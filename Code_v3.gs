@@ -23,7 +23,25 @@ function ordersSheet_(){ return getSheet_('Orders', ['id','queueNo','items','tot
 function customersSheet_(){ return getSheet_('Customers', ['phone','name','count','qty']); }
 function adminsSheet_(){ return getSheet_('Admins', ['id','name','username','password']); }
 function metaSheet_(){ return getSheet_('Meta', ['key','value']); }
-function menuMetaSheet_(){ return getSheet_('MenuMeta', ['id','desc','imageUrl','updatedAt']); }
+function menuMetaSheet_(){
+  const required = ['id','desc','imageUrl','name','price','published','updatedAt'];
+  const sheet = getSheet_('MenuMeta', required);
+  const current = sheet.getRange(1, 1, 1, Math.max(sheet.getLastColumn(), 1)).getValues()[0];
+  required.forEach(header => {
+    if(current.indexOf(header) === -1){
+      sheet.getRange(1, sheet.getLastColumn() + 1).setValue(header);
+      current.push(header);
+    }
+  });
+  return sheet;
+}
+
+function menuMetaColumns_(sheet){
+  const headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0].map(String);
+  const out = {};
+  headers.forEach((header, index) => { out[header] = index + 1; });
+  return out;
+}
 
 function jsonOut_(obj){
   return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
@@ -80,27 +98,41 @@ function getMenuMeta_(){
   try{
     const sheet = menuMetaSheet_();
     const rows = sheet.getDataRange().getValues();
+    const cols = menuMetaColumns_(sheet);
     if(rows.length <= 1) return { items: [] };
     const items = [];
     for(let i = 1; i < rows.length; i++){
-      const [id, desc, imageUrl] = rows[i];
-      if(id) items.push({ id: String(id), desc: String(desc || ''), imageUrl: String(imageUrl || '') });
+      const id = rows[i][cols.id - 1];
+      if(id) items.push({
+        id: String(id),
+        desc: String(rows[i][cols.desc - 1] || ''),
+        imageUrl: String(rows[i][cols.imageUrl - 1] || ''),
+        name: String(rows[i][cols.name - 1] || ''),
+        price: rows[i][cols.price - 1],
+        published: rows[i][cols.published - 1] === '' ? true : rows[i][cols.published - 1]
+      });
     }
     return { items };
   }catch(e){ return { error: String(e) }; }
 }
 
-function saveMenuMeta_(id, desc, imageUrl){
+function saveMenuMeta_(id, desc, imageUrl, name, price, published){
   try{
     const sheet = menuMetaSheet_();
-    const row = findRow_(sheet, 0, id);
+    const cols = menuMetaColumns_(sheet);
+    const row = findRow_(sheet, cols.id - 1, id);
+    let targetRow = row;
     if(row === -1){
-      sheet.appendRow([id, desc || '', imageUrl || '', new Date().toISOString()]);
-    } else {
-      if(desc !== null && desc !== undefined) sheet.getRange(row, 2).setValue(desc);
-      if(imageUrl) sheet.getRange(row, 3).setValue(imageUrl);
-      sheet.getRange(row, 4).setValue(new Date().toISOString());
+      sheet.appendRow([]);
+      targetRow = sheet.getLastRow();
+      sheet.getRange(targetRow, cols.id).setValue(id);
     }
+    if(desc !== null && desc !== undefined) sheet.getRange(targetRow, cols.desc).setValue(desc);
+    if(imageUrl) sheet.getRange(targetRow, cols.imageUrl).setValue(imageUrl);
+    if(name !== null && name !== undefined) sheet.getRange(targetRow, cols.name).setValue(name);
+    if(price !== null && price !== undefined && price !== '') sheet.getRange(targetRow, cols.price).setValue(price);
+    if(published !== null && published !== undefined) sheet.getRange(targetRow, cols.published).setValue(Boolean(published));
+    sheet.getRange(targetRow, cols.updatedAt).setValue(new Date().toISOString());
     return { ok: true };
   }catch(e){ return { error: String(e) }; }
 }
@@ -352,7 +384,7 @@ function doPost_(e){
 
   // ★ NEW: save menu description
   if(action === 'saveMenuMeta'){
-    return jsonOut_(saveMenuMeta_(body.id, body.desc, body.imageUrl || null));
+    return jsonOut_(saveMenuMeta_(body.id, body.desc, body.imageUrl || null, body.name, body.price, body.published));
   }
 
   // ★ NEW: save menu image to Google Drive

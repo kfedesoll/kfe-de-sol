@@ -1258,6 +1258,20 @@ body{
   .admin-form input, .admin-form select, .admin-form button{ min-height:42px; }
   .admin-list-row .a-actions button{ flex:1; min-height:40px; }
   .modal-content, .modal-card{ width:calc(100vw - 24px) !important; max-width:none !important; margin:12px auto; }
+
+  /* Keep expanded Pesanan/Simpanan cards inside the phone viewport. */
+  .customer-group, .cg-simpanan-detail, .cg-order-block{ box-sizing:border-box; }
+  .cg-table, .cg-table thead, .cg-table tbody, .cg-table tfoot{ display:table; width:100% !important; table-layout:fixed !important; overflow:visible; }
+  .cg-table thead, .cg-table tbody, .cg-table tfoot{ display:table-row-group; }
+  .cg-table tr{ display:table-row; width:100%; }
+  .cg-table th, .cg-table td{ display:table-cell; width:auto !important; max-width:none; overflow-wrap:anywhere; word-break:break-word; white-space:normal; }
+  .cg-table th:first-child, .cg-table td:first-child{ width:calc(100% - 200px) !important; }
+  .cg-table th:nth-child(2), .cg-table td:nth-child(2){ width:58px !important; }
+  .cg-table th:nth-child(3), .cg-table td:nth-child(3){ width:70px !important; }
+  .cg-table th:nth-child(4), .cg-table td:nth-child(4){ width:72px !important; }
+  .cg-simpanan-detail .cg-table th:first-child, .cg-simpanan-detail .cg-table td:first-child{ width:calc(100% - 142px) !important; }
+  .cg-simpanan-detail .cg-table th:nth-child(2), .cg-simpanan-detail .cg-table td:nth-child(2){ width:64px !important; }
+  .cg-simpanan-detail .cg-table th:nth-child(3), .cg-simpanan-detail .cg-table td:nth-child(3){ width:78px !important; }
 }
 </style>
 </head>

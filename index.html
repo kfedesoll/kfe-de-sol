@@ -931,6 +931,8 @@ body{
   box-shadow:0 2px 6px rgba(0,0,0,0.18);
 }
 .popular-plus:active{ transform:scale(0.92); }
+.popular-plus:hover{ background:#1B3A5C; }
+.stepper button.minus:active{ background:#111; color:#fff; border-color:#111; }
 
 /* ---------- Lightbox ---------- */
 .menu-card .photo img{ cursor:pointer; }
@@ -1036,6 +1038,8 @@ body{
   letter-spacing:0.5px; transition:background 0.15s, color 0.15s;
 }
 .temp-btn.active{ background:var(--sol-orange); color:#fff; }
+.temp-btn[data-temp="hot"].active{ background:#DF301C; border-color:#DF301C; color:#fff; }
+.temp-btn[data-temp="ice"].active{ background:#2587D8; border-color:#2587D8; color:#fff; }
 .temp-btn:first-child{ border-right:1px solid var(--sol-orange); }
 
 /* ---------- Pengurusan Menu Admin (redesign) ---------- */
@@ -1825,6 +1829,7 @@ function render(){
   });
 
   bindViewEvents();
+  setupTapFeedback();
   setupPolling();
   setupVisibilityCatchup();
 }
@@ -3542,19 +3547,21 @@ function bindViewEvents(){
         const id = btn.dataset.id;
         const item = MENU.find(m => m.id === id);
         if(!item || !isItemPublished(item)) return;
+        playTapFeedback();
         state.cart[id] = (state.cart[id]||0) + 1;
-        render();
+        if(state.view === 'menu') updateMenuCartDom(); else render();
       };
     });
     document.querySelectorAll('.menu-card .minus').forEach(btn=>{
       btn.onclick = () => {
         const id = btn.dataset.id;
+        playTapFeedback();
         state.cart[id] = Math.max(0, (state.cart[id]||0) - 1);
         if(state.view === 'preview'){
           const hasItems = MENU.some(m => (state.cart[m.id]||0) > 0);
           if(!hasItems){ state.view = 'menu'; }
         }
-        render();
+        if(state.view === 'menu') updateMenuCartDom(); else render();
       };
     });
     document.querySelectorAll('.menu-card .photo img, .popular-card .photo img').forEach(img=>{
@@ -3568,8 +3575,9 @@ function bindViewEvents(){
         const id = btn.dataset.id;
         const item = MENU.find(m => m.id === id);
         if(!item || !isItemPublished(item)) return;
+        playTapFeedback();
         state.cart[id] = (state.cart[id]||0) + 1;
-        render();
+        if(state.view === 'menu') updateMenuCartDom(); else render();
       };
     });
   }
@@ -3991,11 +3999,29 @@ async function submitOrder(){
 
 /* ---------- sound effects ---------- */
 let audioCtx = null;
+let tapDelegationBound = false;
 function getAudioCtx(){
   if(!audioCtx){
     try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ return null; }
   }
   return audioCtx;
+}
+function updateMenuCartDom(){
+  const frame = document.getElementById('app-frame');
+  if(!frame) return;
+  let qty = 0, total = 0;
+  MENU.forEach(m => { const q=state.cart[m.id]||0; qty += q; total += q*getItemPrice(m); });
+  document.querySelectorAll('.menu-card').forEach(card => {
+    const button = card.querySelector('.plus,.minus');
+    if(!button) return;
+    const q = state.cart[button.dataset.id] || 0;
+    const label = card.querySelector('.qty');
+    if(label) label.textContent = q;
+  });
+  const summary = frame.querySelector('.cart-bar .summary');
+  if(summary) summary.innerHTML = `${qty} item<br><strong>${fmt(total)}</strong>`;
+  const preview = frame.querySelector('#previewOrder');
+  if(preview) preview.disabled = qty === 0;
 }
 function beep(freq, duration, delay){
   const ctx = getAudioCtx();
@@ -4013,6 +4039,20 @@ function beep(freq, duration, delay){
   gain.connect(ctx.destination);
   osc.start(t0);
   osc.stop(t0 + duration + 0.02);
+}
+function playTapFeedback(){
+  // Must be called from the user's tap so mobile browsers allow the sound.
+  beep(720, 0.07, 0);
+  try{ if(navigator.vibrate) navigator.vibrate(35); }catch(e){}
+}
+function setupTapFeedback(){
+  if(tapDelegationBound) return;
+  tapDelegationBound = true;
+  document.addEventListener('click', (e) => {
+    const button = e.target.closest('button');
+    if(!button || button.disabled || button.classList.contains('plus') || button.classList.contains('minus') || button.classList.contains('popular-plus')) return;
+    playTapFeedback();
+  }, { passive:true });
 }
 function playNewOrderSound(){
   beep(880, 0.15, 0);

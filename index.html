@@ -1313,6 +1313,7 @@ let state = {
 
 let pollTimer = null;
 let clockTimer = null;
+let completedReturnTimer = null;
 
 function fmt(n){ return 'RM ' + n.toFixed(2); }
 function orderStatus(order){ return String((order && order.status) || '').split('|')[0]; }
@@ -3645,6 +3646,7 @@ function bindViewEvents(){
     const againBtn = document.getElementById('orderAgain');
     if(againBtn){
       againBtn.onclick = () => {
+        if(completedReturnTimer){ clearTimeout(completedReturnTimer); completedReturnTimer = null; }
         state.cart = {};
         state.popularIds = null;
         state.completedOrder = null;
@@ -4090,6 +4092,16 @@ async function refreshMyOrders(){
       if(!existingIds.has(o.id)) state.myReceipts.unshift(o);
     });
     state.completedOrder = justDone[0];
+    if(completedReturnTimer) clearTimeout(completedReturnTimer);
+    const completedId = state.completedOrder.id;
+    completedReturnTimer = setTimeout(() => {
+      if(state.completedOrder && state.completedOrder.id === completedId){
+        state.completedOrder = null;
+        if(state.view === 'waiting') state.view = 'menu';
+        completedReturnTimer = null;
+        render();
+      }
+    }, 8000);
   }
 
   if(removedIds.length > 0){

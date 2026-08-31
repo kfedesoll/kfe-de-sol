@@ -90,6 +90,7 @@ body{
 .icon-btn svg{ width:18px; height:18px; }
 .icon-btn:hover{ background:#1B3A5C; color:#fff; border-color:#1B3A5C; }
 .icon-btn:active{ transform:scale(0.97); }
+.music-btn{font-size:18px;}
 .icon-btn.queue-icon-btn.ready{
   animation: queue-icon-blink 0.5s steps(1, end) infinite;
 }
@@ -178,7 +179,15 @@ body{
   background:var(--coffee-dark); color:var(--cream); text-align:center; gap:18px;
   animation: fadein 0.5s ease;
 }
+.splash #introStart{
+  position:absolute; left:50%; bottom:28px; transform:translateX(-50%); width:min(86%,340px); margin:0; padding:18px 28px;
+  border-radius:30px; font-size:18px; font-weight:700;
+  background:#F4C978; color:#2B1810; border:0; box-shadow:0 6px 16px rgba(0,0,0,.2);
+}
+.splash-coffee{width:min(78vw,360px);margin-top:24px;filter:drop-shadow(0 8px 18px rgba(0,0,0,.18))}
+.splash #introStart:hover{ background:#FFD991; }
 .splash .sol-rise{ animation: rise 1.8s ease-out; }
+.splash > .sol-rise:first-child{ margin-top:-22px; }
 @keyframes rise{
   0%{ transform:translateY(40px) scale(0.6); opacity:0; }
   100%{ transform:translateY(0) scale(1); opacity:1; }
@@ -186,6 +195,8 @@ body{
 .splash h1{
   font-family:'Fraunces', serif; font-weight:900; font-size:34px; letter-spacing:0.5px;
 }
+.splash.playing h1 span{display:inline-block;opacity:0;animation:letter-in .5s forwards}
+@keyframes letter-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 .splash p{ color:var(--sol-gold); font-size:13px; letter-spacing:3px; text-transform:uppercase; }
 @keyframes fadein{ from{opacity:0;} to{opacity:1;} }
 @keyframes fadeout{ from{opacity:1;} to{opacity:0;} }
@@ -1199,6 +1210,7 @@ body{
 </head>
 <body>
 <div id="app-frame"></div>
+<audio id="kfeMusic" src="kafe-de-sol-music.mp4" preload="auto" loop></audio>
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
@@ -1624,11 +1636,28 @@ function render(){
 
   if(state.view === 'splash'){
     frame.innerHTML = renderSplash();
+    const introMusic = document.getElementById('kfeMusic');
+    const startBtn = frame.querySelector('#introStart');
+    let introFinished = false;
+    const finishIntro = () => {
+      if(introFinished) return;
+      introFinished = true;
+      if(introMusic){ introMusic.pause(); introMusic.currentTime = 0; introMusic.onended = null; }
+      state.view = state.customer ? 'menu' : 'register';
+      render();
+    };
+    if(introMusic){
+      introMusic.loop = false;
+      introMusic.onended = finishIntro;
+      introMusic.currentTime = 0;
+      introMusic.pause();
+      if(startBtn) startBtn.onclick = () => { startBtn.disabled=true; frame.querySelector('.splash')?.classList.add('playing'); let dots=0; const dotTimer=setInterval(()=>{ dots=(dots+1)%4; startBtn.textContent='Loading'+'.'.repeat(dots); if(introMusic.paused && introMusic.ended) clearInterval(dotTimer); },450); introMusic.play().catch(()=>{}); };
+    }
     setTimeout(()=>{
       const s = frame.querySelector('.splash');
       if(s) s.classList.add('fading-out');
-      setTimeout(()=>{ state.view = state.customer ? 'menu' : 'register'; render(); }, 380);
-    }, 1900);
+      if(!introMusic || !Number.isFinite(introMusic.duration) || introMusic.duration <= 0){ finishIntro(); }
+    }, 30000);
     return;
   }
 
@@ -1737,6 +1766,16 @@ function render(){
     ${zoomModal}
     ${receiptModal}
   `;
+  const music = document.getElementById('kfeMusic');
+  const musicBtn = document.getElementById('musicToggle');
+  if(music){ music.volume = 0.16; }
+  if(musicBtn){
+    musicBtn.onclick = async () => {
+      if(!music) return;
+      if(music.paused){ try{ await music.play(); musicBtn.textContent='🔊'; }catch(e){} }
+      else { music.pause(); musicBtn.textContent='🔇'; }
+    };
+  }
 
   const promoBtn = document.getElementById('promoBtn');
   if(promoBtn){
@@ -1839,8 +1878,10 @@ function renderSplash(){
   return `
     <div class="splash">
       <div class="sol-rise"><img src="${LOGO_URL}" alt="K'fe De Sol" style="width:140px;height:140px;border-radius:50%;display:block;"></div>
-      <h1 class="sol-rise">K'fe De Sol</h1>
+      <h1 class="sol-rise"><span style="animation-delay:0ms">K</span><span style="animation-delay:70ms">'</span><span style="animation-delay:140ms">f</span><span style="animation-delay:210ms">e</span><span>&nbsp;</span><span style="animation-delay:350ms">D</span><span style="animation-delay:420ms">e</span><span>&nbsp;</span><span style="animation-delay:560ms">S</span><span style="animation-delay:630ms">o</span><span style="animation-delay:700ms">l</span></h1>
       <p class="sol-rise">Kopi segar, hangat hati</p>
+      <img class="splash-coffee sol-rise" src="coffee-motion-source.png" alt="Kopi">
+      <button id="introStart" class="reg-submit">Get Started</button>
     </div>
   `;
 }

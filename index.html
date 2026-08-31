@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>K'fe De Sol</title>
+<title>K'fe De Sol · v3.1.0</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;900&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
 
@@ -179,6 +179,11 @@ body{
   animation: fadein 0.5s ease;
 }
 .splash .sol-rise{ animation: rise 1.8s ease-out; }
+.splash #introStart{ position:absolute; left:50%; bottom:28px; transform:translateX(-50%); width:min(86%,340px); margin:0; padding:18px 28px; border-radius:30px; font-size:18px; font-weight:700; background:#F4C978; color:#2B1810; border:0; box-shadow:0 6px 16px rgba(0,0,0,.2); }
+.splash-coffee{ width:min(78vw,360px); margin-top:24px; filter:drop-shadow(0 8px 18px rgba(0,0,0,.18)); }
+.app-version{ position:absolute; right:14px; bottom:10px; color:rgba(255,255,255,.55); font:11px 'Space Mono',monospace; }
+.splash #introStart:hover{ background:#FFD991; }
+.splash > .sol-rise:first-child{ margin-top:-22px; }
 @keyframes rise{
   0%{ transform:translateY(40px) scale(0.6); opacity:0; }
   100%{ transform:translateY(0) scale(1); opacity:1; }
@@ -1725,19 +1730,16 @@ function render(){
   if(state.view === 'splash'){
     frame.innerHTML = renderSplash();
     const music = frame.querySelector('#kfeMusic');
-    const musicBtn = frame.querySelector('#musicToggle');
-    if(music && musicBtn){
-      music.volume = 0.16;
-      musicBtn.onclick = async () => {
-        if(music.paused){ try{ await music.play(); musicBtn.textContent='🔊 Lagu'; }catch(e){} }
-        else { music.pause(); musicBtn.textContent='🔇 Lagu'; }
-      };
-    }
-    setTimeout(()=>{
-      const s = frame.querySelector('.splash');
-      if(s) s.classList.add('fading-out');
-      setTimeout(()=>{ state.view = state.customer ? 'menu' : 'register'; render(); }, 380);
-    }, 1900);
+    const start = frame.querySelector('#introStart');
+    if(start) start.onclick = () => {
+      start.disabled=true; let dots=0;
+      const timer=setInterval(()=>{ dots=(dots+1)%4; start.textContent='Loading'+'.'.repeat(dots); },450);
+      const splash=frame.querySelector('.splash'); if(splash) splash.classList.add('playing');
+      const goNext=()=>{ clearInterval(timer); state.view=state.customer?'menu':'register'; render(); };
+      if(music){ music.volume=0.16; music.loop=false; music.onended=goNext; music.play().catch(()=>{ setTimeout(goNext,3000); }); }
+      else setTimeout(goNext,1400);
+      setTimeout(goNext,30000);
+    };
     return;
   }
 
@@ -1953,8 +1955,10 @@ function renderSplash(){
       <div class="sol-rise"><img src="${LOGO_URL}" alt="K'fe De Sol" style="width:140px;height:140px;border-radius:50%;display:block;"></div>
       <h1 class="sol-rise">K'fe De Sol</h1>
       <p class="sol-rise">Kopi segar, hangat hati</p>
+      <img class="splash-coffee sol-rise" src="coffee-motion-source.png" alt="Kopi">
+      <small class="app-version">v3.1.0</small>
       <audio id="kfeMusic" src="kafe-de-sol-music.mp4" preload="auto" loop></audio>
-      <button class="music-btn" id="musicToggle" type="button" aria-label="Mainkan lagu">🔇 Lagu</button>
+      <button id="introStart" class="reg-submit" type="button">Get Started</button>
     </div>
   `;
 }

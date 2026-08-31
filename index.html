@@ -90,7 +90,6 @@ body{
 .icon-btn svg{ width:18px; height:18px; }
 .icon-btn:hover{ background:#1B3A5C; color:#fff; border-color:#1B3A5C; }
 .icon-btn:active{ transform:scale(0.97); }
-.music-btn{font-size:18px;}
 .icon-btn.queue-icon-btn.ready{
   animation: queue-icon-blink 0.5s steps(1, end) infinite;
 }
@@ -179,15 +178,7 @@ body{
   background:var(--coffee-dark); color:var(--cream); text-align:center; gap:18px;
   animation: fadein 0.5s ease;
 }
-.splash #introStart{
-  position:absolute; left:50%; bottom:28px; transform:translateX(-50%); width:min(86%,340px); margin:0; padding:18px 28px;
-  border-radius:30px; font-size:18px; font-weight:700;
-  background:#F4C978; color:#2B1810; border:0; box-shadow:0 6px 16px rgba(0,0,0,.2);
-}
-.splash-coffee{width:min(78vw,360px);margin-top:24px;filter:drop-shadow(0 8px 18px rgba(0,0,0,.18))}
-.splash #introStart:hover{ background:#FFD991; }
 .splash .sol-rise{ animation: rise 1.8s ease-out; }
-.splash > .sol-rise:first-child{ margin-top:-22px; }
 @keyframes rise{
   0%{ transform:translateY(40px) scale(0.6); opacity:0; }
   100%{ transform:translateY(0) scale(1); opacity:1; }
@@ -195,8 +186,6 @@ body{
 .splash h1{
   font-family:'Fraunces', serif; font-weight:900; font-size:34px; letter-spacing:0.5px;
 }
-.splash.playing h1 span{display:inline-block;opacity:0;animation:letter-in .5s forwards}
-@keyframes letter-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 .splash p{ color:var(--sol-gold); font-size:13px; letter-spacing:3px; text-transform:uppercase; }
 @keyframes fadein{ from{opacity:0;} to{opacity:1;} }
 @keyframes fadeout{ from{opacity:1;} to{opacity:0;} }
@@ -942,8 +931,6 @@ body{
   box-shadow:0 2px 6px rgba(0,0,0,0.18);
 }
 .popular-plus:active{ transform:scale(0.92); }
-.popular-plus:hover{ background:#1B3A5C; }
-.stepper button.minus:active{ background:#111; color:#fff; border-color:#111; }
 
 /* ---------- Lightbox ---------- */
 .menu-card .photo img{ cursor:pointer; }
@@ -1049,8 +1036,6 @@ body{
   letter-spacing:0.5px; transition:background 0.15s, color 0.15s;
 }
 .temp-btn.active{ background:var(--sol-orange); color:#fff; }
-.temp-btn[data-temp="hot"].active{ background:#DF301C; border-color:#DF301C; color:#fff; }
-.temp-btn[data-temp="ice"].active{ background:#2587D8; border-color:#2587D8; color:#fff; }
 .temp-btn:first-child{ border-right:1px solid var(--sol-orange); }
 
 /* ---------- Pengurusan Menu Admin (redesign) ---------- */
@@ -1186,7 +1171,15 @@ body{
   .admin-grid, .admin-stats, .admin-panels{ grid-template-columns:1fr !important; }
   .admin-card, .admin-panel{ min-width:0; }
   .admin-table-wrap, .cg-table-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
-  .cg-table{ min-width:620px; }
+  .customer-groups, .customer-group, .cg-header, .cg-simpanan-detail, .cg-order-block{
+    width:100%; max-width:100%; min-width:0;
+  }
+  .cg-table{
+    width:100%; min-width:0; table-layout:fixed;
+  }
+  .cg-table th, .cg-table td{
+    overflow-wrap:anywhere; word-break:normal;
+  }
   .admin-list-row{ flex-wrap:wrap; gap:10px; }
   .admin-list-row .a-actions{ width:100%; justify-content:flex-start; }
   .report-row{ flex-wrap:wrap; }
@@ -1194,13 +1187,73 @@ body{
   .chart-wrap{ overflow-x:auto; }
 }
 @media (max-width: 520px){
+  html, body, #app-frame.admin-mode{ width:100%; max-width:100%; overflow-x:hidden; }
   .admin-wrap{ padding:14px 12px; font-size:14px; }
   .admin-welcome{ margin-bottom:14px; }
   .admin-welcome h2{ font-size:23px; }
   .admin-datetime{ font-size:13px; }
-  #app-frame.admin-mode .topbar .brand{ font-size:18px; }
+  #app-frame.admin-mode .topbar{ gap:8px; }
+  #app-frame.admin-mode .topbar .brand{ font-size:18px; min-width:0; gap:7px; }
   #app-frame.admin-mode .topbar .brand small{ display:none; }
+  #app-frame.admin-mode .topbar-logo{ width:36px; height:36px; flex:0 0 36px; }
+  #app-frame.admin-mode .topbar-actions{ flex:0 0 auto; }
   #app-frame.admin-mode .mode-toggle{ padding:8px 10px; font-size:12px; }
+  .admin-tabs{ gap:2px; margin-bottom:16px; scrollbar-width:none; }
+  .admin-tabs::-webkit-scrollbar{ display:none; }
+  .admin-tab{ padding:11px 9px; font-size:14px; }
+  .customer-group{ padding:16px 14px; border-radius:16px; overflow:hidden; }
+  .cg-header{ align-items:flex-start; gap:12px; }
+  .cg-info, .cg-right{ width:100%; min-width:0; }
+  .cg-info .cg-name, .cg-info .cg-phone{ font-size:15px; overflow-wrap:anywhere; }
+  .cg-info .cg-datetime{ font-size:12px; }
+  .cg-right{ justify-content:space-between; gap:8px; }
+  .cg-queue{ font-size:25px; }
+  .btn-simpanan-pdf{ padding:9px 14px; min-height:44px; }
+  .cg-table{ margin-bottom:12px; }
+  .customer-group, .cg-order-block{ contain:inline-size; }
+  .cg-table{
+    display:block; width:100% !important; max-width:100% !important;
+    min-width:0 !important; overflow:hidden;
+  }
+  .cg-table thead, .cg-table tbody, .cg-table tfoot{ display:block; width:100%; }
+  .cg-table tr{
+    display:grid; grid-template-columns:minmax(0, 1fr) 58px 70px 72px;
+    width:100%; min-width:0;
+  }
+  .cg-table th, .cg-table td{
+    display:block; width:auto !important; min-width:0 !important;
+    padding:8px 5px; font-size:11px; overflow:hidden;
+    overflow-wrap:anywhere; word-break:break-word;
+  }
+  .cg-table th:first-child, .cg-table td:first-child{ text-align:left; }
+  .cg-table th:nth-child(2), .cg-table td:nth-child(2),
+  .cg-table th:nth-child(3), .cg-table td:nth-child(3){ text-align:center; }
+  .cg-table th:nth-child(4), .cg-table td:nth-child(4){ text-align:right; }
+  .cg-simpanan-detail .cg-table th:first-child,
+  .cg-simpanan-detail .cg-table td:first-child{ width:58%; }
+  .cg-simpanan-detail .cg-table th:nth-child(2),
+  .cg-simpanan-detail .cg-table td:nth-child(2){ width:18%; }
+  .cg-simpanan-detail .cg-table th:nth-child(3),
+  .cg-simpanan-detail .cg-table td:nth-child(3){ width:24%; text-align:right; }
+  .cg-simpanan-detail, .cg-order-block{
+    display:block; max-width:100%; min-width:0; overflow:hidden; contain:inline-size;
+  }
+  .cg-simpanan-detail .cg-table{
+    display:block; width:100% !important; max-width:100% !important;
+    min-width:0 !important; table-layout:fixed !important;
+  }
+  .cg-simpanan-detail .cg-table tr{
+    grid-template-columns:minmax(0, 1fr) 64px 78px;
+  }
+  .cg-simpanan-detail .cg-table th,
+  .cg-simpanan-detail .cg-table td{
+    min-width:0 !important; max-width:none; white-space:normal;
+    overflow-wrap:anywhere; word-break:break-word;
+  }
+  .cg-simpanan-detail .oi-meta{ max-width:100%; overflow-wrap:anywhere; }
+  .cg-actions{ justify-content:stretch; gap:8px; }
+  .cg-actions button{ flex:1 1 calc(50% - 4px); min-width:0; min-height:44px; padding:10px 8px; }
+  .cg-footer{ gap:8px; font-size:12px; }
   .admin-form{ padding:14px; }
   .admin-form input, .admin-form select, .admin-form button{ min-height:42px; }
   .admin-list-row .a-actions button{ flex:1; min-height:40px; }
@@ -1210,7 +1263,6 @@ body{
 </head>
 <body>
 <div id="app-frame"></div>
-<audio id="kfeMusic" src="kafe-de-sol-music.mp4" preload="auto" loop></audio>
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
@@ -1325,6 +1377,8 @@ let state = {
   itemDetailId: null,   // item id for detail modal (menu list)
   popularDetailId: null, // item id for detail in popular section
   itemTemp: {},          // { itemId: 'hot' | 'ice' } - hot/ice selection per item
+  loggedInAdmin: null,
+  adminSessionToken: null,
 };
 
 let pollTimer = null;
@@ -1458,7 +1512,10 @@ function checkIcon(color){
 async function gasGet(action, params){
   if(GAS_URL.indexOf('PASTE_YOUR') === 0) return null;
   try{
-    const qs = new URLSearchParams(Object.assign({ action, _ts: Date.now() }, params || {})).toString();
+    const auth = state.loggedInAdmin && state.adminSessionToken ? {
+      adminId:state.loggedInAdmin.id, authToken:state.adminSessionToken
+    } : {};
+    const qs = new URLSearchParams(Object.assign({ action, _ts: Date.now() }, auth, params || {})).toString();
     const res = await fetch(`${GAS_URL}?${qs}`, { cache: 'no-store' });
     return await res.json();
   }catch(e){ console.error('gas GET failed', action, e); return null; }
@@ -1469,7 +1526,10 @@ async function gasPost(action, body){
     const res = await fetch(GAS_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(Object.assign({ action }, body || {}))
+      body: JSON.stringify(Object.assign({ action }, body || {},
+        state.loggedInAdmin && state.adminSessionToken ? {
+          adminId:state.loggedInAdmin.id, authToken:state.adminSessionToken
+        } : {}))
     });
     const data = await res.json();
     if(data && data.error) console.error('gas backend error', action, data.error, data.stack || '');
@@ -1545,9 +1605,7 @@ async function gasMenuSaveImage(itemId, base64, mimeType){
 /* ---------- orders ---------- */
 async function loadOrders(){
   const data = await gasGet('orders');
-  // A failed/empty poll must not erase the last known orders from the UI.
-  if(!data || data.error || !Array.isArray(data.orders)) return null;
-  return data.orders;
+  return (data && data.orders) ? data.orders : [];
 }
 async function addOrder(order){
   const data = await gasPost('addOrder', { order });
@@ -1601,6 +1659,22 @@ async function loadAdmins(){
   const data = await gasGet('admins');
   return (data && data.admins) ? data.admins : [];
 }
+async function adminLoginApi(username, password){
+  return await gasPost('adminLogin', { username, password });
+}
+async function adminSessionIsValid(){
+  if(!state.loggedInAdmin || !state.adminSessionToken) return false;
+  const data = await gasGet('adminSession');
+  return Boolean(data && data.valid);
+}
+function forceAdminLogout(message){
+  state.loggedInAdmin = null;
+  state.adminSessionToken = null;
+  state.adminAccounts = null;
+  state.view = 'admin-login';
+  state.adminLoginError = message || 'Sesi admin telah tamat. Sila log masuk semula.';
+  render();
+}
 async function addAdminApi(name, username, password){
   await gasPost('addAdmin', { name, username, password });
 }
@@ -1636,28 +1710,11 @@ function render(){
 
   if(state.view === 'splash'){
     frame.innerHTML = renderSplash();
-    const introMusic = document.getElementById('kfeMusic');
-    const startBtn = frame.querySelector('#introStart');
-    let introFinished = false;
-    const finishIntro = () => {
-      if(introFinished) return;
-      introFinished = true;
-      if(introMusic){ introMusic.pause(); introMusic.currentTime = 0; introMusic.onended = null; }
-      state.view = state.customer ? 'menu' : 'register';
-      render();
-    };
-    if(introMusic){
-      introMusic.loop = false;
-      introMusic.onended = finishIntro;
-      introMusic.currentTime = 0;
-      introMusic.pause();
-      if(startBtn) startBtn.onclick = () => { startBtn.disabled=true; frame.querySelector('.splash')?.classList.add('playing'); let dots=0; const dotTimer=setInterval(()=>{ dots=(dots+1)%4; startBtn.textContent='Loading'+'.'.repeat(dots); if(introMusic.paused && introMusic.ended) clearInterval(dotTimer); },450); introMusic.play().catch(()=>{}); };
-    }
     setTimeout(()=>{
       const s = frame.querySelector('.splash');
       if(s) s.classList.add('fading-out');
-      if(!introMusic || !Number.isFinite(introMusic.duration) || introMusic.duration <= 0){ finishIntro(); }
-    }, 30000);
+      setTimeout(()=>{ state.view = state.customer ? 'menu' : 'register'; render(); }, 380);
+    }, 1900);
     return;
   }
 
@@ -1766,16 +1823,6 @@ function render(){
     ${zoomModal}
     ${receiptModal}
   `;
-  const music = document.getElementById('kfeMusic');
-  const musicBtn = document.getElementById('musicToggle');
-  if(music){ music.volume = 0.16; }
-  if(musicBtn){
-    musicBtn.onclick = async () => {
-      if(!music) return;
-      if(music.paused){ try{ await music.play(); musicBtn.textContent='🔊'; }catch(e){} }
-      else { music.pause(); musicBtn.textContent='🔇'; }
-    };
-  }
 
   const promoBtn = document.getElementById('promoBtn');
   if(promoBtn){
@@ -1812,10 +1859,14 @@ function render(){
 
   const modeToggle = document.getElementById('modeToggle');
   if(modeToggle){
-    modeToggle.onclick = () => {
+    modeToggle.onclick = async () => {
       if(state.view === 'register'){
         state.view = 'admin-login';
       } else if(state.view === 'admin'){
+        await gasPost('adminLogout', {});
+        state.loggedInAdmin = null;
+        state.adminSessionToken = null;
+        state.adminAccounts = null;
         state.view = state.customer ? 'menu' : 'register';
       } else if(state.view === 'menu' || state.view === 'preview' || state.view === 'waiting' || state.view === 'promo' || state.view === 'receipts'){
         state.customer = null;
@@ -1868,7 +1919,6 @@ function render(){
   });
 
   bindViewEvents();
-  setupTapFeedback();
   setupPolling();
   setupVisibilityCatchup();
 }
@@ -1878,10 +1928,8 @@ function renderSplash(){
   return `
     <div class="splash">
       <div class="sol-rise"><img src="${LOGO_URL}" alt="K'fe De Sol" style="width:140px;height:140px;border-radius:50%;display:block;"></div>
-      <h1 class="sol-rise"><span style="animation-delay:0ms">K</span><span style="animation-delay:70ms">'</span><span style="animation-delay:140ms">f</span><span style="animation-delay:210ms">e</span><span>&nbsp;</span><span style="animation-delay:350ms">D</span><span style="animation-delay:420ms">e</span><span>&nbsp;</span><span style="animation-delay:560ms">S</span><span style="animation-delay:630ms">o</span><span style="animation-delay:700ms">l</span></h1>
+      <h1 class="sol-rise">K'fe De Sol</h1>
       <p class="sol-rise">Kopi segar, hangat hati</p>
-      <img class="splash-coffee sol-rise" src="coffee-motion-source.png" alt="Kopi">
-      <button id="introStart" class="reg-submit">Get Started</button>
     </div>
   `;
 }
@@ -2150,10 +2198,6 @@ function renderPopularSection(){
 async function loadPopularItems(){
   state.popularLoading = true;
   const orders = await loadOrders();
-  if(!Array.isArray(orders)){
-    state.popularLoading = false;
-    return;
-  }
   const counts = {};
   orders.forEach(o => {
     (o.items || []).forEach(i => {
@@ -3564,15 +3608,18 @@ function bindViewEvents(){
         if(ctx && ctx.state === 'suspended') ctx.resume();
         const username = (userInput.value || '').trim();
         const pw = (pwInput.value || '').trim();
-        const admins = await loadAdmins();
-        const match = admins.find(a => a.username === username && a.password === pw);
-        if(!match){
+        loginBtn.disabled = true;
+        loginBtn.textContent = 'Menyemak...';
+        const result = await adminLoginApi(username, pw);
+        if(!result || !result.ok || !result.admin || !result.token){
           state.adminLoginError = 'ID atau kata laluan salah.';
           render();
           return;
         }
         state.adminLoginError = '';
-        state.loggedInAdmin = match;
+        state.loggedInAdmin = result.admin;
+        state.adminSessionToken = result.token;
+        state.adminAccounts = null;
         state.view = 'admin';
         render();
       };
@@ -3588,21 +3635,19 @@ function bindViewEvents(){
         const id = btn.dataset.id;
         const item = MENU.find(m => m.id === id);
         if(!item || !isItemPublished(item)) return;
-        playTapFeedback();
         state.cart[id] = (state.cart[id]||0) + 1;
-        if(state.view === 'menu') updateMenuCartDom(); else render();
+        render();
       };
     });
     document.querySelectorAll('.menu-card .minus').forEach(btn=>{
       btn.onclick = () => {
         const id = btn.dataset.id;
-        playTapFeedback();
         state.cart[id] = Math.max(0, (state.cart[id]||0) - 1);
         if(state.view === 'preview'){
           const hasItems = MENU.some(m => (state.cart[m.id]||0) > 0);
           if(!hasItems){ state.view = 'menu'; }
         }
-        if(state.view === 'menu') updateMenuCartDom(); else render();
+        render();
       };
     });
     document.querySelectorAll('.menu-card .photo img, .popular-card .photo img').forEach(img=>{
@@ -3616,9 +3661,8 @@ function bindViewEvents(){
         const id = btn.dataset.id;
         const item = MENU.find(m => m.id === id);
         if(!item || !isItemPublished(item)) return;
-        playTapFeedback();
         state.cart[id] = (state.cart[id]||0) + 1;
-        if(state.view === 'menu') updateMenuCartDom(); else render();
+        render();
       };
     });
   }
@@ -4040,29 +4084,11 @@ async function submitOrder(){
 
 /* ---------- sound effects ---------- */
 let audioCtx = null;
-let tapDelegationBound = false;
 function getAudioCtx(){
   if(!audioCtx){
     try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ return null; }
   }
   return audioCtx;
-}
-function updateMenuCartDom(){
-  const frame = document.getElementById('app-frame');
-  if(!frame) return;
-  let qty = 0, total = 0;
-  MENU.forEach(m => { const q=state.cart[m.id]||0; qty += q; total += q*getItemPrice(m); });
-  document.querySelectorAll('.menu-card').forEach(card => {
-    const button = card.querySelector('.plus,.minus');
-    if(!button) return;
-    const q = state.cart[button.dataset.id] || 0;
-    const label = card.querySelector('.qty');
-    if(label) label.textContent = q;
-  });
-  const summary = frame.querySelector('.cart-bar .summary');
-  if(summary) summary.innerHTML = `${qty} item<br><strong>${fmt(total)}</strong>`;
-  const preview = frame.querySelector('#previewOrder');
-  if(preview) preview.disabled = qty === 0;
 }
 function beep(freq, duration, delay){
   const ctx = getAudioCtx();
@@ -4080,20 +4106,6 @@ function beep(freq, duration, delay){
   gain.connect(ctx.destination);
   osc.start(t0);
   osc.stop(t0 + duration + 0.02);
-}
-function playTapFeedback(){
-  // Must be called from the user's tap so mobile browsers allow the sound.
-  beep(720, 0.07, 0);
-  try{ if(navigator.vibrate) navigator.vibrate(35); }catch(e){}
-}
-function setupTapFeedback(){
-  if(tapDelegationBound) return;
-  tapDelegationBound = true;
-  document.addEventListener('click', (e) => {
-    const button = e.target.closest('button');
-    if(!button || button.disabled || button.classList.contains('plus') || button.classList.contains('minus') || button.classList.contains('popular-plus')) return;
-    playTapFeedback();
-  }, { passive:true });
 }
 function playNewOrderSound(){
   beep(880, 0.15, 0);
@@ -4148,7 +4160,6 @@ async function refreshMyOrders(){
   if(!state.myOrderIds || state.myOrderIds.length === 0) return { changed:false, newlyReady:null };
 
   const orders = await loadOrders();
-  if(!Array.isArray(orders)) return { changed:false, newlyReady:null, newlyRejected:null };
   const myOrdersAll = orders.filter(o => state.myOrderIds.includes(o.id));
 
   const prevMap = {};
@@ -4229,10 +4240,12 @@ function setupPolling(){
   pollTimer = setInterval(async ()=>{
     checkMidnightReset(); // check auto reset on 1st of month
     if(state.view === 'admin'){
+      const sessionValid = await adminSessionIsValid();
+      if(!sessionValid){
+        forceAdminLogout('Akaun ini telah log masuk pada peranti lain. Sesi anda telah ditamatkan.');
+        return;
+      }
       const orders = await loadOrders();
-      // Keep the previous snapshot when polling fails, preventing
-      // Simpanan/Pesanan from blinking empty during a transient error.
-      if(!Array.isArray(orders)) return;
       const changed = JSON.stringify(orders) !== JSON.stringify(state.allOrders);
       if(changed){
         const oldIds = new Set((state.allOrders||[]).map(o=>o.id));

@@ -93,6 +93,36 @@ function setMeta_(key, value){
   cell.setValue(value);
 }
 
+/* ================= Admin single-session security ================= */
+function adminSessionKey_(adminId){ return 'admin-session-' + String(adminId); }
+
+function findAdminByLogin_(username, password){
+  const sheet = adminsSheet_();
+  let data = sheet.getDataRange().getValues();
+  if(data.length <= 1){
+    sheet.appendRow(['a_' + Date.now(), 'Admin', 'admin', 'admin123']);
+    data = sheet.getDataRange().getValues();
+  }
+  for(let i = 1; i < data.length; i++){
+    const r = data[i];
+    if(String(r[2]) === String(username) && String(r[3]) === String(password)){
+      return { id:String(r[0]), name:String(r[1]), username:String(r[2]) };
+    }
+  }
+  return null;
+}
+
+function validAdminSession_(adminId, token){
+  if(!adminId || !token) return false;
+  const active = PropertiesService.getScriptProperties().getProperty(adminSessionKey_(adminId));
+  return active !== null && active === String(token);
+}
+
+function sessionFrom_(source){
+  source = source || {};
+  return validAdminSession_(source.adminId, source.authToken);
+}
+
 /* ================= MenuMeta helpers ================= */
 function getMenuMeta_(){
   try{
@@ -213,6 +243,7 @@ function doGet(e){
   }
 
   if(action === 'admins'){
+    if(!sessionFrom_(e.parameter)) return jsonOut_({ error:'SESSION_INVALID' });
     const sheet = adminsSheet_();
     let data = sheet.getDataRange().getValues();
     if(data.length <= 1){
@@ -226,6 +257,10 @@ function doGet(e){
       admins.push({ id: r[0], name: r[1], username: String(r[2]), password: String(r[3]) });
     }
     return jsonOut_({ admins });
+  }
+
+  if(action === 'adminSession'){
+    return jsonOut_({ valid:sessionFrom_(e.parameter) });
   }
 
   if(action === 'meta'){
@@ -249,6 +284,34 @@ function doPost(e){
 function doPost_(e){
   const body = JSON.parse(e.postData.contents);
   const action = body.action;
+
+  if(action === 'adminLogin'){
+    const admin = findAdminByLogin_(body.username, body.password);
+    if(!admin) return jsonOut_({ ok:false, error:'LOGIN_FAILED' });
+    const lock = LockService.getScriptLock();
+    lock.waitLock(10000);
+    try{
+      const token = Utilities.getUuid() + '-' + Utilities.getUuid();
+      PropertiesService.getScriptProperties().setProperty(adminSessionKey_(admin.id), token);
+      return jsonOut_({ ok:true, admin:admin, token:token });
+    } finally { lock.releaseLock(); }
+  }
+
+  if(action === 'adminLogout'){
+    if(sessionFrom_(body)){
+      PropertiesService.getScriptProperties().deleteProperty(adminSessionKey_(body.adminId));
+    }
+    return jsonOut_({ ok:true });
+  }
+
+  const adminOnlyActions = [
+    'updateOrderStatus','bulkUpdateStatus','resetOrders','setCustomerCount',
+    'redeemFreeDrinks','addAdmin','updateAdmin','deleteAdmin',
+    'setMeta','repairMeta','saveMenuMeta','saveMenuImage'
+  ];
+  if(adminOnlyActions.indexOf(action) !== -1 && !sessionFrom_(body)){
+    return jsonOut_({ error:'SESSION_INVALID' });
+  }
 
   if(action === 'addOrder'){
     const o = body.order;

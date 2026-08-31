@@ -1724,6 +1724,15 @@ function render(){
 
   if(state.view === 'splash'){
     frame.innerHTML = renderSplash();
+    const music = frame.querySelector('#kfeMusic');
+    const musicBtn = frame.querySelector('#musicToggle');
+    if(music && musicBtn){
+      music.volume = 0.16;
+      musicBtn.onclick = async () => {
+        if(music.paused){ try{ await music.play(); musicBtn.textContent='🔊 Lagu'; }catch(e){} }
+        else { music.pause(); musicBtn.textContent='🔇 Lagu'; }
+      };
+    }
     setTimeout(()=>{
       const s = frame.querySelector('.splash');
       if(s) s.classList.add('fading-out');
@@ -1944,6 +1953,8 @@ function renderSplash(){
       <div class="sol-rise"><img src="${LOGO_URL}" alt="K'fe De Sol" style="width:140px;height:140px;border-radius:50%;display:block;"></div>
       <h1 class="sol-rise">K'fe De Sol</h1>
       <p class="sol-rise">Kopi segar, hangat hati</p>
+      <audio id="kfeMusic" src="kafe-de-sol-music.mp4" preload="auto" loop></audio>
+      <button class="music-btn" id="musicToggle" type="button" aria-label="Mainkan lagu">🔇 Lagu</button>
     </div>
   `;
 }

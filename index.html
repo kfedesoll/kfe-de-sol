@@ -1529,7 +1529,9 @@ async function gasMenuSaveImage(itemId, base64, mimeType){
 /* ---------- orders ---------- */
 async function loadOrders(){
   const data = await gasGet('orders');
-  return (data && data.orders) ? data.orders : [];
+  // A failed/empty poll must not erase the last known orders from the UI.
+  if(!data || data.error || !Array.isArray(data.orders)) return null;
+  return data.orders;
 }
 async function addOrder(order){
   const data = await gasPost('addOrder', { order });
@@ -2102,6 +2104,10 @@ function renderPopularSection(){
 async function loadPopularItems(){
   state.popularLoading = true;
   const orders = await loadOrders();
+  if(!Array.isArray(orders)){
+    state.popularLoading = false;
+    return;
+  }
   const counts = {};
   orders.forEach(o => {
     (o.items || []).forEach(i => {
@@ -4061,6 +4067,7 @@ async function refreshMyOrders(){
   if(!state.myOrderIds || state.myOrderIds.length === 0) return { changed:false, newlyReady:null };
 
   const orders = await loadOrders();
+  if(!Array.isArray(orders)) return { changed:false, newlyReady:null, newlyRejected:null };
   const myOrdersAll = orders.filter(o => state.myOrderIds.includes(o.id));
 
   const prevMap = {};
@@ -4142,6 +4149,9 @@ function setupPolling(){
     checkMidnightReset(); // check auto reset on 1st of month
     if(state.view === 'admin'){
       const orders = await loadOrders();
+      // Keep the previous snapshot when polling fails, preventing
+      // Simpanan/Pesanan from blinking empty during a transient error.
+      if(!Array.isArray(orders)) return;
       const changed = JSON.stringify(orders) !== JSON.stringify(state.allOrders);
       if(changed){
         const oldIds = new Set((state.allOrders||[]).map(o=>o.id));

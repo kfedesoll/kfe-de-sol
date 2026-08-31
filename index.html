@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>K'fe De Sol · v3.1.0</title>
+<title>K'fe De Sol · v3.1.1</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;900&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
 
@@ -1961,7 +1961,7 @@ function renderSplash(){
       <h1 class="sol-rise">K'fe De Sol</h1>
       <p class="sol-rise">Kopi segar, hangat hati</p>
       <img class="splash-coffee sol-rise" src="coffee-motion-source.png" alt="Kopi">
-      <small class="app-version">v3.1.0</small>
+      <small class="app-version">v3.1.1</small>
       <audio id="kfeMusic" src="kafe-de-sol-music.mp4" preload="auto" loop></audio>
       <button id="introStart" class="reg-submit" type="button">Get Started</button>
     </div>
@@ -2152,7 +2152,7 @@ function renderMenu(){
     return `
       <div class="menu-card ${published?'':'sold-out'}" aria-disabled="${published?'false':'true'}">
         <div class="photo">
-          <img src="${getItemImage(item)}" alt="${item.id}" loading="lazy">
+          <img src="${getItemImage(item)}" alt="${item.id}" loading="eager" decoding="async">
         </div>
         <div class="info">
           <div class="name">${getItemName(item)}</div>
@@ -2204,7 +2204,7 @@ function renderPopularSection(){
     const q = state.cart[item.id] || 0;
     return `
       <div class="popular-card ${isItemPublished(item)?'':'sold-out'}" aria-disabled="${isItemPublished(item)?'false':'true'}">
-        <div class="photo"><img src="${bigImg}" alt="${item.id}" loading="lazy"></div>
+        <div class="photo"><img src="${bigImg}" alt="${item.id}" loading="eager" decoding="async"></div>
         <div class="info">
           <div class="name">${getItemName(item)}</div>
           <div class="price">${fmt(getItemPrice(item))}</div>
@@ -2290,7 +2290,7 @@ function renderPreview(){
       : '';
     return `
       <div class="menu-card">
-        <div class="photo"><img src="${getItemImage(item)}" alt="${item.id}" loading="lazy"></div>
+        <div class="photo"><img src="${getItemImage(item)}" alt="${item.id}" loading="eager" decoding="async"></div>
         <div class="info">
           <div class="name">${getItemName(item)}${tempBadge}</div>
           <div class="price">${fmt(getItemPrice(item))} x ${q} = ${fmt(getItemPrice(item)*q)}</div>
@@ -4133,7 +4133,7 @@ function getAudioCtx(){
 function beep(freq, duration, delay){
   const ctx = getAudioCtx();
   if(!ctx) return;
-  if(ctx.state === 'suspended'){ ctx.resume(); }
+  if(ctx.state === 'suspended'){ ctx.resume().catch(()=>{}); }
   const t0 = ctx.currentTime + (delay||0);
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();

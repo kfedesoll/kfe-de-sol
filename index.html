@@ -1434,6 +1434,21 @@ try{
   }
 }catch(e){ console.warn('Session restore skipped', e); }
 
+/* Customer stays signed in and keeps receipts until explicit logout. */
+if(!state.customer){
+  try{
+    const durable = JSON.parse(localStorage.getItem('kfedeSolCustomerSession') || 'null');
+    if(durable && durable.customer){
+      state.customer = durable.customer;
+      state.myOrderIds = durable.myOrderIds || [];
+      state.myReceipts = durable.myReceipts || [];
+      state.cart = durable.cart || {};
+      state.itemTemp = durable.itemTemp || {};
+      state.view = state.myOrderIds.length ? 'waiting' : 'menu';
+    }
+  }catch(e){ console.warn('Customer restore skipped', e); }
+}
+
 function persistAppSession(){
   try{
     sessionStorage.setItem('kfedeSolAppSession', JSON.stringify({
@@ -1441,12 +1456,19 @@ function persistAppSession(){
       myOrderIds:state.myOrderIds || [], myReceipts:state.myReceipts || [],
       loggedInAdmin:state.loggedInAdmin || null, adminSessionToken:state.adminSessionToken || null
     }));
+    if(state.customer){
+      localStorage.setItem('kfedeSolCustomerSession', JSON.stringify({
+        customer:state.customer, myOrderIds:state.myOrderIds || [], myReceipts:state.myReceipts || [],
+        cart:state.cart || {}, itemTemp:state.itemTemp || {}
+      }));
+    }
   }catch(e){}
 }
 
 let pollTimer = null;
 let clockTimer = null;
 let completedReturnTimer = null;
+let adminInvalidSessionChecks = 0;
 
 function fmt(n){ return 'RM ' + n.toFixed(2); }
 function orderStatus(order){ return String((order && order.status) || '').split('|')[0]; }
@@ -1699,9 +1721,11 @@ async function gasMenuSaveImage(itemId, base64, mimeType){
 }
 
 /* ---------- orders ---------- */
+let lastOrdersCache = [];
 async function loadOrders(){
   const data = await gasGet('orders');
-  return (data && data.orders) ? data.orders : [];
+  if(data && Array.isArray(data.orders)){ lastOrdersCache = data.orders; return data.orders; }
+  return lastOrdersCache;
 }
 async function addOrder(order){
   const data = await gasPost('addOrder', { order });
@@ -1980,6 +2004,8 @@ function render(){
         state.adminAccounts = null;
         state.view = state.customer ? 'menu' : 'register';
       } else if(state.view === 'menu' || state.view === 'preview' || state.view === 'waiting' || state.view === 'promo' || state.view === 'receipts'){
+        localStorage.removeItem('kfedeSolCustomerSession');
+        sessionStorage.removeItem('kfedeSolAppSession');
         state.customer = null;
         state.cart = {};
         state.myOrderIds = [];
@@ -3763,6 +3789,7 @@ function bindViewEvents(){
         state.adminLoginError = '';
         state.loggedInAdmin = result.admin;
         state.adminSessionToken = result.token;
+        adminInvalidSessionChecks = 0;
         state.adminAccounts = null;
         state.view = 'admin';
         render();
@@ -4244,6 +4271,7 @@ async function submitOrder(){
   state.myOrders.push(order);
   state.activeQueueId = order.id;
   state.cart = {};
+  state.itemTemp = {};
   state.view = 'waiting';
   state.submitting = false;
   render();
@@ -4369,7 +4397,11 @@ async function refreshMyOrders(){
     completedReturnTimer = setTimeout(() => {
       if(state.completedOrder && state.completedOrder.id === completedId){
         state.completedOrder = null;
-        if(state.view === 'waiting') state.view = 'menu';
+        if(state.view === 'waiting'){
+          const nextOrder = (state.myOrders || [])[0];
+          if(nextOrder){ state.activeQueueId = nextOrder.id; state.view = 'waiting'; }
+          else state.view = 'menu';
+        }
         completedReturnTimer = null;
         render();
       }
@@ -4379,10 +4411,8 @@ async function refreshMyOrders(){
   if(removedIds.length > 0){
     state.myOrderIds = state.myOrderIds.filter(id => !removedIds.includes(id));
     if(removedIds.includes(state.activeQueueId)){
-      state.activeQueueId = null;
-      if(state.view === 'waiting'){
-        state.view = 'waiting';
-      }
+      const nextOrder = myOrders[0];
+      state.activeQueueId = nextOrder ? nextOrder.id : null;
     }
   }
 
@@ -4414,10 +4444,9 @@ function setupPolling(){
     checkMidnightReset(); // check auto reset on 1st of month
     if(state.view === 'admin'){
       const sessionValid = await adminSessionIsValid();
-      if(sessionValid === false){
-        forceAdminLogout('Akaun ini telah log masuk pada peranti lain. Sesi anda telah ditamatkan.');
-        return;
-      }
+      if(sessionValid === true) adminInvalidSessionChecks = 0;
+      if(sessionValid === false) adminInvalidSessionChecks += 1;
+      if(adminInvalidSessionChecks >= 2){ forceAdminLogout('Akaun ini telah log masuk pada peranti lain. Sesi anda telah ditamatkan.'); adminInvalidSessionChecks=0; return; }
       const orders = await loadOrders();
       const changed = JSON.stringify(orders) !== JSON.stringify(state.allOrders);
       if(changed){

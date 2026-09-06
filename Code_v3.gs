@@ -93,8 +93,9 @@ function setMeta_(key, value){
   cell.setValue(value);
 }
 
-/* ================= Admin single-session security ================= */
-function adminSessionKey_(adminId){ return 'admin-session-' + String(adminId); }
+/* ================= Admin session security ================= */
+const ADMIN_SESSION_TTL_MS_ = 7 * 24 * 60 * 60 * 1000;
+function adminSessionKey_(token){ return 'admin-session-token-' + String(token); }
 
 function findAdminByLogin_(username, password){
   const sheet = adminsSheet_();
@@ -114,8 +115,27 @@ function findAdminByLogin_(username, password){
 
 function validAdminSession_(adminId, token){
   if(!adminId || !token) return false;
-  const active = PropertiesService.getScriptProperties().getProperty(adminSessionKey_(adminId));
-  return active !== null && active === String(token);
+  const props = PropertiesService.getScriptProperties();
+  const key = adminSessionKey_(token);
+  const raw = props.getProperty(key);
+  if(!raw) return false;
+  try{
+    const session = JSON.parse(raw);
+    if(String(session.adminId) !== String(adminId) || Number(session.expiresAt) <= Date.now()){
+      props.deleteProperty(key);
+      return false;
+    }
+    // Renew only near expiry, avoiding a Script Properties write on every
+    // three-second client health check.
+    if(Number(session.expiresAt) - Date.now() < 24 * 60 * 60 * 1000){
+      session.expiresAt = Date.now() + ADMIN_SESSION_TTL_MS_;
+      props.setProperty(key, JSON.stringify(session));
+    }
+    return true;
+  }catch(e){
+    props.deleteProperty(key);
+    return false;
+  }
 }
 
 function sessionFrom_(source){
@@ -292,14 +312,17 @@ function doPost_(e){
     lock.waitLock(10000);
     try{
       const token = Utilities.getUuid() + '-' + Utilities.getUuid();
-      PropertiesService.getScriptProperties().setProperty(adminSessionKey_(admin.id), token);
+      PropertiesService.getScriptProperties().setProperty(adminSessionKey_(token), JSON.stringify({
+        adminId: admin.id,
+        expiresAt: Date.now() + ADMIN_SESSION_TTL_MS_
+      }));
       return jsonOut_({ ok:true, admin:admin, token:token });
     } finally { lock.releaseLock(); }
   }
 
   if(action === 'adminLogout'){
     if(sessionFrom_(body)){
-      PropertiesService.getScriptProperties().deleteProperty(adminSessionKey_(body.adminId));
+      PropertiesService.getScriptProperties().deleteProperty(adminSessionKey_(body.authToken));
     }
     return jsonOut_({ ok:true });
   }
@@ -346,28 +369,37 @@ function doPost_(e){
 
   if(action === 'resetOrders'){
     const sheet = ordersSheet_();
+    const data = sheet.getDataRange().getValues();
+    // Manual reset clears the live queue only. Completed orders are the
+    // source for Simpanan and the current-month report, so retain them.
+    const completed = data.slice(1).filter(r => String(r[4]).split('|')[0] === 'selesai');
     const last = sheet.getLastRow();
-    if(last > 1) sheet.deleteRows(2, last - 1);
+    if(last > 1) sheet.getRange(2, 1, last - 1, sheet.getLastColumn()).clearContent();
+    if(completed.length) sheet.getRange(2, 1, completed.length, completed[0].length).setValues(completed);
     setMeta_('counter', '0');
     setMeta_('last-reset-date', todayStr_());
     return jsonOut_({ ok: true });
   }
 
   if(action === 'upsertCustomer'){
-    const sheet = customersSheet_();
-    const row = findRow_(sheet, 0, body.phone);
-    if(row === -1){
-      const newRow = sheet.getLastRow() + 1;
-      setTextCell_(sheet, newRow, 1, body.phone);
-      sheet.getRange(newRow, 2, 1, 3).setValues([[body.name, body.deltaCount || 0, body.deltaQty || 0]]);
-    } else {
-      const curCount = Number(sheet.getRange(row, 3).getValue()) || 0;
-      const curQty = Number(sheet.getRange(row, 4).getValue()) || 0;
-      setTextCell_(sheet, row, 1, body.phone);
-      sheet.getRange(row, 2).setValue(body.name);
-      sheet.getRange(row, 3).setValue(curCount + (body.deltaCount || 0));
-      sheet.getRange(row, 4).setValue(curQty + (body.deltaQty || 0));
-    }
+    const lock = LockService.getScriptLock();
+    lock.waitLock(10000);
+    try{
+      const sheet = customersSheet_();
+      const row = findRow_(sheet, 0, body.phone);
+      if(row === -1){
+        const newRow = sheet.getLastRow() + 1;
+        setTextCell_(sheet, newRow, 1, body.phone);
+        sheet.getRange(newRow, 2, 1, 3).setValues([[body.name, body.deltaCount || 0, body.deltaQty || 0]]);
+      } else {
+        const curCount = Number(sheet.getRange(row, 3).getValue()) || 0;
+        const curQty = Number(sheet.getRange(row, 4).getValue()) || 0;
+        setTextCell_(sheet, row, 1, body.phone);
+        sheet.getRange(row, 2).setValue(body.name);
+        sheet.getRange(row, 3).setValue(curCount + (body.deltaCount || 0));
+        sheet.getRange(row, 4).setValue(curQty + (body.deltaQty || 0));
+      }
+    } finally { lock.releaseLock(); }
     return jsonOut_({ ok: true });
   }
 
@@ -463,9 +495,9 @@ function dailyAutoReset(){
   const today = todayStr_();
   const lastReset = getMeta_('last-reset-date', '');
   if(lastReset === today) return;
-  const sheet = ordersSheet_();
-  const last = sheet.getLastRow();
-  if(last > 1) sheet.deleteRows(2, last - 1);
+  // Orders are the current-month history used by Simpanan and the monthly
+  // charts. Never delete them at the daily boundary.
+  archiveCustomersIfMonthChanged_();
   setMeta_('counter', '0');
   setMeta_('last-reset-date', today);
 }
@@ -491,6 +523,13 @@ function archiveCustomersIfMonthChanged_(){
     const last = sheet.getLastRow();
     if(last > 1) sheet.deleteRows(2, last - 1);
     setMeta_('current-month', curMonth);
+
+    // A new month starts a fresh operational/order history only after the
+    // previous customer's monthly snapshot has been saved.
+    const orderSheet = ordersSheet_();
+    const orderLast = orderSheet.getLastRow();
+    if(orderLast > 1) orderSheet.deleteRows(2, orderLast - 1);
+    setMeta_('counter', '0');
   }
   return curMonth;
 }

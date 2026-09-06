@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>K'fe De Sol · v3.1.3</title>
+<title>K'fe De Sol · v3.2.0</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;900&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
 
@@ -1434,6 +1434,19 @@ try{
   }
 }catch(e){ console.warn('Session restore skipped', e); }
 
+/* Admin login survives refresh/browser restart until the server-side TTL
+   expires. This is kept separately from the customer session. */
+if(!state.loggedInAdmin || !state.adminSessionToken){
+  try{
+    const durableAdmin = JSON.parse(localStorage.getItem('kfedeSolAdminSession') || 'null');
+    if(durableAdmin && durableAdmin.admin && durableAdmin.token){
+      state.loggedInAdmin = durableAdmin.admin;
+      state.adminSessionToken = durableAdmin.token;
+      if(state.view === 'admin-login') state.view = 'admin';
+    }
+  }catch(e){ console.warn('Admin restore skipped', e); }
+}
+
 /* Customer stays signed in and keeps receipts until explicit logout. */
 if(!state.customer){
   try{
@@ -1461,6 +1474,13 @@ function persistAppSession(){
         customer:state.customer, myOrderIds:state.myOrderIds || [], myReceipts:state.myReceipts || [],
         cart:state.cart || {}, itemTemp:state.itemTemp || {}
       }));
+    }
+    if(state.loggedInAdmin && state.adminSessionToken){
+      localStorage.setItem('kfedeSolAdminSession', JSON.stringify({
+        admin:state.loggedInAdmin, token:state.adminSessionToken
+      }));
+    } else {
+      localStorage.removeItem('kfedeSolAdminSession');
     }
   }catch(e){}
 }
@@ -1792,6 +1812,7 @@ function forceAdminLogout(message){
   state.loggedInAdmin = null;
   state.adminSessionToken = null;
   state.adminAccounts = null;
+  try{ localStorage.removeItem('kfedeSolAdminSession'); }catch(e){}
   state.view = 'admin-login';
   state.adminLoginError = message || 'Sesi admin telah tamat. Sila log masuk semula.';
   render();
@@ -1835,13 +1856,14 @@ function render(){
     const music = frame.querySelector('#kfeMusic');
     const start = frame.querySelector('#introStart');
     if(start) start.onclick = () => {
-      start.disabled=true; let dots=0;
-      const timer=setInterval(()=>{ dots=(dots+1)%4; start.textContent='Loading'+'.'.repeat(dots); },450);
+      if(start.dataset.started === '1') return;
+      start.dataset.started = '1';
+      start.disabled=true;
       const splash=frame.querySelector('.splash'); if(splash) splash.classList.add('playing');
-      const goNext=()=>{ clearInterval(timer); state.view=state.customer?'menu':'register'; render(); };
-      if(music){ music.volume=0.16; music.loop=false; music.onended=goNext; music.play().catch(()=>{ setTimeout(goNext,3000); }); }
-      else setTimeout(goNext,1400);
-      setTimeout(goNext,30000);
+      // Audio is decorative: navigation must respond to the first click.
+      if(music){ music.volume=0.16; music.loop=false; music.play().catch(()=>{}); }
+      state.view=state.customer?'menu':'register';
+      render();
     };
     return;
   }
@@ -1910,6 +1932,7 @@ function render(){
   let topQueueBtn = '';
   let topReceiptBtn = '';
   let topHomeBtn = '';
+  let topAdminBtn = '';
   if(state.view === 'register'){
     topRightBtn = `<button class="mode-toggle" id="modeToggle">Admin</button>`;
   } else if(state.view === 'admin'){
@@ -1918,6 +1941,7 @@ function render(){
     topRightBtn = `<button class="mode-toggle" id="modeToggle">Pelanggan</button>`;
   } else if(state.view === 'menu' || state.view === 'preview' || state.view === 'waiting' || state.view === 'promo' || state.view === 'receipts'){
     topRightBtn = `<button class="icon-btn" id="modeToggle" title="Log Keluar">${ICON_LOGOUT}</button>`;
+    topAdminBtn = `<button class="mode-toggle" id="customerAdminBtn" type="button">Admin</button>`;
     if(state.view !== 'promo'){
       const freeCount = state.myLoyalty ? Math.floor((state.myLoyalty.qty||0) / 6) : 0;
       topPromoBtn = `<button class="icon-btn gift-icon-btn ${freeCount>0?'has-reward':''}" id="promoBtn" title="Promosi">${ICON_GIFT}</button>`;
@@ -1949,6 +1973,7 @@ function render(){
         ${topQueueBtn}
         ${topReceiptBtn}
         ${topHomeBtn}
+        ${topAdminBtn}
         ${topRightBtn}
       </div>
     </div>
@@ -2002,6 +2027,7 @@ function render(){
         state.loggedInAdmin = null;
         state.adminSessionToken = null;
         state.adminAccounts = null;
+        try{ localStorage.removeItem('kfedeSolAdminSession'); }catch(e){}
         state.view = state.customer ? 'menu' : 'register';
       } else if(state.view === 'menu' || state.view === 'preview' || state.view === 'waiting' || state.view === 'promo' || state.view === 'receipts'){
         localStorage.removeItem('kfedeSolCustomerSession');
@@ -2021,6 +2047,14 @@ function render(){
         state.mode = 'customer';
         state.view = (state.myOrderIds && state.myOrderIds.length > 0) ? 'waiting' : (state.customer ? 'menu' : 'register');
       }
+      render();
+    };
+  }
+
+  const customerAdminBtn = document.getElementById('customerAdminBtn');
+  if(customerAdminBtn){
+    customerAdminBtn.onclick = () => {
+      state.view = (state.loggedInAdmin && state.adminSessionToken) ? 'admin' : 'admin-login';
       render();
     };
   }
@@ -2068,7 +2102,7 @@ function renderSplash(){
       <h1 class="sol-rise">K'fe De Sol</h1>
       <p class="sol-rise">Kopi segar, hangat hati</p>
       <img class="splash-coffee sol-rise" src="coffee-motion-source.png" alt="Kopi">
-      <small class="app-version">v3.1.3</small>
+      <small class="app-version">v3.2.0</small>
       <audio id="kfeMusic" src="kafe-de-sol-music.mp4" preload="auto" loop></audio>
       <button id="introStart" class="reg-submit" type="button">Get Started</button>
     </div>
@@ -3789,6 +3823,7 @@ function bindViewEvents(){
         state.adminLoginError = '';
         state.loggedInAdmin = result.admin;
         state.adminSessionToken = result.token;
+        try{ localStorage.setItem('kfedeSolAdminSession', JSON.stringify({admin:result.admin, token:result.token})); }catch(e){}
         adminInvalidSessionChecks = 0;
         state.adminAccounts = null;
         state.view = 'admin';
@@ -4446,7 +4481,7 @@ function setupPolling(){
       const sessionValid = await adminSessionIsValid();
       if(sessionValid === true) adminInvalidSessionChecks = 0;
       if(sessionValid === false) adminInvalidSessionChecks += 1;
-      if(adminInvalidSessionChecks >= 2){ forceAdminLogout('Akaun ini telah log masuk pada peranti lain. Sesi anda telah ditamatkan.'); adminInvalidSessionChecks=0; return; }
+      if(adminInvalidSessionChecks >= 3){ forceAdminLogout('Sesi admin telah tamat. Sila log masuk semula.'); adminInvalidSessionChecks=0; return; }
       const orders = await loadOrders();
       const changed = JSON.stringify(orders) !== JSON.stringify(state.allOrders);
       if(changed){

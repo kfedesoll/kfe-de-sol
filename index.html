@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>K'fe De Sol · v3.2.0</title>
+<title>K'fe De Sol · v3.2.3</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;900&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
 
@@ -144,6 +144,8 @@ body{
   padding:5px 38px; transform:rotate(28deg);
   box-shadow:0 2px 4px rgba(0,0,0,0.2);
 }
+.receipt-stamp.rejected{ background:#C62828; }
+.receipt-reject-reason{ color:#C62828; font-weight:800; margin:8px 0 2px; }
 .receipt-divider{
   border-top:1px dashed var(--coffee-mid); opacity:0.4; margin:14px 0;
 }
@@ -1488,6 +1490,7 @@ function persistAppSession(){
 let pollTimer = null;
 let clockTimer = null;
 let completedReturnTimer = null;
+const rejectedReturnTimers = new Map();
 let adminInvalidSessionChecks = 0;
 
 function fmt(n){ return 'RM ' + n.toFixed(2); }
@@ -1506,6 +1509,8 @@ function buildRejectedStatus(reason){ return 'rejected|' + String(reason || 'Lai
    Renders a single order as a printable shop receipt (logo, item list, total, queue no, date/time). */
 function buildReceiptHtml(order){
   const dateTimeStr = new Date(order.createdAt).toLocaleString('ms-MY', {day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'});
+  const rejected = isOrderRejected(order);
+  const rejectReason = getRejectReason(order);
   const itemsHtml = (order.items||[]).map(i =>
     `<div class="shop-receipt-row"><span>${i.name} x${i.qty}</span><span>${fmt(i.price*i.qty)}</span></div>`
   ).join('');
@@ -1513,20 +1518,22 @@ function buildReceiptHtml(order){
     <div class="shop-receipt">
       <div class="shop-receipt-logo"><img src="${LOGO_URL}" alt="K'fe De Sol"></div>
       <div class="shop-receipt-shopname">K'fe De Sol</div>
-      <div class="shop-receipt-tagline">Resit Rasmi</div>
+      <div class="shop-receipt-tagline">${rejected ? 'Rekod Pesanan Ditolak' : 'Resit Rasmi'}</div>
       <div class="shop-receipt-divider"></div>
       <div class="shop-receipt-meta">
         <div class="shop-receipt-row"><span>No. Giliran</span><span>${String(order.queueNo).padStart(3,'0')}</span></div>
         <div class="shop-receipt-row"><span>Tarikh/Masa</span><span>${dateTimeStr}</span></div>
         ${order.customerName ? `<div class="shop-receipt-row"><span>Nama</span><span>${order.customerName}</span></div>` : ''}
         ${order.customerPhone ? `<div class="shop-receipt-row"><span>No. Hp</span><span>${order.customerPhone}</span></div>` : ''}
+        ${rejected ? `<div class="shop-receipt-row"><span>Status</span><span>DITOLAK</span></div>` : ''}
+        ${rejected ? `<div class="shop-receipt-row"><span>Sebab</span><span>${rejectReason || 'Lain-lain'}</span></div>` : ''}
       </div>
       <div class="shop-receipt-divider"></div>
       <div class="shop-receipt-items">${itemsHtml}</div>
       <div class="shop-receipt-divider"></div>
       <div class="shop-receipt-row shop-receipt-total"><span>Jumlah</span><span>${fmt(order.total)}</span></div>
       <div class="shop-receipt-divider"></div>
-      <div class="shop-receipt-thanks">Terima kasih atas sokongan anda &#9749;</div>
+      <div class="shop-receipt-thanks">${rejected ? 'Pesanan ini tidak dikira sebagai jualan.' : 'Terima kasih atas sokongan anda &#9749;'}</div>
     </div>
   `;
 }
@@ -1853,15 +1860,12 @@ function render(){
 
   if(state.view === 'splash'){
     frame.innerHTML = renderSplash();
-    const music = frame.querySelector('#kfeMusic');
     const start = frame.querySelector('#introStart');
     if(start) start.onclick = () => {
       if(start.dataset.started === '1') return;
       start.dataset.started = '1';
       start.disabled=true;
       const splash=frame.querySelector('.splash'); if(splash) splash.classList.add('playing');
-      // Audio is decorative: navigation must respond to the first click.
-      if(music){ music.volume=0.16; music.loop=false; music.play().catch(()=>{}); }
       state.view=state.customer?'menu':'register';
       render();
     };
@@ -1941,7 +1945,6 @@ function render(){
     topRightBtn = `<button class="mode-toggle" id="modeToggle">Pelanggan</button>`;
   } else if(state.view === 'menu' || state.view === 'preview' || state.view === 'waiting' || state.view === 'promo' || state.view === 'receipts'){
     topRightBtn = `<button class="icon-btn" id="modeToggle" title="Log Keluar">${ICON_LOGOUT}</button>`;
-    topAdminBtn = `<button class="mode-toggle" id="customerAdminBtn" type="button">Admin</button>`;
     if(state.view !== 'promo'){
       const freeCount = state.myLoyalty ? Math.floor((state.myLoyalty.qty||0) / 6) : 0;
       topPromoBtn = `<button class="icon-btn gift-icon-btn ${freeCount>0?'has-reward':''}" id="promoBtn" title="Promosi">${ICON_GIFT}</button>`;
@@ -2102,8 +2105,7 @@ function renderSplash(){
       <h1 class="sol-rise">K'fe De Sol</h1>
       <p class="sol-rise">Kopi segar, hangat hati</p>
       <img class="splash-coffee sol-rise" src="coffee-motion-source.png" alt="Kopi">
-      <small class="app-version">v3.2.0</small>
-      <audio id="kfeMusic" src="kafe-de-sol-music.mp4" preload="auto" loop></audio>
+      <small class="app-version">v3.2.3</small>
       <button id="introStart" class="reg-submit" type="button">Get Started</button>
     </div>
   `;
@@ -2539,16 +2541,19 @@ function renderReceipts(){
 
   const cardsHtml = receipts.map(o => {
     const dateTimeStr = new Date(o.createdAt).toLocaleString('ms-MY', {day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'});
+    const rejected = isOrderRejected(o);
+    const rejectReason = getRejectReason(o);
     const itemsHtml = o.items.map(i => `<div class="row"><span>${i.name} x${i.qty}</span><span>${fmt(i.price*i.qty)}</span></div>`).join('');
     return `
       <div class="receipt-card">
-        <div class="receipt-stamp">SELESAI</div>
+        <div class="receipt-stamp ${rejected?'rejected':''}">${rejected?'DITOLAK':'SELESAI'}</div>
         <div class="label">No. Giliran${o.customerName ? ' &middot; ' + o.customerName : ''}</div>
         <div class="queue-no small">${String(o.queueNo).padStart(3,'0')}</div>
         <div class="receipt-datetime">${dateTimeStr}</div>
+        ${rejected ? `<div class="receipt-reject-reason">Sebab: ${rejectReason || 'Lain-lain'}</div>` : ''}
         <div class="receipt-divider"></div>
         <div class="order-items">${itemsHtml}<div class="row" style="border-top:1px solid #EFE2D2; margin-top:6px; padding-top:8px; font-weight:600;"><span>Jumlah</span><span>${fmt(o.total)}</span></div></div>
-        <div class="receipt-footer">Terima kasih atas sokongan anda &#9749;</div>
+        <div class="receipt-footer">${rejected ? 'Rekod pesanan ditolak — tiada bayaran/jualan direkodkan.' : 'Terima kasih atas sokongan anda &#9749;'}</div>
       </div>
     `;
   }).join('');
@@ -2603,7 +2608,12 @@ function renderAdmin(){
 function renderAdminPesanan(){
   const holidayNotice = state.shopClosed && state.shopClosedFrom && state.shopClosedUntil
     ? `<div class="holiday-blink">CUTI: ${state.shopClosedFrom} hingga ${state.shopClosedUntil}</div>` : '';
-  const orders = (state.allOrders || []).filter(o => orderStatus(o) !== 'selesai')
+  // Keep rejected orders in Sheets for audit/history, but remove them from the
+  // admin's active work queue as soon as the rejection succeeds.
+  const orders = (state.allOrders || []).filter(o => {
+    const status = orderStatus(o);
+    return status !== 'selesai' && status !== 'rejected';
+  })
     .slice().sort((a,b) => a.createdAt - b.createdAt);
   if(orders.length === 0){
     return holidayNotice + `<div class="empty-msg">Belum ada pesanan masuk.</div>`;
@@ -2704,7 +2714,10 @@ function renderAdminPesanan(){
 
 /* ---------- admin: simpanan pelanggan tab ---------- */
 function renderAdminSimpanan(){
-  const orders = (state.allOrders || []).filter(o => orderStatus(o) === 'selesai');
+  const orders = (state.allOrders || []).filter(o => {
+    const status = orderStatus(o);
+    return status === 'selesai' || status === 'rejected';
+  });
   let html = '';
 
   if(orders.length === 0){
@@ -2724,8 +2737,10 @@ function renderAdminSimpanan(){
     html += `<div class="customer-groups">` + order_seq.reverse().map((key, idx) => {
       const g = groups[key];
       g.orders.sort((a,b) => b.createdAt - a.createdAt);
-      const totalQty = g.orders.reduce((s,o) => s + o.items.reduce((s2,i)=>s2+i.qty,0), 0);
-      const totalPrice = g.orders.reduce((s,o) => s + o.total, 0);
+      const completedOrders = g.orders.filter(o => orderStatus(o) === 'selesai');
+      const rejectedOrders = g.orders.filter(isOrderRejected);
+      const totalQty = completedOrders.reduce((s,o) => s + o.items.reduce((s2,i)=>s2+i.qty,0), 0);
+      const totalPrice = completedOrders.reduce((s,o) => s + o.total, 0);
       const lastDateTime = new Date(g.orders[0].createdAt).toLocaleString('ms-MY', {day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'});
       const latestQueueNo = g.orders[0].queueNo;
       const expandKey = 'simpanan-' + idx;
@@ -2735,6 +2750,8 @@ function renderAdminSimpanan(){
       if(expanded){
         detailHtml = `<div class="cg-simpanan-detail">` + g.orders.map(o => {
           const time = new Date(o.createdAt).toLocaleTimeString('ms-MY', {hour:'2-digit', minute:'2-digit'});
+          const rejected = isOrderRejected(o);
+          const rejectReason = getRejectReason(o);
           const rows = o.items.map(i => `
             <tr>
               <td>${i.name}</td>
@@ -2744,7 +2761,8 @@ function renderAdminSimpanan(){
           `).join('');
           return `
             <div class="cg-order-block">
-              <div class="oi-meta">No: ${String(o.queueNo).padStart(3,'0')} &middot; ${time}</div>
+              <div class="oi-meta">No: ${String(o.queueNo).padStart(3,'0')} &middot; ${time} &middot; ${rejected ? '<strong style="color:#C62828">DITOLAK</strong>' : '<strong style="color:#2E7D32">SELESAI</strong>'}</div>
+              ${rejected ? `<div class="cg-reject-reason">Sebab reject: ${rejectReason || 'Lain-lain'}</div>` : ''}
               <table class="cg-table">
                 <thead>
                   <tr><th>Jenis minuman</th><th>Kuantiti</th><th>Harga</th></tr>
@@ -2773,7 +2791,7 @@ function renderAdminSimpanan(){
             </div>
           </div>
           <div class="cg-footer">
-            <div>${g.orders.length} pesanan &middot; ${totalQty} cawan &middot; ${fmt(totalPrice)}</div>
+            <div>${completedOrders.length} selesai &middot; ${rejectedOrders.length} ditolak &middot; ${totalQty} cawan &middot; ${fmt(totalPrice)}</div>
             <div class="oi-meta"><span class="cg-toggle-arrow">${expanded?'▲':'▼'}</span></div>
           </div>
           ${detailHtml}
@@ -3144,6 +3162,8 @@ async function exportMonthlyPdf(e){
 /* Draw one order as a native receipt page (vector text, not a screenshot)
    in a narrow portrait layout resembling a shop receipt. */
 function drawReceiptPage_(pdf, order){
+  const rejected = isOrderRejected(order);
+  const rejectReason = getRejectReason(order);
   const pageWidth = pdf.internal.pageSize.getWidth();
   const margin = 12;
   const centerX = pageWidth / 2;
@@ -3163,7 +3183,7 @@ function drawReceiptPage_(pdf, order){
   pdf.setFont('helvetica', 'normal');
   pdf.setFontSize(9);
   pdf.setTextColor(120, 100, 85);
-  pdf.text('Resit Rasmi', centerX, y, { align:'center' });
+  pdf.text(rejected ? 'Rekod Pesanan Ditolak' : 'Resit Rasmi', centerX, y, { align:'center' });
   y += 6;
 
   pdf.setDrawColor(150, 150, 150);
@@ -3188,6 +3208,10 @@ function drawReceiptPage_(pdf, order){
   metaRow('Tarikh/Masa', dateTimeStr);
   if(order.customerName) metaRow('Nama', order.customerName);
   if(order.customerPhone) metaRow('No. Hp', order.customerPhone);
+  if(rejected){
+    metaRow('Status', 'DITOLAK');
+    metaRow('Sebab', rejectReason || 'Lain-lain');
+  }
 
   y += 1.5;
   pdf.setDrawColor(150, 150, 150);
@@ -3220,7 +3244,7 @@ function drawReceiptPage_(pdf, order){
   pdf.setFont('helvetica', 'normal');
   pdf.setFontSize(9);
   pdf.setTextColor(120, 100, 85);
-  pdf.text('Terima kasih atas sokongan anda', centerX, y, { align:'center' });
+  pdf.text(rejected ? 'Pesanan ini tidak dikira sebagai jualan' : 'Terima kasih atas sokongan anda', centerX, y, { align:'center' });
 }
 
 /* Build a single PDF covering all accumulated orders for one customer
@@ -3686,6 +3710,31 @@ function notifyOrderRejected(order){
   if(navigator.vibrate) navigator.vibrate([200,80,200]);
 }
 
+function dismissRejectedOrder(orderId){
+  const timer = rejectedReturnTimers.get(orderId);
+  if(timer) clearTimeout(timer);
+  rejectedReturnTimers.delete(orderId);
+  state.myOrderIds = (state.myOrderIds || []).filter(id => id !== orderId);
+  state.myOrders = (state.myOrders || []).filter(o => o.id !== orderId);
+  if(state.activeQueueId === orderId){
+    const nextOrder = state.myOrders[0];
+    state.activeQueueId = nextOrder ? nextOrder.id : null;
+  }
+  persistAppSession();
+}
+
+function scheduleRejectedOrderDismissal(orderId){
+  if(!orderId || rejectedReturnTimers.has(orderId)) return;
+  const timer = setTimeout(() => {
+    dismissRejectedOrder(orderId);
+    if(state.view === 'waiting'){
+      state.view = state.myOrders.length > 0 ? 'waiting' : 'receipts';
+    }
+    render();
+  }, 10000);
+  rejectedReturnTimers.set(orderId, timer);
+}
+
 function bindViewEvents(){
   if(state.view === 'register'){
     const nameInput = document.getElementById('custName');
@@ -3762,8 +3811,15 @@ function bindViewEvents(){
         }
         const custName = found[found.length - 1].customerName || '';
         state.customer = { name: custName, phone };
-        const activeOrders = found.filter(o => orderStatus(o) !== 'selesai');
-        const doneOrders = found.filter(o => orderStatus(o) === 'selesai');
+        const activeOrders = found.filter(o => {
+          const status = orderStatus(o);
+          return status !== 'selesai' && status !== 'rejected';
+        });
+        const receiptOrders = found.filter(o => {
+          const status = orderStatus(o);
+          return status === 'selesai' || status === 'rejected';
+        });
+        state.myReceipts = receiptOrders;
         state.checkOrderError = '';
         state.checkPhone = '';
         if(activeOrders.length > 0){
@@ -3774,7 +3830,6 @@ function bindViewEvents(){
         } else {
           // All matching orders are already 'selesai' - go straight to
           // receipts instead of flashing through an empty waiting page.
-          state.myReceipts = doneOrders;
           state.view = 'receipts';
         }
         render();
@@ -3952,6 +4007,8 @@ function bindViewEvents(){
     if(againBtn){
       againBtn.onclick = () => {
         if(completedReturnTimer){ clearTimeout(completedReturnTimer); completedReturnTimer = null; }
+        const activeOrder = (state.myOrders || []).find(o => o.id === state.activeQueueId);
+        if(activeOrder && isOrderRejected(activeOrder)) dismissRejectedOrder(activeOrder.id);
         state.cart = {};
         state.popularIds = null;
         state.completedOrder = null;
@@ -4020,7 +4077,20 @@ function bindViewEvents(){
         if(reason === null) return;
         btn.disabled = true;
         btn.textContent = '...';
-        await updateOrderStatus(id, buildRejectedStatus(reason), reason);
+        const rejectedOrder = (state.allOrders || []).find(o => o.id === id);
+        const result = await updateOrderStatus(id, buildRejectedStatus(reason), reason);
+        if(!result || !result.ok){
+          btn.disabled = false;
+          btn.textContent = 'Reject';
+          showToast('Reject gagal disimpan. Cuba lagi.', 'error');
+          return;
+        }
+        // The purchase tally was added when the order was submitted. Reverse
+        // it after a confirmed rejection so loyalty/sales totals stay correct.
+        if(rejectedOrder && rejectedOrder.customerPhone){
+          const rejectedQty = (rejectedOrder.items || []).reduce((sum,item) => sum + (Number(item.qty) || 0), 0);
+          await upsertCustomer(rejectedOrder.customerPhone, rejectedOrder.customerName || '', -1, -rejectedQty);
+        }
         state.acknowledgedOrderIds.add(id);
         state.allOrders = await loadOrders();
         render();
@@ -4054,8 +4124,11 @@ function bindViewEvents(){
       btn.onclick = async (e) => {
         e.stopPropagation();
         const key = btn.dataset.customerKey;
-        const orders = (state.allOrders || []).filter(o => orderStatus(o) === 'selesai' &&
-          String(o.customerPhone || o.customerName || o.id) === key);
+        const orders = (state.allOrders || []).filter(o => {
+          const status = orderStatus(o);
+          return (status === 'selesai' || status === 'rejected') &&
+            String(o.customerPhone || o.customerName || o.id) === key;
+        });
         if(orders.length === 0) return;
         btn.disabled = true;
         const original = btn.textContent;
@@ -4321,7 +4394,7 @@ document.addEventListener('pointerdown', (event) => {
 }, {passive:true});
 let audioCtx = null;
 function getAudioCtx(){
-  if(!audioCtx){
+  if(!audioCtx || audioCtx.state === 'closed'){
     try{ audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){ return null; }
   }
   return audioCtx;
@@ -4329,19 +4402,28 @@ function getAudioCtx(){
 function beep(freq, duration, delay){
   const ctx = getAudioCtx();
   if(!ctx) return;
-  if(ctx.state === 'suspended'){ ctx.resume().catch(()=>{}); }
-  const t0 = ctx.currentTime + (delay||0);
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.type = 'sine';
-  osc.frequency.value = freq;
-  gain.gain.setValueAtTime(0.0001, t0);
-  gain.gain.exponentialRampToValueAtTime(0.25, t0 + 0.02);
-  gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.start(t0);
-  osc.stop(t0 + duration + 0.02);
+  const play = () => {
+    if(ctx.state === 'closed') return;
+    const t0 = ctx.currentTime + (delay||0);
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(0.25, t0 + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t0);
+    osc.stop(t0 + duration + 0.02);
+  };
+  // Mobile browsers may suspend/interupt Web Audio after a mode change,
+  // backgrounding, or screen lock. Resume first, then schedule the beep.
+  if(ctx.state === 'suspended' || ctx.state === 'interrupted'){
+    ctx.resume().then(play).catch(() => { audioCtx = null; });
+  } else {
+    play();
+  }
 }
 function playNewOrderSound(){
   beep(880, 0.15, 0);
@@ -4453,6 +4535,16 @@ async function refreshMyOrders(){
 
   const changed = JSON.stringify(myOrders) !== JSON.stringify(state.myOrders) || removedIds.length > 0;
   state.myOrders = myOrders;
+  const rejectedOrders = myOrders.filter(isOrderRejected);
+  if(rejectedOrders.length > 0){
+    if(!state.myReceipts) state.myReceipts = [];
+    const receiptIds = new Set(state.myReceipts.map(r => r.id));
+    rejectedOrders.forEach(o => {
+      if(!receiptIds.has(o.id)) state.myReceipts.unshift(o);
+      scheduleRejectedOrderDismissal(o.id);
+    });
+    persistAppSession();
+  }
 
   if(newlyReady){
     notifyOrderReady(newlyReady);

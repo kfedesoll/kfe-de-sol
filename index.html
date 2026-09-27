@@ -3,9 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>K'fe De Sol · v3.2.3</title>
+<title>K'fe De Sol · v3.2.9</title>
+<meta name="theme-color" content="#2B1810">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="K'fe De Sol">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600;900&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600;700&family=Fraunces:wght@400;600;900&family=Work+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap');
 
 :root{
   --coffee-dark:#2B1810;
@@ -39,6 +47,8 @@ body{
   flex-direction:column;
 }
 #app-frame.admin-mode{ max-width:1850px; }
+#app-frame.customer-mode{ height:100vh; height:100dvh; min-height:0; }
+#app-frame.customer-mode .cart-bar{ bottom:calc(70px + env(safe-area-inset-bottom)); }
 
 /* ---------- Top bar ---------- */
 .topbar{
@@ -93,6 +103,13 @@ body{
 .icon-btn.queue-icon-btn.ready{
   animation: queue-icon-blink 0.5s steps(1, end) infinite;
 }
+.icon-btn.queue-icon-btn.active:not(.ready){
+  animation: queue-icon-active-blink 0.85s ease-in-out infinite;
+}
+@keyframes queue-icon-active-blink{
+  0%,100%{ background:transparent; color:var(--sol-orange); border-color:var(--sol-orange); box-shadow:none; }
+  50%{ background:var(--sol-orange); color:#fff; border-color:var(--sol-orange); box-shadow:0 0 0 6px rgba(239,132,35,.18); }
+}
 @keyframes queue-icon-blink{
   0%,49%{ background:#00E676; color:#fff; border-color:#00E676; box-shadow:0 0 10px rgba(0,230,118,0.9); }
   50%,100%{ background:transparent; color:#00C853; border-color:#00C853; box-shadow:none; }
@@ -118,13 +135,13 @@ body{
 /* ---------- Receipts (customer receipt history) ---------- */
 .receipts-view{
   flex:1; display:flex; flex-direction:column; align-items:stretch; justify-content:flex-start;
-  padding:24px 18px; text-align:left; gap:16px; overflow-y:auto;
+  padding:18px 18px 100px; text-align:left; gap:10px; overflow-y:auto;
 }
 .receipts-header{
-  font-size:18px; letter-spacing:2px; text-transform:uppercase; color:var(--coffee-mid);
-  font-weight:600; text-align:center;
+  margin:0 0 4px; color:var(--coffee-dark); font:700 24px 'Fraunces',serif;
+  letter-spacing:0; text-transform:none; text-align:left;
 }
-.receipt-list{ display:flex; flex-direction:column; gap:16px; }
+.receipt-list{ display:flex; flex-direction:column; gap:12px; }
 .receipt-card{
   position:relative; background:var(--card); border:2px solid var(--coffee-dark); border-radius:18px;
   padding:32px 20px 28px; text-align:center; overflow:hidden; min-height:260px;
@@ -145,6 +162,11 @@ body{
   box-shadow:0 2px 4px rgba(0,0,0,0.2);
 }
 .receipt-stamp.rejected{ background:#C62828; }
+.receipt-stamp.active{ background:var(--sol-orange); animation:receipt-active-blink .85s ease-in-out infinite; }
+@keyframes receipt-active-blink{ 50%{ background:#FFB343; box-shadow:0 0 0 6px rgba(239,132,35,.18); } }
+.receipt-section-title{ margin:2px 2px 0; color:var(--coffee-dark); font:700 17px 'Fraunces',serif; }
+.receipt-card.active-card{ border-color:var(--sol-orange); box-shadow:0 8px 22px rgba(239,132,35,.16); }
+.receipt-open-order{ min-height:44px; margin-top:16px; border:0; border-radius:999px; background:var(--sol-orange); color:#fff; font:700 14px 'Work Sans',sans-serif; cursor:pointer; }
 .receipt-reject-reason{ color:#C62828; font-weight:800; margin:8px 0 2px; }
 .receipt-divider{
   border-top:1px dashed var(--coffee-mid); opacity:0.4; margin:14px 0;
@@ -183,7 +205,7 @@ body{
 .splash .sol-rise{ animation: rise 1.8s ease-out; }
 .splash #introStart{ position:absolute; left:50%; bottom:28px; transform:translateX(-50%); width:min(86%,340px); margin:0; padding:18px 28px; border-radius:30px; font-size:18px; font-weight:700; background:#F4C978; color:#2B1810; border:0; box-shadow:0 6px 16px rgba(0,0,0,.2); }
 .splash-coffee{ width:min(78vw,360px); margin-top:24px; filter:drop-shadow(0 8px 18px rgba(0,0,0,.18)); }
-.app-version{ position:absolute; right:14px; bottom:10px; color:rgba(255,255,255,.55); font:11px 'Space Mono',monospace; }
+.app-version{ position:absolute; top:10px; right:14px; color:rgba(255,255,255,.55); font:11px 'Space Mono',monospace; }
 .splash #introStart:hover{ background:#FFD991; }
 .splash > .sol-rise:first-child{ margin-top:-22px; }
 @keyframes rise{
@@ -221,7 +243,7 @@ body{
 .menu-card .photo{
   width:58px; height:58px; flex-shrink:0;
   border-radius:12px;
-  background:#FBEFE0;
+  background:transparent;
   overflow:hidden;
 }
 .menu-card .photo img{
@@ -238,6 +260,30 @@ body{
 .menu-card .info{ flex:1; min-width:0; }
 .menu-card .info .name{ font-weight:500; font-size:15px; color:var(--coffee-dark); }
 .menu-card .info .price{ font-family:'Space Mono', monospace; font-size:13px; color:var(--text-soft); margin-top:2px; }
+.menu-card[role="button"]{ cursor:pointer; }
+.menu-card[role="button"]:focus-visible{ outline:3px solid rgba(239,132,35,.35); outline-offset:2px; }
+
+/* ---------- Product detail page ---------- */
+.product-detail-page{ flex:1; min-height:0; overflow-y:auto; padding:14px 20px 118px; background:var(--cream); }
+.product-detail-back{ min-height:44px; display:inline-flex; align-items:center; gap:7px; border:0; background:transparent; color:var(--coffee-dark); font:700 14px 'Work Sans',sans-serif; cursor:pointer; }
+.product-detail-back svg{ width:20px; height:20px; }
+.product-detail-visual{ min-height:270px; display:grid; place-items:center; padding:8px 10px 14px; }
+.product-detail-visual img{ width:min(82vw,330px); height:270px; object-fit:contain; filter:drop-shadow(0 16px 20px rgba(43,24,16,.16)); }
+.product-detail-name{ margin:0; text-align:center; color:var(--coffee-dark); font:700 25px 'Fraunces',serif; }
+.product-detail-description{ margin:14px 0 18px; color:var(--coffee-mid); font-size:14px; line-height:1.55; }
+.product-detail-label{ margin:16px 0 8px; color:var(--coffee-dark); font-size:13px; font-weight:800; }
+.product-temp-options{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; padding:5px; border-radius:999px; background:#EFE2D2; }
+.product-temp-btn{ min-height:44px; border:0; border-radius:999px; background:transparent; color:var(--coffee-mid); font:800 13px 'Work Sans',sans-serif; cursor:pointer; }
+.product-temp-btn[data-detail-temp="hot"].active{ background:#8F1D2C; color:#fff; box-shadow:0 4px 10px rgba(143,29,44,.25); }
+.product-temp-btn[data-detail-temp="ice"].active{ background:#153E75; color:#fff; box-shadow:0 4px 10px rgba(21,62,117,.25); }
+.product-detail-qty-row{ display:flex; align-items:center; justify-content:space-between; gap:16px; margin-top:16px; }
+.product-detail-stepper{ display:flex; align-items:center; gap:13px; }
+.product-detail-stepper button{ width:44px; height:44px; border:1px solid var(--sol-orange); border-radius:50%; background:#fff; color:var(--sol-orange); font-size:22px; font-weight:700; cursor:pointer; }
+.product-detail-qty{ min-width:30px; text-align:center; color:var(--coffee-dark); font:700 18px 'Space Mono',monospace; }
+.product-detail-price{ text-align:right; color:var(--coffee-dark); font:700 20px 'Space Mono',monospace; }
+.product-detail-cartbar{ position:absolute; right:0; bottom:0; left:0; z-index:35; display:flex; align-items:center; gap:14px; padding:12px 18px calc(12px + env(safe-area-inset-bottom)); border-top:1px solid #E6DCCF; background:#FFFCF6; box-shadow:0 -5px 18px rgba(43,24,16,.1); }
+.product-detail-add{ flex:1; min-height:50px; border:0; border-radius:999px; background:var(--sol-orange); color:#fff; font:800 15px 'Work Sans',sans-serif; cursor:pointer; }
+.product-detail-cart-total{ min-width:88px; color:var(--coffee-dark); font:700 17px 'Space Mono',monospace; text-align:right; }
 .menu-card.sold-out{position:relative;background:#eee7df;pointer-events:none;isolation:isolate}
 .menu-card.sold-out>*{filter:grayscale(.82);opacity:.62}
 .menu-card.sold-out:before{content:'';position:absolute;inset:-3px;z-index:3;border:3px solid #DF301C;border-radius:15px;background:linear-gradient(90deg,transparent 0%,#fff 42%,#DF301C 50%,#fff 58%,transparent 100%) top right/180% 3px no-repeat,linear-gradient(90deg,transparent 0%,#fff 42%,#DF301C 50%,#fff 58%,transparent 100%) bottom right/180% 3px no-repeat;animation:sold-out-line-flow 1.25s linear infinite;pointer-events:none;box-shadow:0 0 8px rgba(223,48,28,.45)}
@@ -282,11 +328,22 @@ body{
 .cart-bar button:disabled{ background:#5a4a3e; color:#9b8c80; cursor:not-allowed; }
 .cart-bar button:active:not(:disabled){ transform:scale(0.97); }
 .cart-bar button:hover:not(:disabled){ background:#1B3A5C; }
+.cart-bar.menu-next-bar{ padding:0 14px 8px; background:transparent; border-radius:0; justify-content:flex-end; pointer-events:none; }
+.cart-bar.menu-next-bar #previewOrder{ flex:0 0 auto; min-width:124px; padding:10px 22px; font-size:15px; pointer-events:auto; box-shadow:0 3px 10px rgba(43,24,16,.22); }
+.cart-bar.preview-cart-bar{ padding:0 14px 8px; gap:10px; background:transparent; border-radius:0; pointer-events:none; }
+.cart-bar.preview-cart-bar .outline-btn,.cart-bar.preview-cart-bar #submitOrder{ pointer-events:auto; }
 
 /* ---------- Waiting ---------- */
 .waiting{
   flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
   padding:30px 24px; text-align:center; gap:22px;
+}
+.waiting.receipts-view{
+  align-items:stretch;
+  justify-content:flex-start;
+  padding:18px 18px 100px;
+  text-align:left;
+  gap:10px;
 }
 .waiting .label{ font-size:18px; letter-spacing:2px; text-transform:uppercase; color:var(--coffee-mid); font-weight:600; }
 .queue-tabs{
@@ -756,7 +813,7 @@ body{
 /* ---------- Register (Daftar) ---------- */
 .register{
   flex:1; display:flex; flex-direction:column; justify-content:center;
-  padding:32px 24px; gap:22px;
+  padding:32px 24px; gap:20px;
 }
 .register .reg-icon{ display:flex; justify-content:center; margin-bottom:4px; }
 .register h2{
@@ -773,14 +830,14 @@ body{
 .field-hint{ font-size:11px; color:var(--coffee-mid); opacity:0.75; margin-top:-2px; }
 .register .reg-submit{
   background:var(--sol-orange); color:#fff; border:none; font-weight:600; font-size:15px;
-  padding:15px; border-radius:30px; cursor:pointer; font-family:'Work Sans',sans-serif; margin-top:6px;
+  padding:15px; border-radius:30px; cursor:pointer; font-family:'Work Sans',sans-serif; margin-top:0;
 }
 .register .reg-submit:hover:not(:disabled){ background:#1B3A5C; }
 .register .reg-submit:disabled{ background:#EFE2D2; color:#C9B8A8; cursor:not-allowed; }
 .check-order-card{
   display:flex; align-items:center; gap:12px; width:100%;
   background:#FFF7EC; border:1.5px dashed var(--sol-orange); border-radius:16px;
-  padding:12px 14px; margin-top:10px; cursor:pointer; text-align:left;
+  padding:13px 15px; margin-top:10px; cursor:pointer; text-align:left;
   font-family:'Work Sans',sans-serif; animation:cocPulse 2.4s ease-in-out infinite;
 }
 .check-order-card:hover{ background:#FFEFD9; }
@@ -790,8 +847,8 @@ body{
 }
 .check-order-card .coc-icon svg{ width:20px; height:20px; }
 .check-order-card .coc-text{ flex:1; display:flex; flex-direction:column; gap:1px; }
-.check-order-card .coc-title{ font-size:14px; font-weight:700; color:var(--coffee-dark); }
-.check-order-card .coc-sub{ font-size:12px; color:var(--coffee-mid); }
+.check-order-card .coc-title{ font-size:15px; font-weight:700; color:var(--coffee-dark); }
+.check-order-card .coc-sub{ font-size:13px; color:var(--coffee-mid); }
 .check-order-card .coc-arrow{ font-size:20px; color:var(--sol-orange); font-weight:700; }
 @keyframes cocPulse{
   0%, 100% { box-shadow: 0 0 0 0 rgba(224,122,46,0.35); }
@@ -817,11 +874,111 @@ body{
 }
 .login-banner-logo img{ width:100%; height:100%; border-radius:50%; display:block; }
 .register.with-banner{ padding-top:8px; }
+@media(max-height:860px){
+  .register.with-banner{ padding:8px 24px 12px; gap:16px; }
+}
+@media(max-height:760px){
+  .login-banner{ height:140px; }
+  .login-banner-logo{ width:132px; height:132px; margin:-28px auto 6px; }
+  .register.with-banner{ padding:6px 24px 8px; gap:10px; justify-content:flex-start; }
+}
 
 /* ---------- Promosi ---------- */
-.promo{ flex:1; display:flex; flex-direction:column; }
-.promo-banner{ width:100%; height:190px; overflow:hidden; }
-.promo-banner img{ width:100%; height:100%; object-fit:cover; display:block; }
+.promo{ flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden; }
+.promo-banner{ width:100%; height:min(52vh,420px); min-height:0; overflow:hidden; flex:0 1 auto; display:flex; align-items:flex-start; justify-content:center; padding-top:16px; }
+.promo-banner img{ width:auto; height:auto; max-width:112%; max-height:100%; object-fit:contain; object-position:center; display:block; }
+.promo-greeting{ padding:24px 24px 10px; background:var(--cream); color:var(--coffee-dark); text-align:left; flex-shrink:0; }
+.promo-greeting h1{ font-family:'Dancing Script',cursive; font-weight:700; font-size:30px; line-height:1.2; overflow-wrap:anywhere; }
+.promo-stats{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; padding:10px 18px; flex-shrink:0; }
+.promo-stat-card{ min-width:0; min-height:92px; display:flex; align-items:center; justify-content:space-between; gap:8px; padding:12px; background:linear-gradient(145deg,#FFFEFB 0%,#F1F2F3 100%); border:1px solid #fff; border-radius:12px; box-shadow:0 3px 0 #D8D9DE,0 7px 13px rgba(43,24,16,.12),inset 0 1px 0 rgba(255,255,255,.9); text-align:left; }
+.promo-stat-copy{ min-width:0; display:flex; flex:1; flex-direction:column; gap:3px; }
+.promo-stat-label{ color:var(--text-soft); font-size:12px; }
+.promo-stat-value{ color:var(--coffee-dark); font:700 21px 'Space Mono',monospace; }
+.promo-stat-note{ color:var(--coffee-mid); font-size:11px; }
+.promo-stat-icon{ width:40px; height:40px; flex:0 0 40px; display:grid; place-items:center; border-radius:11px; }
+.promo-stat-icon svg{ width:24px; height:24px; }
+.promo-stat-icon.coffee{ background:#F3E2CF; color:var(--coffee-mid); }
+.promo-stat-icon.reward{ background:#FFE2AE; color:#B65B12; }
+.promo-stat-icon.reward.has-reward{ animation:promo-gift-shake 1.1s ease-in-out infinite,promo-gift-blink .8s steps(1,end) infinite; }
+@keyframes promo-gift-shake{
+  0%,100%{ transform:rotate(0) scale(1); }
+  10%{ transform:rotate(-12deg) scale(1.08); }
+  20%{ transform:rotate(12deg) scale(1.08); }
+  30%{ transform:rotate(-9deg) scale(1.05); }
+  40%{ transform:rotate(9deg) scale(1.05); }
+  50%{ transform:rotate(0) scale(1); }
+}
+@keyframes promo-gift-blink{
+  0%,49%{ background:#FFE2AE; box-shadow:0 0 0 0 rgba(232,134,44,0); }
+  50%,100%{ background:#FFF8E9; box-shadow:0 0 0 4px rgba(232,134,44,.32); }
+}
+@media(prefers-reduced-motion:reduce){ .promo-stat-icon.reward.has-reward{ animation:none; } }
+.promo-section-title{ padding:16px 24px 8px; color:var(--coffee-dark); font:600 22px 'Fraunces',serif; }
+.customer-tabbar{ position:absolute; right:0; bottom:0; left:0; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); padding:8px 6px calc(8px + env(safe-area-inset-bottom)); background:#FFFCF6; border-top:1px solid #E6DCCF; box-shadow:0 -4px 14px rgba(43,24,16,.08); z-index:30; }
+.customer-tab{ min-width:0; min-height:54px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; border:0; background:transparent; color:#9B958D; font:500 11px 'Work Sans',sans-serif; cursor:pointer; }
+.customer-tab svg{ width:22px; height:22px; flex:0 0 22px; }
+.customer-tab.active{ color:#8F1D2C; background:#F8E7E7; border-radius:10px; font-weight:700; }
+.primary-tab-page{ flex:1; overflow-y:auto; padding:24px 18px calc(100px + env(safe-area-inset-bottom)); }
+.primary-tab-page h1{ margin:0 6px 14px; color:var(--coffee-dark); font:600 24px 'Fraunces',serif; }
+.reward-message{ margin:14px 6px 0; color:var(--coffee-mid); font-size:14px; line-height:1.5; }
+.location-card{ position:relative; margin:18px 6px 14px; padding:12px 12px 20px; background:linear-gradient(145deg,#FFFDF8 0%,#F5E9D8 100%); border:1px solid #FFF; border-radius:18px; box-shadow:0 5px 0 #D2B899,0 12px 24px rgba(43,24,16,.22),inset 0 1px 0 rgba(255,255,255,.95); text-align:left; }
+.location-photo-frame{ overflow:hidden; margin-bottom:18px; padding:5px; background:linear-gradient(145deg,#FFF,#D9C1A4); border-radius:13px; box-shadow:inset 0 1px 1px rgba(255,255,255,.95),0 4px 9px rgba(43,24,16,.2); }
+.location-photo{ width:100%; aspect-ratio:16/7.4; display:block; object-fit:cover; border-radius:9px; }
+.location-card h2{ margin:0 0 10px; color:var(--coffee-dark); font:600 20px 'Fraunces',serif; }
+.location-card-content{ padding:0 8px; }
+.location-address{ margin:0; color:var(--coffee-dark); font-size:16px; font-style:normal; line-height:1.55; }
+.location-landmark{ margin:14px 0 0; padding:12px 14px; background:#FFF1CC; border-radius:12px; color:#7B4B18; font-size:14px; line-height:1.45; }
+.location-landmark strong{ display:block; margin-bottom:3px; color:var(--coffee-dark); }
+.location-hours{ margin-top:12px; padding:12px 14px; display:flex; align-items:center; justify-content:space-between; gap:12px; background:#F3E2CF; border:1px solid #E3C9AA; border-radius:12px; color:var(--coffee-dark); }
+.location-hours-label{ font-size:13px; font-weight:700; }
+.location-hours-value{ text-align:right; font-size:13px; line-height:1.4; }
+.location-hours-value strong{ display:block; font-size:15px; }
+.location-map-btn{ min-height:48px; margin-top:16px; display:flex; align-items:center; justify-content:center; gap:9px; padding:12px 16px; border-radius:12px; background:var(--sol-orange); color:#fff; font-weight:700; text-decoration:none; transition:filter .2s ease,transform .2s ease; }
+.location-map-btn svg{ width:21px; height:21px; flex:0 0 21px; }
+.location-map-btn.waze{ margin-top:10px; background:#05C8F7; color:#16333B; box-shadow:0 3px 0 #069ABD; }
+.location-map-btn:hover{ filter:brightness(.94); }
+.location-map-btn:active{ transform:scale(.98); }
+.location-map-btn:focus-visible{ outline:3px solid rgba(143,29,44,.28); outline-offset:3px; }
+.location-qr-card{ margin:24px 6px 10px; padding:20px 18px; display:flex; flex-direction:column; align-items:center; text-align:center; background:linear-gradient(145deg,#FFFDF8,#F1E1CC); border:1px solid #FFF; border-radius:18px; box-shadow:0 5px 0 #D2B899,0 12px 22px rgba(43,24,16,.18),inset 0 1px 0 rgba(255,255,255,.95); }
+.location-qr-card h2{ margin:0 0 5px; color:var(--coffee-dark); font:600 21px 'Fraunces',serif; }
+.location-qr-card p{ margin:0 0 14px; color:var(--coffee-mid); font-size:13px; line-height:1.45; }
+.location-qr-image{ width:min(230px,72vw); height:auto; display:block; border-radius:12px; box-shadow:0 4px 12px rgba(43,24,16,.16); }
+.account-profile{ display:flex; align-items:center; gap:14px; margin:8px 6px 20px; padding:18px 0; border-bottom:1px solid #E6DCCF; }
+.account-profile-icon{ width:48px; height:48px; flex:0 0 48px; display:grid; place-items:center; border-radius:50%; background:#F3E2CF; color:var(--coffee-mid); }
+.account-profile-icon svg{ width:26px; height:26px; }
+.account-profile-copy{ min-width:0; display:flex; flex-direction:column; gap:4px; }
+.account-profile-name{ color:var(--coffee-dark); font-weight:700; overflow-wrap:anywhere; }
+.account-profile-phone{ color:var(--text-soft); font-size:13px; }
+.account-page .promo-stats{ padding:0 6px 22px; }
+.account-purchase-title{ margin:2px 6px 8px; color:var(--coffee-dark); font:600 21px 'Fraunces',serif; }
+.account-purchase-list{ margin:0 6px 22px; overflow:hidden; background:#FFFDF9; border:1px solid #E6DCCF; border-radius:14px; box-shadow:0 4px 12px rgba(43,24,16,.08); }
+.account-purchase-row{ width:100%; min-height:60px; display:flex; align-items:center; gap:12px; padding:13px 15px; border:0; border-bottom:1px solid #EEE2D5; background:transparent; color:var(--coffee-dark); font:600 15px 'Work Sans',sans-serif; text-align:left; cursor:pointer; }
+.account-purchase-row:last-child{ border-bottom:0; }
+.account-purchase-row svg{ width:22px; height:22px; flex:0 0 22px; color:#8F1D2C; }
+.account-purchase-row-label{ flex:1; }
+.account-purchase-count{ min-width:24px; padding:3px 7px; border-radius:999px; background:#F3E2CF; color:var(--coffee-mid); font-size:12px; text-align:center; }
+.account-purchase-chevron{ color:#A78E7A; font-size:28px; font-weight:400; line-height:1; }
+.account-purchase-row:active{ background:#FAF1E7; }
+.account-purchase-row:focus-visible{ outline:3px solid rgba(143,29,44,.22); outline-offset:-3px; }
+.orders-history-view{ flex:1; padding:22px 18px 100px; overflow-y:auto; background:var(--cream); }
+.orders-history-title{ margin:0 0 14px; color:var(--coffee-dark); font:700 24px 'Fraunces',serif; }
+.orders-history-list{ display:flex; flex-direction:column; gap:12px; }
+.order-history-card{ background:#FFFDF9; border:1px solid #E6DCCF; border-radius:15px; padding:15px; box-shadow:0 4px 12px rgba(43,24,16,.07); }
+.order-history-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding-bottom:11px; border-bottom:1px solid #EEE2D5; }
+.order-history-number{ color:var(--coffee-dark); font:700 16px 'Space Mono',monospace; }
+.order-history-date{ margin-top:3px; color:var(--text-soft); font-size:12px; }
+.order-history-summary{ min-width:94px; text-align:right; }
+.order-history-status{ display:inline-flex; align-items:center; justify-content:center; min-height:26px; padding:4px 9px; border-radius:999px; font-size:11px; font-weight:800; }
+.order-history-status.done{ background:#DDF3E2; color:#1F6E2E; }
+.order-history-status.pending{ background:#FFF0BE; color:#785700; }
+.order-history-status.rejected{ background:#FBE0DE; color:#A32020; }
+.order-history-price{ margin-top:6px; color:var(--coffee-dark); font:700 14px 'Space Mono',monospace; }
+.order-history-items{ display:flex; flex-direction:column; gap:7px; padding-top:11px; }
+.order-history-item{ display:flex; justify-content:space-between; gap:12px; color:var(--coffee-mid); font-size:13px; }
+.order-history-item span:first-child{ min-width:0; }
+.order-history-item span:last-child{ flex:0 0 auto; color:var(--coffee-dark); font-weight:600; }
+.account-logout{ display:flex; align-items:center; gap:10px; border:0; background:transparent; color:#B33D2E; padding:12px 6px; font:600 14px 'Work Sans',sans-serif; cursor:pointer; }
+.account-logout svg{ width:20px; height:20px; }
 .promo-body{
   flex:1; display:flex; flex-direction:column; gap:14px;
   padding:24px; text-align:center;
@@ -982,6 +1139,7 @@ body{
   padding:13px 18px; border-radius:30px; font-weight:600; font-size:13px;
   cursor:pointer; font-family:'Work Sans',sans-serif;
 }
+.cart-bar.preview-cart-bar .outline-btn{ border-color:var(--coffee-mid); color:var(--coffee-mid); }
 .cart-bar #submitOrder{ flex:1; }
 
 /* ---------- Squares loader ---------- */
@@ -1048,8 +1206,8 @@ body{
   letter-spacing:0.5px; transition:background 0.15s, color 0.15s;
 }
 .temp-btn.active{ background:var(--sol-orange); color:#fff; }
-.temp-btn[data-temp="hot"].active{ background:#DF301C; border-color:#DF301C; color:#fff; }
-.temp-btn[data-temp="ice"].active{ background:#2587D8; border-color:#2587D8; color:#fff; }
+.temp-btn[data-temp="hot"].active{ background:#8F1D2C; border-color:#8F1D2C; color:#fff; }
+.temp-btn[data-temp="ice"].active{ background:#153E75; border-color:#153E75; color:#fff; }
 .temp-btn:first-child{ border-right:1px solid var(--sol-orange); }
 
 /* ---------- Pengurusan Menu Admin (redesign) ---------- */
@@ -1132,6 +1290,39 @@ body{
 @keyframes toast-out{
   from{ opacity:1; transform:translateY(0); }
   to{ opacity:0; transform:translateY(-20px); }
+}
+
+/* ---------- Admin login loading overlay ---------- */
+.admin-login-loader{
+  position:fixed; inset:0; z-index:2500;
+  display:flex; align-items:center; justify-content:center;
+  padding:28px; background:rgba(31,17,12,.97); color:#FFF8EA;
+}
+.admin-login-loader-card{ width:min(440px,100%); text-align:center; }
+.admin-login-loader-title{
+  font-family:'Space Mono',monospace; font-size:clamp(22px,7vw,34px);
+  font-weight:700; letter-spacing:2px; margin-bottom:22px;
+  text-shadow:3px 3px 0 #7A2B17;
+}
+.admin-login-loader-row{
+  display:flex; justify-content:space-between; gap:16px; margin-bottom:8px;
+  font-family:'Space Mono',monospace; font-size:13px; font-weight:700;
+}
+.admin-login-loader-track{
+  height:28px; padding:4px; border:3px solid #FFF8EA; border-radius:3px;
+  box-shadow:4px 4px 0 #7A2B17; overflow:hidden;
+}
+.admin-login-loader-fill{
+  width:100%; height:100%; transform:scaleX(0); transform-origin:left center;
+  background:repeating-linear-gradient(90deg,#F6B544 0 12px,#F6B544 12px,#FFF8EA 12px 15px);
+  transition:transform .25s ease-out;
+}
+.admin-login-loader-status{
+  min-height:22px; margin-top:18px; font-size:13px; color:#E8CDB8;
+  font-family:'Work Sans',sans-serif;
+}
+@media (prefers-reduced-motion:reduce){
+  .admin-login-loader-fill{ transition:none; }
 }
 
 /* ---------- menu card expanded state ---------- */
@@ -1310,6 +1501,9 @@ const ICON_QUEUE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" s
 const ICON_GIFT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8"/><path d="M16.5 8a2.5 2.5 0 0 0 0-5C13 3 12 8 12 8"/></svg>';
 const ICON_RECEIPT = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h12v18.5a1 1 0 0 1-1.5.87L14 20l-2 1.3-2-1.3-2.5 1.37A1 1 0 0 1 6 20.5V2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="15" y2="11"/><path d="M9 15l1.5 1.5L15 13"/></svg>';
 const ICON_HOME = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9"/></svg>';
+const ICON_MENU = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>';
+const ICON_LOCATION = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>';
+const FREE_DRINKS_THRESHOLD = 5;
 const ICON_SEARCH_CUP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h11v6a4 4 0 0 1-4 4H8a3 3 0 0 1-3-3V8z"/><path d="M16 10h1.5a2 2 0 0 1 0 4H16"/><path d="M8 5c0-1 1-1 1-2M12 5c0-1 1-1 1-2"/><circle cx="18.5" cy="18.5" r="3"/><line x1="20.7" y1="20.7" x2="22.5" y2="22.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>';
 
@@ -1342,7 +1536,37 @@ try{
   Object.keys(savedPublished).forEach(id => { menuPublished[id] = savedPublished[id] !== false; });
 }catch(e){}
 
-function getItemImage(item){ return menuImages[item.id] || DEFAULT_ITEM_IMAGE; }
+const TRANSPARENT_MENU_IMAGES = {
+  'coffee-latte':'01-coffee-latte.webp',
+  'spanish-latte':'02-spanish-latte.webp',
+  'cappuccino':'03-cappuccino.webp',
+  'caramel-latte':'04-caramel-latte.webp',
+  'mocha':'05-mocha.webp',
+  'butterscotch-latte':'06-butterscotch-latte.webp',
+  'mint-americano':'07-the-mint-americano.webp',
+  'peppermint-choc-americano':'08-peppermint-chocolate-americano.webp',
+  'orange-americano':'09-orange-americano.webp',
+  'sparkling-passion-americano':'10-sparkling-passion-fruit-americano.webp',
+  'passion-pineapple-americano':'11-passion-fruit-pineapple-americano.webp',
+  'affogato':'12-affogato.webp',
+  'hazelnut-americano':'13-hazelnut-americano.webp',
+  'vanilla-americano':'14-vanilla-americano.webp',
+  'press-orange':'15-press-orange.webp',
+  'watermelon-soda':'16-watermelon-soda.webp',
+  'blue-wave':'17-the-blue-wave.webp',
+  'sunset-soda':'18-the-sunset-soda.webp',
+  'mojito':'19-mojito.webp',
+  'lemonide-soda':'20-lemonide-soda.webp',
+  'aparajita':'21-aparajita.webp',
+  'matcha-latte':'22-matcha-latte.webp',
+  'matcha-strawberry':'23-matcha-strawberry.webp',
+  'matcha-watermelon':'24-matcha-watermelon.webp',
+  'matcha-mango':'25-matcha-mango.webp',
+};
+function getItemImage(item){
+  const transparentImage = TRANSPARENT_MENU_IMAGES[item.id];
+  return transparentImage ? `drinks-transparent/${transparentImage}` : (menuImages[item.id] || DEFAULT_ITEM_IMAGE);
+}
 function getItemDesc(item){ return menuDescs[item.id] || item.description || ''; }
 function getItemName(item){ return menuNames[item.id] != null ? menuNames[item.id] : item.name; }
 function getItemPrice(item){ return menuPrices[item.id] != null ? menuPrices[item.id] : item.price; }
@@ -1380,7 +1604,7 @@ const MENU = [
   {id:'matcha-latte', name:'Matcha Latte', price:8.00, category:'matcha', image:'https://picsum.photos/seed/matcha-latte/120/120', description:'Matcha premium Jepun dengan susu segar. Pahit-manis yang seimbang.'},
   {id:'matcha-strawberry', name:'Matcha Strawberry', price:9.00, category:'matcha', image:'https://picsum.photos/seed/matcha-strawberry/120/120', description:'Matcha dipadankan dengan strawberry segar. Kombinasi sempurna!'},
   {id:'matcha-watermelon', name:'Matcha Watermelon', price:9.00, category:'matcha', image:'https://picsum.photos/seed/matcha-watermelon/120/120', description:'Matcha dengan tembikai segar. Unik dan menyegarkan.'},
-  {id:'matcha-manggo', name:'Matcha Manggo', price:9.00, category:'matcha', image:'https://picsum.photos/seed/matcha-manggo/120/120', description:'Matcha dengan mangga tropika. Kombinasi yang menakjubkan!'},
+  {id:'matcha-mango', name:'Matcha Mango', price:9.00, category:'matcha', image:'https://picsum.photos/seed/matcha-mango/120/120', description:'Matcha dengan mangga tropika. Kombinasi yang menakjubkan!'},
 ];
 
 // Apply any locally-saved name/price overrides to MENU array immediately
@@ -1405,6 +1629,7 @@ let state = {
   completedOrder: null, // last collected order, kept for the completed roadmap
   acknowledgedOrderIds: new Set(),
   itemDetailId: null,   // item id for detail modal (menu list)
+  detailQty: 1,
   popularDetailId: null, // item id for detail in popular section
   itemTemp: {},          // { itemId: 'hot' | 'ice' } - hot/ice selection per item
   loggedInAdmin: null,
@@ -1422,7 +1647,7 @@ let state = {
 /* Restore the current page/session after a browser refresh. */
 try{
   const saved = JSON.parse(sessionStorage.getItem('kfedeSolAppSession') || 'null');
-  const allowedViews = ['register','check-order','menu','preview','waiting','promo','receipts','admin-login','admin'];
+  const allowedViews = ['register','check-order','menu','item-detail','preview','waiting','promo','rewards','location','account','receipts','admin-login','admin'];
   if(saved && allowedViews.includes(saved.view)){
     state.view = saved.view;
     state.customer = saved.customer || null;
@@ -1459,7 +1684,7 @@ if(!state.customer){
       state.myReceipts = durable.myReceipts || [];
       state.cart = durable.cart || {};
       state.itemTemp = durable.itemTemp || {};
-      state.view = state.myOrderIds.length ? 'waiting' : 'menu';
+      state.view = state.myOrderIds.length ? 'waiting' : 'promo';
     }
   }catch(e){ console.warn('Customer restore skipped', e); }
 }
@@ -1621,23 +1846,29 @@ function checkIcon(color){
 }
 
 /* ---------- Google Sheets v2 API helpers (normalized tables) ---------- */
-async function gasGet(action, params){
+async function gasGet(action, params, timeoutMs){
   if(GAS_URL.indexOf('PASTE_YOUR') === 0) return null;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(()=>controller.abort(), timeoutMs || 10000);
   try{
     const auth = state.loggedInAdmin && state.adminSessionToken ? {
       adminId:state.loggedInAdmin.id, authToken:state.adminSessionToken
     } : {};
     const qs = new URLSearchParams(Object.assign({ action, _ts: Date.now() }, auth, params || {})).toString();
-    const res = await fetch(`${GAS_URL}?${qs}`, { cache: 'no-store' });
+    const res = await fetch(`${GAS_URL}?${qs}`, { cache: 'no-store', signal:controller.signal });
     return await res.json();
   }catch(e){ console.error('gas GET failed', action, e); return null; }
+  finally{ clearTimeout(timeoutId); }
 }
-async function gasPost(action, body){
+async function gasPost(action, body, timeoutMs){
   if(GAS_URL.indexOf('PASTE_YOUR') === 0) return null;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(()=>controller.abort(), timeoutMs || 30000);
   try{
     const res = await fetch(GAS_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      signal: controller.signal,
       body: JSON.stringify(Object.assign({ action }, body || {},
         state.loggedInAdmin && state.adminSessionToken ? {
           adminId:state.loggedInAdmin.id, authToken:state.adminSessionToken
@@ -1647,11 +1878,13 @@ async function gasPost(action, body){
     if(data && data.error) console.error('gas backend error', action, data.error, data.stack || '');
     return data;
   }catch(e){ console.error('gas POST failed', action, e); return null; }
+  finally{ clearTimeout(timeoutId); }
 }
 
 async function loadShopStatus(){
+  const previousStatus = [state.shopClosed, state.shopClosedFrom, state.shopClosedUntil, JSON.stringify(state.shopHolidays)];
   const data = await gasGet('meta', {key:'shop-status'});
-  if(!data || data.value == null) return;
+  if(!data || data.value == null) return false;
   try{
     const status = typeof data.value === 'string' ? JSON.parse(data.value) : data.value;
     const today = new Date().toISOString().slice(0,10);
@@ -1663,6 +1896,8 @@ async function loadShopStatus(){
     state.shopClosedFrom = active ? active.from : '';
     state.shopClosedUntil = active ? active.until : '';
   }catch(e){ state.shopClosed = String(data.value) === 'closed'; }
+  return previousStatus[0] !== state.shopClosed || previousStatus[1] !== state.shopClosedFrom ||
+    previousStatus[2] !== state.shopClosedUntil || previousStatus[3] !== JSON.stringify(state.shopHolidays);
 }
 
 async function saveShopStatus(closed, reason, from, until){
@@ -1807,7 +2042,14 @@ async function loadAdmins(){
   return (data && data.admins) ? data.admins : [];
 }
 async function adminLoginApi(username, password){
-  return await gasPost('adminLogin', { username, password });
+  // Google Apps Script occasionally needs a cold start. Retry a failed network
+  // request once so the user does not need to submit the same login repeatedly.
+  let result = await gasPost('adminLogin', { username, password }, 15000);
+  if(result === null){
+    await new Promise(resolve => setTimeout(resolve, 900));
+    result = await gasPost('adminLogin', { username, password }, 15000);
+  }
+  return result;
 }
 async function adminSessionIsValid(){
   if(!state.loggedInAdmin || !state.adminSessionToken) return false;
@@ -1845,18 +2087,50 @@ async function recordCustomerPurchase(order){
 /* Load the current customer's loyalty progress for the Promosi page */
 async function loadMyLoyalty(){
   state.myLoyaltyLoading = true;
+  state.myLoyaltyError = false;
   const phone = state.customer ? state.customer.phone : '';
-  const customers = await loadCustomers();
-  state.myLoyalty = (phone && customers[phone]) ? customers[phone] : { count: 0, qty: 0 };
-  state.myLoyaltyLoading = false;
-  render();
+  // Never block the promotion page while Google Apps Script wakes up. Show the
+  // most recent successful value (or zero) immediately, then refresh it quietly.
+  if(state.myLoyalty === undefined){
+    let cached = null;
+    try{ cached = JSON.parse(localStorage.getItem('kfedeSolLoyalty_' + phone) || 'null'); }catch(e){}
+    state.myLoyalty = cached && cached.data ? cached.data : { count: 0, qty: 0 };
+    Promise.resolve().then(()=>render());
+  }
+  try{
+    const data = await gasGet('customers', null, 5000);
+    if(!data || !data.customers) throw new Error('Data pelanggan tidak tersedia');
+    state.myLoyalty = (phone && data.customers[phone])
+      ? data.customers[phone]
+      : { count: 0, qty: 0 };
+    try{
+      localStorage.setItem('kfedeSolLoyalty_' + phone, JSON.stringify({ data:state.myLoyalty, at:Date.now() }));
+    }catch(e){}
+  }catch(e){
+    console.error('loyalty progress failed', e);
+    state.myLoyaltyError = true;
+  }finally{
+    state.myLoyaltyLoading = false;
+    render();
+  }
 }
 
 /* ---------- render root ---------- */
 function render(){
   persistAppSession();
   const frame = document.getElementById('app-frame');
-  frame.className = state.view === 'admin' ? 'admin-mode' : '';
+  const customerTabViews = ['menu','item-detail','preview','waiting','promo','rewards','location','account','orders','receipts'];
+  frame.className = state.view === 'admin' ? 'admin-mode' :
+    (state.customer && customerTabViews.includes(state.view) ? 'customer-mode' : '');
+
+  // A scheduled holiday blocks the customer flow immediately, even before
+  // registration/login. Admin access remains available from the close screen.
+  if(state.shopClosed && state.view !== 'admin' && state.view !== 'admin-login'){
+    frame.innerHTML = renderShopClosed();
+    const adminBtn = document.getElementById('closedAdminLogin');
+    if(adminBtn) adminBtn.onclick = () => { state.view='admin-login'; render(); };
+    return;
+  }
 
   if(state.view === 'splash'){
     frame.innerHTML = renderSplash();
@@ -1866,16 +2140,9 @@ function render(){
       start.dataset.started = '1';
       start.disabled=true;
       const splash=frame.querySelector('.splash'); if(splash) splash.classList.add('playing');
-      state.view=state.customer?'menu':'register';
+      state.view=state.customer?'promo':'register';
       render();
     };
-    return;
-  }
-
-  if(state.shopClosed && state.customer && state.view !== 'admin' && state.view !== 'admin-login'){
-    frame.innerHTML = renderShopClosed();
-    const adminBtn = document.getElementById('closedAdminLogin');
-    if(adminBtn) adminBtn.onclick = () => { state.view='admin-login'; render(); };
     return;
   }
 
@@ -1896,16 +2163,41 @@ function render(){
     body = renderPreview();
   } else if(state.view === 'promo'){
     body = renderPromo();
+  } else if(state.view === 'item-detail'){
+    body = renderProductDetail();
+  } else if(state.view === 'rewards'){
+    body = renderRewards();
+  } else if(state.view === 'location'){
+    body = renderLocation();
+  } else if(state.view === 'account'){
+    body = renderAccount();
+  } else if(state.view === 'orders'){
+    body = renderOrders();
   } else if(state.view === 'receipts'){
     body = renderReceipts();
   } else {
     body = renderMenu();
-    if(!state.popularIds && !state.popularLoading){ loadPopularItems(); }
   }
 
   if(state.customer && state.myLoyalty === undefined && !state.myLoyaltyLoading
-     && ['menu','preview','waiting','promo','receipts'].includes(state.view)){
+      && ['menu','preview','waiting','promo','rewards','account','orders','receipts'].includes(state.view)){
     loadMyLoyalty();
+  }
+
+  // Active order details are fetched again after a browser reload because only
+  // their IDs are stored locally. Load them immediately on the receipt page so
+  // an active receipt never appears to be missing while waiting for polling.
+  if(state.view === 'receipts' && (state.myOrderIds || []).length > 0
+      && (state.myOrders || []).length === 0 && !state.receiptsLoading && !state.receiptsLoadedOnce){
+    state.receiptsLoading = true;
+    Promise.resolve().then(async () => {
+      try{ await refreshMyOrders(); }
+      finally{
+        state.receiptsLoading = false;
+        state.receiptsLoadedOnce = true;
+        if(state.view === 'receipts') render();
+      }
+    });
   }
 
   const lightbox = state.lightboxImage ? `
@@ -1930,11 +2222,11 @@ function render(){
 
   const zoomModal = (state.view === 'admin' && state.zoomChart) ? renderZoomModal() : '';
   const receiptModal = (state.view === 'admin' && state.receiptModalOrderId) ? renderReceiptModal() : '';
+  const customerTabbar = state.customer && customerTabViews.includes(state.view) && state.view !== 'item-detail'
+    ? renderCustomerTabbar() : '';
 
   let topRightBtn = '';
-  let topPromoBtn = '';
   let topQueueBtn = '';
-  let topReceiptBtn = '';
   let topHomeBtn = '';
   let topAdminBtn = '';
   if(state.view === 'register'){
@@ -1943,22 +2235,14 @@ function render(){
     topRightBtn = `<button class="mode-toggle" id="modeToggle">Log Keluar</button>`;
   } else if(state.view === 'admin-login'){
     topRightBtn = `<button class="mode-toggle" id="modeToggle">Pelanggan</button>`;
-  } else if(state.view === 'menu' || state.view === 'preview' || state.view === 'waiting' || state.view === 'promo' || state.view === 'receipts'){
-    topRightBtn = `<button class="icon-btn" id="modeToggle" title="Log Keluar">${ICON_LOGOUT}</button>`;
-    if(state.view !== 'promo'){
-      const freeCount = state.myLoyalty ? Math.floor((state.myLoyalty.qty||0) / 6) : 0;
-      topPromoBtn = `<button class="icon-btn gift-icon-btn ${freeCount>0?'has-reward':''}" id="promoBtn" title="Promosi">${ICON_GIFT}</button>`;
-    }
+  } else if(state.view === 'menu' || state.view === 'item-detail' || state.view === 'preview' || state.view === 'waiting' || state.view === 'promo' || state.view === 'rewards' || state.view === 'location' || state.view === 'account' || state.view === 'orders' || state.view === 'receipts'){
+    if(state.view !== 'account') topRightBtn = `<button class="icon-btn" id="modeToggle" title="Log Keluar">${ICON_LOGOUT}</button>`;
     if(state.view !== 'waiting' && (state.myOrderIds||[]).length > 0){
       const anyReady = (state.myOrders||[]).some(o => orderStatus(o) === 'siap');
       const badge = (state.myOrderIds.length > 1) ? `<span class="badge">${state.myOrderIds.length}</span>` : '';
-      topQueueBtn = `<button class="icon-btn queue-icon-btn ${anyReady?'ready':''}" id="queueBtn" title="No. Giliran">${ICON_QUEUE}${badge}</button>`;
+      topQueueBtn = `<button class="icon-btn queue-icon-btn active ${anyReady?'ready':''}" id="queueBtn" title="Pesanan aktif">${ICON_QUEUE}${badge}</button>`;
     }
-    if(state.view !== 'receipts' && (state.myReceipts||[]).length > 0){
-      const receiptBadge = state.myReceipts.length > 1 ? `<span class="badge">${state.myReceipts.length}</span>` : '';
-      topReceiptBtn = `<button class="icon-btn receipt-icon-btn" id="receiptBtn" title="Resit">${ICON_RECEIPT}${receiptBadge}</button>`;
-    }
-    if(state.view === 'receipts'){
+    if(state.view === 'orders' || state.view === 'receipts'){
       topHomeBtn = `<button class="icon-btn home-icon-btn" id="homeBtn" title="Menu Utama">${ICON_HOME}</button>`;
     }
   }
@@ -1972,26 +2256,69 @@ function render(){
         <div>K'fe De Sol<br><small>${topLabel}</small></div>
       </div>
       <div class="topbar-actions">
-        ${topPromoBtn}
         ${topQueueBtn}
-        ${topReceiptBtn}
         ${topHomeBtn}
         ${topAdminBtn}
         ${topRightBtn}
       </div>
     </div>
     ${body}
+    ${customerTabbar}
     ${lightbox}
     ${submittingOverlay}
     ${zoomModal}
     ${receiptModal}
   `;
 
-  const promoBtn = document.getElementById('promoBtn');
-  if(promoBtn){
-    promoBtn.onclick = () => {
-      state.myLoyalty = undefined;
-      state.view = 'promo';
+  document.querySelectorAll('#customerTabbar [data-tab]').forEach(tab=>{
+    tab.onclick = () => {
+      const nextView = { home:'promo', menu:'menu', reward:'rewards', location:'location', account:'account' }[tab.dataset.tab];
+      if(nextView && nextView !== state.view){ state.view = nextView; render(); }
+    };
+  });
+
+  const accountLogout = document.getElementById('accountLogout');
+  if(accountLogout) accountLogout.onclick = () => { clearCustomerSession(); render(); };
+
+  const accountOrders = document.getElementById('accountOrders');
+  if(accountOrders){
+    accountOrders.onclick = () => { state.view = 'orders'; render(); };
+  }
+
+  const accountReceipts = document.getElementById('accountReceipts');
+  if(accountReceipts){
+    accountReceipts.onclick = () => { state.view = 'receipts'; render(); };
+  }
+
+  document.querySelectorAll('[data-open-active-order]').forEach(btn=>{
+    btn.onclick = () => {
+      state.activeQueueId = btn.dataset.openActiveOrder;
+      state.view = 'waiting';
+      render();
+    };
+  });
+
+  const productDetailBack = document.getElementById('productDetailBack');
+  if(productDetailBack) productDetailBack.onclick = () => { state.view = 'menu'; render(); };
+  const productDetailMinus = document.getElementById('productDetailMinus');
+  if(productDetailMinus) productDetailMinus.onclick = () => { state.detailQty = Math.max(1, Number(state.detailQty || 1) - 1); render(); };
+  const productDetailPlus = document.getElementById('productDetailPlus');
+  if(productDetailPlus) productDetailPlus.onclick = () => { state.detailQty = Math.min(20, Number(state.detailQty || 1) + 1); render(); };
+  document.querySelectorAll('[data-detail-temp]').forEach(btn=>{
+    btn.onclick = () => {
+      if(state.itemDetailId) state.itemTemp[state.itemDetailId] = btn.dataset.detailTemp;
+      render();
+    };
+  });
+  const productDetailAdd = document.getElementById('productDetailAdd');
+  if(productDetailAdd){
+    productDetailAdd.onclick = () => {
+      const item = MENU.find(m => m.id === state.itemDetailId);
+      if(!item || !isItemPublished(item)) return;
+      state.cart[item.id] = (state.cart[item.id] || 0) + Math.max(1, Number(state.detailQty || 1));
+      state.view = 'menu';
+      state.detailQty = 1;
+      showToast(`${getItemName(item)} ditambah ke troli.`, 'success');
       render();
     };
   }
@@ -2004,18 +2331,10 @@ function render(){
     };
   }
 
-  const receiptBtn = document.getElementById('receiptBtn');
-  if(receiptBtn){
-    receiptBtn.onclick = () => {
-      state.view = 'receipts';
-      render();
-    };
-  }
-
   const homeBtn = document.getElementById('homeBtn');
   if(homeBtn){
     homeBtn.onclick = () => {
-      state.view = 'menu';
+      state.view = 'promo';
       render();
     };
   }
@@ -2032,20 +2351,8 @@ function render(){
         state.adminAccounts = null;
         try{ localStorage.removeItem('kfedeSolAdminSession'); }catch(e){}
         state.view = state.customer ? 'menu' : 'register';
-      } else if(state.view === 'menu' || state.view === 'preview' || state.view === 'waiting' || state.view === 'promo' || state.view === 'receipts'){
-        localStorage.removeItem('kfedeSolCustomerSession');
-        sessionStorage.removeItem('kfedeSolAppSession');
-        state.customer = null;
-        state.cart = {};
-        state.myOrderIds = [];
-        state.myOrders = [];
-        state.myReceipts = [];
-        state.activeQueueId = null;
-        state.popularIds = null;
-        state.myLoyalty = undefined;
-        state.regName = '';
-        state.regPhone = '';
-        state.view = 'register';
+      } else if(state.view === 'menu' || state.view === 'item-detail' || state.view === 'preview' || state.view === 'waiting' || state.view === 'promo' || state.view === 'rewards' || state.view === 'location' || state.view === 'account' || state.view === 'receipts'){
+        clearCustomerSession();
       } else {
         state.mode = 'customer';
         state.view = (state.myOrderIds && state.myOrderIds.length > 0) ? 'waiting' : (state.customer ? 'menu' : 'register');
@@ -2104,8 +2411,8 @@ function renderSplash(){
       <div class="sol-rise"><img src="${LOGO_URL}" alt="K'fe De Sol" style="width:140px;height:140px;border-radius:50%;display:block;"></div>
       <h1 class="sol-rise">K'fe De Sol</h1>
       <p class="sol-rise">Kopi segar, hangat hati</p>
-      <img class="splash-coffee sol-rise" src="coffee-motion-source.png" alt="Kopi">
-      <small class="app-version">v3.2.3</small>
+      <img class="splash-coffee sol-rise" src="coffee-motion-source.webp" alt="Kopi">
+      <small class="app-version">v3.2.9</small>
       <button id="introStart" class="reg-submit" type="button">Get Started</button>
     </div>
   `;
@@ -2117,7 +2424,7 @@ function renderShopClosed(){
   const reopenText = Number.isNaN(reopen.getTime()) ? '' : reopen.toLocaleDateString('ms-MY',{day:'2-digit',month:'2-digit',year:'numeric'});
   return `<div class="splash">
     <button class="icon-btn" id="closedAdminLogin" title="Log Masuk Admin" aria-label="Log Masuk Admin" style="position:absolute;top:16px;right:16px;color:var(--sol-gold);border-color:var(--sol-gold)">${ICON_ADMIN}</button>
-    <img src="shop close.png" alt="Kedai tutup" style="width:min(82vw,380px);max-height:55vh;object-fit:contain">
+    <img src="shop close.webp" alt="Kedai tutup" style="width:min(82vw,380px);max-height:55vh;object-fit:contain">
     <h1>Kedai Tutup</h1>
     ${reopenText ? `<p style="letter-spacing:1px">Kedai akan dibuka pada ${reopenText}</p>` : ''}
   </div>`;
@@ -2208,48 +2515,269 @@ function renderAdminLogin(){
   `;
 }
 
+let adminLoginLoaderTimer = null;
+let adminLoginLoaderValue = 0;
+function showAdminLoginLoader(){
+  if(document.getElementById('adminLoginLoader')) return;
+  adminLoginLoaderValue = 7;
+  const overlay = document.createElement('div');
+  overlay.id = 'adminLoginLoader';
+  overlay.className = 'admin-login-loader';
+  overlay.setAttribute('role','status');
+  overlay.setAttribute('aria-live','polite');
+  overlay.innerHTML = `
+    <div class="admin-login-loader-card">
+      <div class="admin-login-loader-title">NOW LOADING...</div>
+      <div class="admin-login-loader-row"><span>LOGIN ADMIN</span><span id="adminLoginLoaderPercent">7%</span></div>
+      <div class="admin-login-loader-track"><div class="admin-login-loader-fill" id="adminLoginLoaderFill"></div></div>
+      <div class="admin-login-loader-status" id="adminLoginLoaderStatus">Menyemak akaun admin...</div>
+    </div>`;
+  document.body.appendChild(overlay);
+  requestAnimationFrame(()=>{
+    const fill = document.getElementById('adminLoginLoaderFill');
+    if(fill) fill.style.transform = 'scaleX(.07)';
+  });
+  adminLoginLoaderTimer = setInterval(()=>{
+    const step = adminLoginLoaderValue < 55 ? 5 : (adminLoginLoaderValue < 80 ? 2 : 1);
+    adminLoginLoaderValue = Math.min(92, adminLoginLoaderValue + step);
+    const fill = document.getElementById('adminLoginLoaderFill');
+    const percent = document.getElementById('adminLoginLoaderPercent');
+    if(fill) fill.style.transform = `scaleX(${adminLoginLoaderValue / 100})`;
+    if(percent) percent.textContent = adminLoginLoaderValue + '%';
+  }, 280);
+}
+function hideAdminLoginLoader(success){
+  if(adminLoginLoaderTimer){ clearInterval(adminLoginLoaderTimer); adminLoginLoaderTimer = null; }
+  const overlay = document.getElementById('adminLoginLoader');
+  if(!overlay) return Promise.resolve();
+  if(!success){ overlay.remove(); return Promise.resolve(); }
+  const fill = document.getElementById('adminLoginLoaderFill');
+  const percent = document.getElementById('adminLoginLoaderPercent');
+  const status = document.getElementById('adminLoginLoaderStatus');
+  if(fill) fill.style.transform = 'scaleX(1)';
+  if(percent) percent.textContent = '100%';
+  if(status) status.textContent = 'Login berjaya! Membuka panel admin...';
+  return new Promise(resolve=>setTimeout(()=>{ overlay.remove(); resolve(); }, 350));
+}
+
 /* ---------- promosi ---------- */
-function renderPromo(){
+function getLoyaltyStats(){
   const loyalty = state.myLoyalty;
-  const totalCups = loyalty ? (loyalty.qty || 0) : 0;
-  const freeCount = Math.floor(totalCups / 6);
-  const hasFree = freeCount > 0;
+  const ready = !!loyalty && !state.myLoyaltyLoading && !state.myLoyaltyError;
+  const totalCups = ready ? (Number(loyalty.qty) || 0) : null;
+  const freeCount = totalCups === null ? null : Math.floor(totalCups / FREE_DRINKS_THRESHOLD);
+  const note = state.myLoyaltyLoading ? 'Menyemak database...' :
+    state.myLoyaltyError ? 'Data belum dapat dimuatkan' : 'Bulan ini';
+  return { ready, totalCups, freeCount, note };
+}
 
-  const progressHtml = loyalty
-    ? `<div class="promo-progress">Anda telah membeli <strong>${totalCups}</strong> cawan bulan ini</div>`
-    : `<div class="promo-progress promo-loading">Memuatkan progress anda...</div>`;
-
-  const celebrationHtml = hasFree ? `
-    <div class="promo-celebration">
-      <div class="gift-burst">
-        ${ICON_GIFT}
-        <span class="confetti c1"></span>
-        <span class="confetti c2"></span>
-        <span class="confetti c3"></span>
-        <span class="confetti c4"></span>
-        <span class="confetti c5"></span>
-        <span class="confetti c6"></span>
-        <span class="confetti c7"></span>
-        <span class="confetti c8"></span>
-      </div>
-      <div class="promo-alert">🎉 Anda mendapat <span class="free-count">${freeCount}</span> air free! Tunjukkan page ini kepada barista untuk tebus.</div>
-    </div>
-  ` : '';
-
+function renderLoyaltyStats(){
+  const { totalCups, freeCount, note } = getLoyaltyStats();
   return `
-    <div class="promo">
-      <div class="promo-banner">
-        <img src="${LOGIN_BANNER_URL}" alt="Promosi Kopi">
+    <div class="promo-stats">
+      <div class="promo-stat-card">
+        <span class="promo-stat-copy">
+          <span class="promo-stat-label">Cawan kopi dibeli</span>
+          <strong class="promo-stat-value">${totalCups === null ? '—' : totalCups}</strong>
+          <span class="promo-stat-note">${note}</span>
+        </span>
+        <span class="promo-stat-icon coffee" aria-hidden="true">${iconCup('hot')}</span>
       </div>
-      <div class="promo-body">
-        <h2>Promosi Bulan Ini</h2>
-        <p class="sub">Setiap pembelian sebanyak <strong>6 cawan</strong> akan mendapat <strong>1 cawan kopi percuma</strong> pada bulan tersebut!</p>
-        ${progressHtml}
-        ${celebrationHtml}
-        <button class="reg-submit" id="promoContinue">Teruskan</button>
+      <div class="promo-stat-card">
+        <span class="promo-stat-copy">
+          <span class="promo-stat-label">Kopi percuma</span>
+          <strong class="promo-stat-value">${freeCount === null ? '—' : freeCount}</strong>
+          <span class="promo-stat-note">${freeCount === null ? note : (freeCount > 0 ? 'Boleh ditebus' : `Beli ${FREE_DRINKS_THRESHOLD} untuk 1 percuma`)}</span>
+        </span>
+        <span class="promo-stat-icon reward ${freeCount > 0 ? 'has-reward' : ''}" aria-hidden="true">${ICON_GIFT}</span>
       </div>
     </div>
   `;
+}
+
+function escapeHtml(value){
+  return String(value || '').replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
+}
+
+function renderPromo(){
+  const hour = new Date().getHours();
+  const greeting = hour >= 5 && hour < 12 ? 'Selamat Pagi' :
+    hour < 15 && hour >= 12 ? 'Selamat Tengah Hari' :
+    hour < 19 && hour >= 15 ? 'Selamat Petang' : 'Selamat Malam';
+  const customerName = escapeHtml(state.customer && state.customer.name || 'Pelanggan');
+
+  return `
+    <div class="promo">
+      <div class="promo-greeting"><h1>${greeting}, ${customerName}</h1></div>
+      ${renderLoyaltyStats()}
+      <h2 class="promo-section-title">Promosi Bulan Ini</h2>
+      <div class="promo-banner">
+        <img src="gambar promosi.webp" alt="Promosi K'fe De Sol">
+      </div>
+    </div>
+  `;
+}
+
+function renderRewards(){
+  const { ready, freeCount, note } = getLoyaltyStats();
+  const rewardMessage = !ready ? note : freeCount > 0
+    ? `${freeCount} kopi percuma boleh ditebus.`
+    : `Beli ${FREE_DRINKS_THRESHOLD} cawan untuk dapat 1 kopi percuma.`;
+  return `<div class="primary-tab-page reward-page">
+    <h1>Reward</h1>
+    ${renderLoyaltyStats()}
+    <p class="reward-message">${rewardMessage}</p>
+  </div>`;
+}
+
+function renderLocation(){
+  return `<div class="primary-tab-page location-page">
+    <h1>Lokasi K'fe De Sol</h1>
+    <div class="location-card">
+      <div class="location-photo-frame"><img class="location-photo" src="kfe-de-sol-location.webp" alt="Pemandangan jalan masuk ke K'fe De Sol" loading="lazy"></div>
+      <div class="location-card-content">
+        <h2>Alamat Kedai</h2>
+        <address class="location-address">109 Sg Resik, Sg. Balang,<br>83610 Semerah,<br>Batu Pahat, Johor</address>
+        <p class="location-landmark"><strong>Tanda tempat berdekatan</strong>Berhadapan Dewan Serba Guna</p>
+        <div class="location-hours" aria-label="Waktu operasi Isnin hingga Ahad, 9 pagi hingga 10 malam">
+          <span class="location-hours-label">Waktu Operasi</span>
+          <span class="location-hours-value"><strong>Isnin – Ahad</strong>9.00 pagi – 10.00 malam</span>
+        </div>
+        <a class="location-map-btn" href="https://maps.app.goo.gl/rjBfwdHpdDS4X8Tv6" target="_blank" rel="noopener noreferrer" aria-label="Buka lokasi K'fe De Sol di Google Maps">${ICON_LOCATION}<span>Buka Google Maps</span></a>
+        <a class="location-map-btn waze" href="https://waze.com/ul?ll=1.906915%2C102.738525&amp;navigate=yes" target="_blank" rel="noopener noreferrer" aria-label="Buka arah ke K'fe De Sol dalam Waze">${ICON_LOCATION}<span>Buka Waze</span></a>
+      </div>
+    </div>
+    <section class="location-qr-card" aria-labelledby="shareAppTitle">
+      <h2 id="shareAppTitle">Kongsi App K'fe De Sol</h2>
+      <p>Imbas atau tunjukkan QR ini kepada kawan untuk membuka app pelanggan.</p>
+      <img class="location-qr-image" src="kfe-de-sol-qr.png" alt="Kod QR untuk membuka app pelanggan K'fe De Sol" loading="lazy">
+    </section>
+  </div>`;
+}
+
+function renderAccount(){
+  const customer = state.customer || {};
+  const allOrderCount = new Set([...(state.myOrderIds || []), ...(state.myReceipts || []).map(o=>o.id)]).size;
+  const receiptCount = allOrderCount;
+  return `<div class="primary-tab-page account-page">
+    <h1>Account</h1>
+    <div class="account-profile">
+      <span class="account-profile-icon" aria-hidden="true">${ICON_ADMIN}</span>
+      <div class="account-profile-copy">
+        <span class="account-profile-name">${escapeHtml(customer.name || 'Pelanggan')}</span>
+        <span class="account-profile-phone">${escapeHtml(customer.phone || '')}</span>
+      </div>
+    </div>
+    ${renderLoyaltyStats()}
+    <h2 class="account-purchase-title">My Purchase</h2>
+    <div class="account-purchase-list">
+      <button class="account-purchase-row" id="accountOrders" aria-label="Buka sejarah pesanan">
+        ${ICON_QUEUE}<span class="account-purchase-row-label">Orders</span>
+        ${allOrderCount ? `<span class="account-purchase-count">${allOrderCount}</span>` : ''}
+        <span class="account-purchase-chevron" aria-hidden="true">&rsaquo;</span>
+      </button>
+      <button class="account-purchase-row" id="accountReceipts" aria-label="Buka resit aktif dan selesai">
+        ${ICON_RECEIPT}<span class="account-purchase-row-label">Resit</span>
+        ${receiptCount ? `<span class="account-purchase-count">${receiptCount}</span>` : ''}
+        <span class="account-purchase-chevron" aria-hidden="true">&rsaquo;</span>
+      </button>
+    </div>
+    <button class="account-logout" id="accountLogout">${ICON_LOGOUT}<span>Log Keluar</span></button>
+  </div>`;
+}
+
+function getCustomerOrderHistory(){
+  const seen = new Set();
+  return [...(state.myOrders || []), ...(state.myReceipts || [])]
+    .filter(o => o && !seen.has(o.id) && seen.add(o.id))
+    .sort((a,b) => Number(b.createdAt || 0) - Number(a.createdAt || 0));
+}
+
+function orderStatusLabel(o){
+  const status = orderStatus(o);
+  if(status === 'siap') return 'Siap diambil';
+  if(status === 'sedang_dibuat') return 'Sedang dibuat';
+  if(status === 'selesai') return 'Selesai';
+  if(status === 'rejected') return 'Ditolak';
+  return 'Pesanan diterima';
+}
+
+function renderOrders(){
+  const orders = getCustomerOrderHistory();
+  if(!orders.length) return `<div class="waiting"><p>Belum ada sejarah pesanan.</p></div>`;
+  const cards = orders.map(o => {
+    const status = orderStatus(o);
+    const rejected = isOrderRejected(o);
+    const done = status === 'siap' || status === 'selesai';
+    const statusClass = rejected ? 'rejected' : (done ? 'done' : 'pending');
+    const statusText = rejected ? 'Batal / Reject' : (status === 'selesai' ? 'Selesai' : (status === 'siap' ? 'Dah siap' : 'Belum siap'));
+    const items = (o.items || []).map(i=>`<div class="order-history-item"><span>${escapeHtml(i.name)} x${i.qty}</span><span>${fmt(i.price*i.qty)}</span></div>`).join('');
+    const date = new Date(o.createdAt).toLocaleString('ms-MY',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    return `<article class="order-history-card">
+      <div class="order-history-top">
+        <div><div class="order-history-number">No. Giliran ${String(o.queueNo).padStart(3,'0')}</div><div class="order-history-date">${date}</div></div>
+        <div class="order-history-summary"><span class="order-history-status ${statusClass}">${statusText}</span><div class="order-history-price">${fmt(o.total)}</div></div>
+      </div>
+      <div class="order-history-items">${items}</div>
+    </article>`;
+  }).join('');
+  return `<div class="orders-history-view"><h1 class="orders-history-title">Sejarah Order</h1><div class="orders-history-list">${cards}</div></div>`;
+}
+
+function renderProductDetail(){
+  const item = MENU.find(m => m.id === state.itemDetailId);
+  if(!item){ state.view = 'menu'; return renderMenu(); }
+  const qty = Math.max(1, Number(state.detailQty || 1));
+  const temp = state.itemTemp[item.id] || 'hot';
+  const price = getItemPrice(item);
+  const tempOptions = item.temp === 'both' ? `<div class="product-detail-label">Pilihan minuman</div>
+    <div class="product-temp-options" role="group" aria-label="Pilihan minuman panas atau sejuk">
+      <button class="product-temp-btn ${temp==='hot'?'active':''}" data-detail-temp="hot">Hot</button>
+      <button class="product-temp-btn ${temp==='ice'?'active':''}" data-detail-temp="ice">Ice</button>
+    </div>` : '';
+  return `<div class="product-detail-page">
+    <button class="product-detail-back" id="productDetailBack" aria-label="Kembali ke menu">${ICON_BACK}<span>Kembali</span></button>
+    <div class="product-detail-visual"><img src="${getItemImage(item)}" alt="${escapeHtml(getItemName(item))}"></div>
+    <h1 class="product-detail-name">${escapeHtml(getItemName(item))}</h1>
+    <p class="product-detail-description">${escapeHtml(getItemDesc(item) || 'Minuman istimewa yang disediakan segar untuk dinikmati pada bila-bila masa.')}</p>
+    ${tempOptions}
+    <div class="product-detail-qty-row">
+      <div><div class="product-detail-label">Kuantiti</div><div class="product-detail-stepper"><button id="productDetailMinus" aria-label="Kurangkan kuantiti">−</button><span class="product-detail-qty">${qty}</span><button id="productDetailPlus" aria-label="Tambah kuantiti">+</button></div></div>
+      <div><div class="product-detail-label">Harga</div><div class="product-detail-price">${fmt(price * qty)}</div></div>
+    </div>
+    <div class="product-detail-cartbar"><button class="product-detail-add" id="productDetailAdd">Tambah ke Troli</button><div class="product-detail-cart-total">${fmt(price * qty)}</div></div>
+  </div>`;
+}
+
+function renderCustomerTabbar(){
+  const activeTab = state.view === 'promo' ? 'home' :
+    (state.view === 'menu' || state.view === 'preview' || state.view === 'waiting') ? 'menu' :
+    state.view === 'rewards' ? 'reward' : state.view === 'location' ? 'location' : 'account';
+  return `<nav class="customer-tabbar" id="customerTabbar" aria-label="Navigasi utama">
+    <button class="customer-tab ${activeTab === 'home' ? 'active' : ''}" data-tab="home" aria-label="Home">${ICON_HOME}<span>Home</span></button>
+    <button class="customer-tab ${activeTab === 'menu' ? 'active' : ''}" data-tab="menu" aria-label="Menu">${ICON_MENU}<span>Menu</span></button>
+    <button class="customer-tab ${activeTab === 'reward' ? 'active' : ''}" data-tab="reward" aria-label="Reward">${ICON_GIFT}<span>Reward</span></button>
+    <button class="customer-tab ${activeTab === 'location' ? 'active' : ''}" data-tab="location" aria-label="Lokasi">${ICON_LOCATION}<span>Lokasi</span></button>
+    <button class="customer-tab ${activeTab === 'account' ? 'active' : ''}" data-tab="account" aria-label="Account">${ICON_ADMIN}<span>Account</span></button>
+  </nav>`;
+}
+
+function clearCustomerSession(){
+  localStorage.removeItem('kfedeSolCustomerSession');
+  sessionStorage.removeItem('kfedeSolAppSession');
+  state.customer = null;
+  state.cart = {};
+  state.myOrderIds = [];
+  state.myOrders = [];
+  state.myReceipts = [];
+  state.activeQueueId = null;
+  state.popularIds = null;
+  state.myLoyalty = undefined;
+  state.myLoyaltyLoading = false;
+  state.myLoyaltyError = false;
+  state.regName = '';
+  state.regPhone = '';
+  state.view = 'register';
 }
 
 
@@ -2285,11 +2813,10 @@ function renderItemDetailModal(){
 
 /* ---------- menu ---------- */
 function renderMenu(){
-  let totalQty = 0, totalPrice = 0;
+  let totalQty = 0;
   for(const item of MENU){
     const q = state.cart[item.id] || 0;
     totalQty += q;
-    totalPrice += q * getItemPrice(item);
   }
 
   const activeCat = state.menuCategory || CATEGORIES[0].id;
@@ -2305,7 +2832,7 @@ function renderMenu(){
         <button class="temp-btn ${t==='ice'?'active':''}" data-temp="ice" data-id="${item.id}">ICE</button>
       </div>` : '';
     return `
-      <div class="menu-card ${published?'':'sold-out'}" aria-disabled="${published?'false':'true'}">
+      <div class="menu-card ${published?'':'sold-out'}" data-product-id="${item.id}" role="button" tabindex="${published?'0':'-1'}" aria-label="Lihat ${escapeHtml(getItemName(item))}" aria-disabled="${published?'false':'true'}">
         <div class="photo">
           <img src="${getItemImage(item)}" alt="${item.id}" loading="eager" decoding="async">
         </div>
@@ -2334,16 +2861,14 @@ function renderMenu(){
       <h2>Senarai Kopi Yang Hebat</h2>
       <p>Pilih minuman & tekan + untuk tambah kuantiti</p>
     </div>
-    ${renderPopularSection()}
     <div class="menu-cat-tabs-wrap">
       <div class="menu-cat-tabs" id="catTabs">${tabs}</div>
       <button class="cat-arrow left hidden" id="catArrowLeft" aria-label="Kategori sebelum">&#8249;</button>
       <button class="cat-arrow right" id="catArrowRight" aria-label="Kategori seterusnya">&#8250;</button>
     </div>
     <div class="menu-list" id="menuList">${cards}</div>
-    <div class="cart-bar">
-      <div class="summary">${totalQty} item<br><strong>${fmt(totalPrice)}</strong></div>
-      <button id="previewOrder" ${totalQty===0?'disabled':''}>Pratonton Pesanan</button>
+    <div class="cart-bar menu-next-bar">
+      <button id="previewOrder" ${totalQty===0?'disabled':''}>Next</button>
     </div>
   `;
 }
@@ -2465,7 +2990,7 @@ function renderPreview(){
       <p>Semak semula sebelum hantar ke dapur</p>
     </div>
     <div class="menu-list">${rows || '<div class="empty-msg">Tiada item dipilih.</div>'}</div>
-    <div class="cart-bar">
+    <div class="cart-bar preview-cart-bar">
       <button class="outline-btn" id="addMore">+ Tambah Menu</button>
       <button id="submitOrder" ${totalQty===0?'disabled':''}>Hantar (${fmt(totalPrice)})</button>
     </div>
@@ -2513,7 +3038,7 @@ function renderWaiting(){
     : `<div class="squares-loader"><div class="sq"></div><div class="sq"></div><div class="sq"></div><div class="sq"></div><div class="sq"></div></div>`;
   const statusMessage = rejected ? ('Maaf, pesanan anda ditolak' + (rejectReason ? '<br><small>Sebab: ' + rejectReason + '</small>' : ''))
     : collected ? 'Terima kasih! Pesanan telah diambil.'
-    : ready ? 'Pesanan siap — sila datang ke kaunter untuk ambil'
+    : ready ? 'Pesanan siap — sila datang ke kedai untuk pengambilan dan bayaran'
     : making ? 'Pesanan anda sedang dibuat'
     : 'Pesanan diterima — menunggu pengesahan kedai';
 
@@ -2526,41 +3051,51 @@ function renderWaiting(){
       ${statusVisual}
       <div class="prep-box big ${rejected?'rejected':(collected?'collected-message':(ready?'ready':''))}">${statusMessage}</div>
       <div class="order-items">${itemsHtml}<div class="row" style="border-top:1px solid #EFE2D2; margin-top:6px; padding-top:8px; font-weight:600;"><span>Jumlah</span><span>${fmt(order.total)}</span></div></div>
-      <div class="payment-note">${rejected ? 'Sila buat pesanan baru jika masih ingin membeli.' : (collected ? 'Semoga berpuas hati dan jumpa lagi.' : 'Sila buat bayaran di kaunter pembayaran')}</div>
+      <div class="payment-note">${rejected ? 'Sila buat pesanan baru jika masih ingin membeli.' : (collected ? 'Semoga berpuas hati dan jumpa lagi.' : (ready ? 'Sebut nombor giliran anda di kaunter.' : 'Sila buat bayaran di kaunter pembayaran'))}</div>
       <button class="again-btn" id="orderAgain">Pesan Lagi</button>
     </div>
   `;
 }
 
-/* ---------- receipts (customer's completed-order history, this session) ---------- */
+/* ---------- receipts (active and completed customer orders) ---------- */
 function renderReceipts(){
-  const receipts = state.myReceipts || [];
+  const receipts = getCustomerOrderHistory();
   if(receipts.length === 0){
-    return `<div class="waiting"><p>Tiada resit lagi. Resit akan disimpan di sini selepas pesanan anda selesai.</p></div>`;
+    if((state.myOrderIds || []).length > 0 && (!state.receiptsLoadedOnce || state.receiptsLoading)){
+      return `<div class="receipts-view"><h1 class="receipts-header">Resit Anda</h1><p>Menyemak resit aktif...</p></div>`;
+    }
+    return `<div class="waiting"><p>Tiada resit lagi.</p></div>`;
   }
 
-  const cardsHtml = receipts.map(o => {
+  const renderReceiptCards = list => list.map(o => {
     const dateTimeStr = new Date(o.createdAt).toLocaleString('ms-MY', {day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit'});
     const rejected = isOrderRejected(o);
+    const active = orderStatus(o) !== 'selesai' && !rejected;
     const rejectReason = getRejectReason(o);
     const itemsHtml = o.items.map(i => `<div class="row"><span>${i.name} x${i.qty}</span><span>${fmt(i.price*i.qty)}</span></div>`).join('');
     return `
-      <div class="receipt-card">
-        <div class="receipt-stamp ${rejected?'rejected':''}">${rejected?'DITOLAK':'SELESAI'}</div>
+      <div class="receipt-card ${active?'active-card':''}">
+        <div class="receipt-stamp ${active?'active':(rejected?'rejected':'')}">${active?'AKTIF':(rejected?'DITOLAK':'SELESAI')}</div>
         <div class="label">No. Giliran${o.customerName ? ' &middot; ' + o.customerName : ''}</div>
         <div class="queue-no small">${String(o.queueNo).padStart(3,'0')}</div>
         <div class="receipt-datetime">${dateTimeStr}</div>
         ${rejected ? `<div class="receipt-reject-reason">Sebab: ${rejectReason || 'Lain-lain'}</div>` : ''}
         <div class="receipt-divider"></div>
         <div class="order-items">${itemsHtml}<div class="row" style="border-top:1px solid #EFE2D2; margin-top:6px; padding-top:8px; font-weight:600;"><span>Jumlah</span><span>${fmt(o.total)}</span></div></div>
-        <div class="receipt-footer">${rejected ? 'Rekod pesanan ditolak — tiada bayaran/jualan direkodkan.' : 'Terima kasih atas sokongan anda &#9749;'}</div>
+        <div class="receipt-footer">${active ? orderStatusLabel(o) : (rejected ? 'Rekod pesanan ditolak — tiada bayaran/jualan direkodkan.' : 'Terima kasih atas sokongan anda &#9749;')}</div>
+        ${active?`<button class="receipt-open-order" data-open-active-order="${o.id}">Lihat pesanan aktif</button>`:''}
       </div>
     `;
   }).join('');
 
+  const activeReceipts = receipts.filter(o => orderStatus(o) !== 'selesai' && !isOrderRejected(o));
+  const completedReceipts = receipts.filter(o => orderStatus(o) === 'selesai' || isOrderRejected(o));
+  const cardsHtml = `${activeReceipts.length ? `<div class="receipt-section-title">Aktif</div>${renderReceiptCards(activeReceipts)}` : ''}
+    ${completedReceipts.length ? `<div class="receipt-section-title">Selesai</div>${renderReceiptCards(completedReceipts)}` : ''}`;
+
   return `
-    <div class="waiting receipts-view">
-      <div class="receipts-header">Resit Anda</div>
+    <div class="receipts-view">
+      <h1 class="receipts-header">Resit Anda</h1>
       <div class="receipt-list">${cardsHtml}</div>
     </div>
   `;
@@ -2639,7 +3174,7 @@ function renderAdminPesanan(){
     const phone = o.customerPhone || '';
     const cust = state.customerReport ? state.customerReport[phone] : null;
     let loyaltyBadge = '';
-    const freeCount = cust ? Math.floor((cust.qty||0) / 6) : 0;
+    const freeCount = cust ? Math.floor((cust.qty||0) / FREE_DRINKS_THRESHOLD) : 0;
     if(freeCount > 0){
       loyaltyBadge = `<button class="redeem-btn" data-phone="${phone}" data-count="${freeCount}">🎁 Layak dapat x${freeCount} kopi percuma &middot; tekan untuk redeem</button>`;
     }
@@ -2825,7 +3360,7 @@ function renderAdminDashboard(){
     .map(([phone, c]) => ({ phone, name: c.name, qty: c.qty||0, count: c.count }))
     .sort((a,b) => (a.name||'').localeCompare(b.name||''));
   const loyaltyList = Object.entries(customers)
-    .map(([phone, c]) => ({ phone, name: c.name, qty: c.qty||0, free: Math.floor((c.qty||0)/6) }))
+    .map(([phone, c]) => ({ phone, name: c.name, qty: c.qty||0, free: Math.floor((c.qty||0)/FREE_DRINKS_THRESHOLD) }))
     .filter(c => c.free > 0)
     .sort((a,b) => b.free - a.free);
   const loyaltyCount = loyaltyList.length;
@@ -3659,13 +4194,13 @@ function renderCustomerReport(){
   const monthLabel = state.currentMonthKey || '';
 
   let html = `<div class="section-title">Laporan Pelanggan &middot; ${monthLabel}</div>`;
-  html += `<p class="report-note">Senarai ini akan reset secara automatik pada permulaan bulan baharu (bilangan & kuantiti bulan lepas disimpan dalam laporan bulanan). Pelanggan yang capai 6 cawan layak dapat 1 kopi percuma.</p>`;
+  html += `<p class="report-note">Senarai ini akan reset secara automatik pada permulaan bulan baharu (bilangan & kuantiti bulan lepas disimpan dalam laporan bulanan). Pelanggan yang capai ${FREE_DRINKS_THRESHOLD} cawan layak dapat 1 kopi percuma.</p>`;
 
   if(list.length === 0){
     html += `<div class="empty-msg">Belum ada data pelanggan bulan ini.</div>`;
   } else {
     const rows = list.map(c => {
-      const free = Math.floor((c.qty||0) / 6);
+      const free = Math.floor((c.qty||0) / FREE_DRINKS_THRESHOLD);
       return `
       <div class="report-row">
         <div class="r-name">
@@ -3847,16 +4382,6 @@ function bindViewEvents(){
     }
   }
 
-  if(state.view === 'promo'){
-    const continueBtn = document.getElementById('promoContinue');
-    if(continueBtn){
-      continueBtn.onclick = () => {
-        state.view = 'menu';
-        render();
-      };
-    }
-  }
-
   if(state.view === 'admin-login'){
     const userInput = document.getElementById('adminUsername');
     const pwInput = document.getElementById('adminPassword');
@@ -3867,10 +4392,23 @@ function bindViewEvents(){
         if(ctx && ctx.state === 'suspended') ctx.resume();
         const username = (userInput.value || '').trim();
         const pw = (pwInput.value || '').trim();
+        if(!username || !pw){
+          state.adminLoginError = 'Sila masukkan ID admin dan kata laluan.';
+          render();
+          return;
+        }
         loginBtn.disabled = true;
         loginBtn.textContent = 'Menyemak...';
+        showAdminLoginLoader();
         const result = await adminLoginApi(username, pw);
-        if(!result || !result.ok || !result.admin || !result.token){
+        if(result === null){
+          await hideAdminLoginLoader(false);
+          state.adminLoginError = 'Server sedang lambat. Sila tunggu sebentar dan cuba semula.';
+          render();
+          return;
+        }
+        if(!result.ok || !result.admin || !result.token){
+          await hideAdminLoginLoader(false);
           state.adminLoginError = 'ID atau kata laluan salah.';
           render();
           return;
@@ -3881,6 +4419,7 @@ function bindViewEvents(){
         try{ localStorage.setItem('kfedeSolAdminSession', JSON.stringify({admin:result.admin, token:result.token})); }catch(e){}
         adminInvalidSessionChecks = 0;
         state.adminAccounts = null;
+        await hideAdminLoginLoader(true);
         state.view = 'admin';
         render();
       };
@@ -3891,6 +4430,21 @@ function bindViewEvents(){
   }
 
   if(state.view === 'menu' || state.view === 'preview'){
+    document.querySelectorAll('.menu-card[data-product-id]').forEach(card=>{
+      const openDetail = () => {
+        const item = MENU.find(m => m.id === card.dataset.productId);
+        if(!item || !isItemPublished(item)) return;
+        state.itemDetailId = item.id;
+        state.detailQty = 1;
+        state.view = 'item-detail';
+        render();
+      };
+      card.onclick = e => { if(!e.target.closest('button')) openDetail(); };
+      card.onkeydown = e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openDetail(); } };
+      card.querySelectorAll('.photo, .info').forEach(area=>{
+        area.onclick = e => { e.stopPropagation(); openDetail(); };
+      });
+    });
     document.querySelectorAll('.menu-card .plus').forEach(btn=>{
       btn.onclick = () => {
         const id = btn.dataset.id;
@@ -3908,12 +4462,6 @@ function bindViewEvents(){
           const hasItems = MENU.some(m => (state.cart[m.id]||0) > 0);
           if(!hasItems){ state.view = 'menu'; }
         }
-        render();
-      };
-    });
-    document.querySelectorAll('.menu-card .photo img, .popular-card .photo img').forEach(img=>{
-      img.onclick = () => {
-        state.lightboxImage = img.dataset.img.replace('/120/120', '/800/800');
         render();
       };
     });
@@ -4444,7 +4992,7 @@ function showReadyNotification(order){
   if(Notification.permission !== 'granted') return;
   try{
     const n = new Notification("K'fe De Sol", {
-      body: `Pesanan anda (No. ${String(order.queueNo).padStart(3,'0')}) sudah siap! Sila buat bayaran di kaunter.`,
+      body: `Pesanan anda (No. ${String(order.queueNo).padStart(3,'0')}) sudah siap! Sila datang ke kedai untuk pengambilan dan bayaran.`,
       icon: LOGO_URL,
       tag: 'kfe-order-' + order.id
     });
@@ -4703,7 +5251,7 @@ async function checkMidnightReset(){
 // Load menu meta (descriptions + image URLs) from Sheets on startup
 loadMenuMeta();
 render();
-loadShopStatus().then(()=>render()).catch(()=>{});
+loadShopStatus().then(changed=>{ if(changed) render(); }).catch(()=>{});
 </script>
 </body>
 </html>

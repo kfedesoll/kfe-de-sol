@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <title id="title">K’fe De Sol logo</title>
+  <desc id="desc">Minimal coffee cup logo with K’fe in espresso brown and De Sol in warm orange on white.</desc>
+  <rect width="1200" height="700" fill="#FFFFFF"/>
+
+  <g fill="#2B1810">
+    <path d="M256 292h300v208c0 72-48 116-126 116h-48c-78 0-126-44-126-116z"/>
+    <path fill-rule="evenodd" d="M256 332h-58c-76 0-118 48-118 116s42 116 118 116h68v-54h-62c-40 0-64-23-64-62s24-62 64-62h52zm300 0h25c68 0 109 43 109 108s-41 108-109 108h-25v-54h21c34 0 53-19 53-54s-19-54-53-54h-21z"/>
+    <ellipse cx="406" cy="292" rx="150" ry="31"/>
+  </g>
+
+  <g fill="none" stroke="#2B1810" stroke-width="18" stroke-linecap="round">
+    <path d="M330 242c-24-37 30-52 5-93"/>
+    <path d="M406 242c-25-42 31-61 5-108"/>
+    <path d="M482 242c-24-37 30-52 5-93"/>
+  </g>
+
+  <g font-family="Arial, Helvetica, sans-serif" font-weight="800" text-anchor="start">
+    <text x="725" y="377" font-size="126" fill="#2B1810">K’fe</text>
+    <text x="725" y="515" font-size="116" fill="#E8862C">De Sol</text>
+  </g>
+</svg>

@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skrin Giliran · K'fe De Sol</title>
+<meta name="theme-color" content="#2B1810">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;900&family=Work+Sans:wght@400;500;600;700;800&display=swap');
+:root{
+  --coffee-dark:#2B1810; --coffee-mid:#6B4226; --cream:#FBF3E7; --card:#FFFEFB;
+  --line:#EADCC8; --sol-orange:#E8862C; --sol-gold:#F6C453;
+}
+*{ box-sizing:border-box; margin:0; padding:0; }
+html,body{ height:100%; }
+body{ font-family:'Work Sans',sans-serif; background:var(--coffee-dark); color:var(--coffee-dark); overflow:hidden; }
+
+/* Layout: queue on the left, video on the right. vmin keeps everything
+   readable from across the shop on any TV size. */
+.board{ display:grid; grid-template-columns:minmax(0,46fr) minmax(0,54fr); height:100vh; height:100dvh; }
+.queue{ display:flex; flex-direction:column; min-height:0; padding:3vmin; gap:2.4vmin; background:var(--cream); }
+.brand{ display:flex; align-items:center; gap:2vmin; }
+.brand img{ width:9vmin; height:9vmin; border-radius:50%; }
+.brand h1{ font:900 5vmin/1 'Fraunces',serif; color:var(--coffee-dark); }
+.brand p{ margin-top:.6vmin; font-size:2vmin; font-weight:700; letter-spacing:.3vmin; text-transform:uppercase; color:var(--sol-orange); }
+.clock{ margin-left:auto; text-align:right; font:700 4vmin/1 'Fraunces',serif; color:var(--coffee-dark); font-variant-numeric:tabular-nums; }
+.clock small{ display:block; margin-top:.6vmin; font:600 1.7vmin 'Work Sans',sans-serif; color:var(--coffee-mid); }
+
+.col{ display:flex; flex-direction:column; min-height:0; padding:2.4vmin; background:var(--card); border:1px solid var(--line); border-radius:3vmin; box-shadow:0 .6vmin 2vmin rgba(43,24,16,.07); }
+.col.preparing{ flex:0 1 38%; }
+.col.ready{ flex:1 1 62%; border:.4vmin solid var(--sol-gold); background:linear-gradient(160deg,#FFFDF5 0%,#FFF4D6 100%); }
+.col h2{ display:flex; align-items:center; gap:1.4vmin; font:800 2.6vmin 'Work Sans',sans-serif; letter-spacing:.3vmin; text-transform:uppercase; color:var(--coffee-mid); }
+.col.ready h2{ color:#8A6410; }
+.col h2 .dot{ width:1.6vmin; height:1.6vmin; border-radius:50%; background:var(--sol-orange); }
+.col.ready h2 .dot{ background:#2E7D32; }
+.col h2 .count{ margin-left:auto; font-size:2vmin; color:#A08870; letter-spacing:0; }
+.numbers{ flex:1; min-height:0; display:flex; flex-wrap:wrap; align-content:flex-start; gap:1.8vmin; margin-top:2vmin; overflow:hidden; }
+.num{ min-width:15vmin; padding:1.2vmin 2.4vmin; border-radius:2.2vmin; text-align:center; font:700 7vmin/1.1 'Fraunces',serif; font-variant-numeric:tabular-nums; background:#F6EEE3; color:var(--coffee-dark); animation:num-in .5s cubic-bezier(.2,1.4,.4,1) both; }
+.preparing .num.waiting{ opacity:.55; }
+/* Ready numbers: gold, with a moving shine. Newly ready ones also blink. */
+.ready .num{ min-width:20vmin; font-size:10vmin; color:var(--coffee-dark);
+  background:linear-gradient(100deg,#F6C453 0%,#FFE9A8 30%,#E8A92C 55%,#FFE9A8 80%,#F6C453 100%); background-size:220% 100%;
+  box-shadow:0 .6vmin 0 #C99A2E, 0 0 2.4vmin rgba(246,196,83,.7); animation:num-in .5s cubic-bezier(.2,1.4,.4,1) both, gold-shine 2.2s linear infinite; }
+.ready .num.fresh{ animation:num-in .5s cubic-bezier(.2,1.4,.4,1) both, gold-shine 1.2s linear infinite, gold-blink .7s ease-in-out infinite; }
+.empty{ margin:auto; font-size:2.4vmin; font-weight:500; color:#B8A28A; text-align:center; }
+@keyframes num-in{ from{ opacity:0; transform:scale(.6); } to{ opacity:1; transform:none; } }
+@keyframes gold-shine{ from{ background-position:220% 0; } to{ background-position:0 0; } }
+@keyframes gold-blink{ 0%,100%{ box-shadow:0 .6vmin 0 #C99A2E, 0 0 1.2vmin rgba(246,196,83,.5); filter:brightness(1); } 50%{ box-shadow:0 .6vmin 0 #C99A2E, 0 0 5vmin 1.4vmin rgba(246,196,83,.95); filter:brightness(1.18); } }
+@media (prefers-reduced-motion:reduce){ .num, .ready .num, .ready .num.fresh{ animation:none; } }
+
+/* media side */
+.media{ position:relative; min-width:0; background:#1C0F09; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+.media video, .media iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; background:#000; }
+/* The whole picture is shown in its own shape (wide, square or tall); it is
+   never cropped to fill the panel, which used to cut text off the sides. */
+.media video{ object-fit:contain; }
+.media-idle{ padding:4vmin; text-align:center; color:#EFE3CF; }
+.media-idle img{ width:26vmin; height:26vmin; border-radius:50%; box-shadow:0 0 0 1vmin rgba(246,196,83,.18); }
+.media-idle h2{ margin-top:3vmin; font:900 6vmin 'Fraunces',serif; }
+.media-idle p{ margin-top:1vmin; font-size:2.4vmin; color:var(--sol-gold); letter-spacing:.3vmin; text-transform:uppercase; }
+
+
+/* full-screen states: first tap, switched off, no connection */
+.cover{ position:fixed; inset:0; z-index:20; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3vmin; padding:6vmin; text-align:center; background:radial-gradient(115% 80% at 50% 40%, #5C3725 0%, #2B1810 60%, #1C0F09 100%); color:#EFE3CF; }
+.cover[hidden]{ display:none; }
+.cover img{ width:22vmin; height:22vmin; border-radius:50%; }
+.cover h2{ font:900 6vmin 'Fraunces',serif; }
+.cover p{ max-width:70vmin; font-size:2.6vmin; line-height:1.5; color:#D9CBB8; }
+.cover button{ padding:2.2vmin 6vmin; border:0; border-radius:4vmin; background:var(--sol-gold); color:var(--coffee-dark); font:800 3vmin 'Work Sans',sans-serif; cursor:pointer; box-shadow:0 .8vmin 0 #C99A2E; }
+.cover.welcome img{ width:30vmin; height:30vmin; box-shadow:0 0 0 1.2vmin rgba(246,196,83,.18); }
+.cover.welcome h2{ font-size:11vmin; line-height:1; }
+.cover.welcome .welcome-small{ font-size:3.4vmin; letter-spacing:.6vmin; text-transform:uppercase; color:#D9CBB8; }
+.cover.welcome .welcome-tag{ font-size:3vmin; letter-spacing:.5vmin; text-transform:uppercase; color:var(--sol-gold); }
+.offline{ position:fixed; left:50%; top:2vmin; z-index:15; transform:translateX(-50%); padding:1vmin 2.4vmin; border-radius:3vmin; background:#C62828; color:#fff; font-size:1.8vmin; font-weight:700; }
+.offline[hidden]{ display:none; }
+
+/* portrait screens: video on top, queue below */
+@media (orientation:portrait){
+  .board{ grid-template-columns:1fr; grid-template-rows:38vh 1fr; }
+  .media{ order:-1; }
+}
+</style>
+</head>
+<body>
+<div class="board">
+  <section class="queue" aria-live="polite">
+    <header class="brand">
+      <img src="kfe-logo-bulat.png" alt="">
+      <div><h1>K'fe De Sol</h1><p>Nombor Giliran</p></div>
+      <div class="clock"><span id="clockTime">--:--</span><small id="clockDate"></small></div>
+    </header>
+    <div class="col preparing">
+      <h2><span class="dot"></span>Sedang Disediakan<span class="count" id="prepCount"></span></h2>
+      <div class="numbers" id="prepList"></div>
+    </div>
+    <div class="col ready">
+      <h2><span class="dot"></span>Siap · Sila Ambil<span class="count" id="readyCount"></span></h2>
+      <div class="numbers" id="readyList"></div>
+    </div>
+  </section>
+
+  <section class="media" id="media">
+    <div class="media-idle" id="mediaIdle">
+      <img src="kfe-logo-bulat.png" alt="">
+      <h2>K'fe De Sol</h2>
+      <p>The Legacy Continues</p>
+    </div>
+  </section>
+</div>
+
+<div class="offline" id="offline" hidden>Tiada sambungan · mencuba semula...</div>
+
+<div class="cover" id="startCover">
+  <img src="kfe-logo-bulat.png" alt="">
+  <h2>Skrin Giliran K'fe De Sol</h2>
+  <p>Tekan sekali untuk mula. Skrin akan jadi penuh, dan bunyi serta video dibenarkan.</p>
+  <button type="button" id="startBtn">▶ Mula</button>
+</div>
+<div class="cover welcome" id="offCover" hidden>
+  <img src="kfe-logo-bulat.png" alt="">
+  <p class="welcome-small">Selamat Datang ke</p>
+  <h2>K'fe De Sol</h2>
+  <p class="welcome-tag">The Legacy Continues</p>
+</div>
+
+<script>
+/* Queue display for the shop TV. It only reads: queue numbers and statuses
+   from the 'queueBoard' action (no names or phone numbers are ever sent to
+   this page). Must use the same Apps Script URL as index.html. */
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwJeSEszdLBr_UnwFq-W1kXbH9PNqeMlM3Sb4IABw6prJEU4nm51bSSTfSJ08tPt4EVHA/exec';
+const POLL_GAP_MS = 2500;
+const FRESH_MS = 45000; // how long a newly ready number keeps blinking
+
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(3, '0');
+let started = false;
+let readySince = {};       // queueNo -> time it was first seen as ready
+let firstLoad = true;
+let failures = 0;
+let currentMediaKey = '';
+
+/* ---------- clock ---------- */
+function tickClock(){
+  const now = new Date();
+  $('clockTime').textContent = now.toLocaleTimeString('ms-MY', { hour:'numeric', minute:'2-digit', timeZone:'Asia/Kuala_Lumpur' });
+  $('clockDate').textContent = now.toLocaleDateString('ms-MY', { weekday:'long', day:'numeric', month:'long', timeZone:'Asia/Kuala_Lumpur' });
+}
+setInterval(tickClock, 1000); tickClock();
+
+/* ---------- ding (two soft chime notes, no sound file needed) ---------- */
+let audioCtx = null;
+function ding(){
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    [[1318.5, 0], [1046.5, 0.28]].forEach(([freq, delay]) => {
+      const t0 = audioCtx.currentTime + delay;
+      const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+      osc.type = 'sine'; osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.0001, t0);
+      gain.gain.exponentialRampToValueAtTime(0.5, t0 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.1);
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.start(t0); osc.stop(t0 + 1.2);
+    });
+  }catch(e){}
+}
+
+/* ---------- queue ---------- */
+function renderQueue(orders){
+  const now = Date.now();
+  const byNo = (a, b) => a.queueNo - b.queueNo;
+  const preparing = orders.filter(o => o.status !== 'siap').sort(byNo);
+  const ready = orders.filter(o => o.status === 'siap').sort(byNo);
+
+  // Work out which numbers have only just become ready.
+  const seen = {};
+  let newlyReady = false;
+  ready.forEach(o => {
+    if(readySince[o.queueNo] === undefined){
+      // Numbers already ready when the screen is opened are not "new".
+      readySince[o.queueNo] = firstLoad ? 0 : now;
+      if(!firstLoad) newlyReady = true;
+    }
+    seen[o.queueNo] = readySince[o.queueNo];
+  });
+  readySince = seen;
+  firstLoad = false;
+  if(newlyReady && started) ding();
+
+  $('prepList').innerHTML = preparing.length
+    ? preparing.map(o => `<div class="num ${o.status === 'pending' ? 'waiting' : ''}">${pad(o.queueNo)}</div>`).join('')
+    : '<div class="empty">Tiada pesanan sedang disediakan</div>';
+  $('readyList').innerHTML = ready.length
+    ? ready.map(o => `<div class="num ${now - readySince[o.queueNo] < FRESH_MS ? 'fresh' : ''}">${pad(o.queueNo)}</div>`).join('')
+    : '<div class="empty">Nombor yang siap akan dipaparkan di sini</div>';
+  $('prepCount').textContent = preparing.length ? preparing.length + ' pesanan' : '';
+  $('readyCount').textContent = ready.length ? ready.length + ' siap' : '';
+}
+
+/* ---------- own video, kept on this laptop (IndexedDB) ----------
+   The file never leaves the laptop: no upload, no size limit, no data used.
+   It is stored so the same video comes back after the page is reopened. */
+function videoDb(){
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open('kfeDisplay', 1);
+    req.onupgradeneeded = () => req.result.createObjectStore('files');
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
+async function saveVideo(file){
+  const db = await videoDb();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('files', 'readwrite');
+    tx.objectStore('files').put(file, 'video');
+    tx.oncomplete = resolve; tx.onerror = () => reject(tx.error);
+  });
+}
+async function loadVideo(){
+  try{
+    const db = await videoDb();
+    return await new Promise(resolve => {
+      const req = db.transaction('files').objectStore('files').get('video');
+      req.onsuccess = () => resolve(req.result || null);
+      req.onerror = () => resolve(null);
+    });
+  }catch(e){ return null; }
+}
+async function deleteVideo(){
+  try{
+    const db = await videoDb();
+    await new Promise(resolve => { const tx = db.transaction('files', 'readwrite'); tx.objectStore('files').delete('video'); tx.oncomplete = resolve; tx.onerror = resolve; });
+  }catch(e){}
+}
+let ownVideoBlob = null;
+let videoMuted = false;
+try{ videoMuted = localStorage.getItem('kfeDisplayMuted') === '1'; }catch(e){}
+
+/* ---------- YouTube link -> embed address ---------- */
+function youtubeEmbed(link){
+  let url;
+  try{ url = new URL(String(link).trim()); }catch(e){ return ''; }
+  const host = url.hostname.replace(/^www\.|^m\./, '');
+  let id = '', list = url.searchParams.get('list') || '';
+  if(host === 'youtu.be') id = url.pathname.slice(1).split('/')[0];
+  else if(host === 'youtube.com' || host === 'music.youtube.com'){
+    if(url.pathname === '/watch') id = url.searchParams.get('v') || '';
+    else { const m = url.pathname.match(/^\/(?:live|embed|shorts)\/([^/?]+)/); if(m) id = m[1]; }
+  } else return '';
+  if(!/^[\w-]{6,}$/.test(id)) id = '';
+  if(!/^[\w-]{10,}$/.test(list)) list = '';
+  if(!id && !list) return '';
+  const params = new URLSearchParams({ autoplay:'1', mute: videoMuted ? '1' : '0', controls:'0', rel:'0', playsinline:'1', loop:'1' });
+  if(list){ params.set('listType', 'playlist'); params.set('list', list); }
+  else params.set('playlist', id); // a single video needs this to loop
+  return `https://www.youtube-nocookie.com/embed/${id || 'videoseries'}?${params}`;
+}
+
+/* ---------- other web page / direct video link ---------- */
+function webSource(link){
+  let url;
+  try{ url = new URL(String(link).trim()); }catch(e){ return null; }
+  if(url.protocol !== 'https:') return null;
+  return { href: url.href, isVideo: /\.(mp4|webm|ogv|ogg|mov|m4v)$/i.test(url.pathname) };
+}
+
+/* ---------- media panel ---------- */
+function showMedia(settings){
+  const source = settings.source;
+  const what = source === 'youtube' ? settings.youtube : source === 'web' ? settings.web : (ownVideoBlob ? ownVideoBlob.size + ':' + ownVideoBlob.name : 'none');
+  const key = [source, what, videoMuted, started].join('|');
+  if(key === currentMediaKey) return; // nothing changed: leave the player alone
+  currentMediaKey = key;
+  const media = $('media');
+  media.querySelectorAll('video, iframe').forEach(el => { if(el.src && el.src.startsWith('blob:')) URL.revokeObjectURL(el.src); el.remove(); });
+  let shown = false;
+  if(started && source === 'own' && ownVideoBlob){
+    const v = document.createElement('video');
+    v.src = URL.createObjectURL(ownVideoBlob);
+    v.loop = true; v.autoplay = true; v.playsInline = true; v.muted = videoMuted;
+    media.prepend(v);
+    v.play().catch(() => { v.muted = true; v.play().catch(()=>{}); });
+    shown = true;
+  } else if(started && source === 'youtube'){
+    const src = youtubeEmbed(settings.youtube);
+    if(src){
+      const f = document.createElement('iframe');
+      f.src = src; f.allow = 'autoplay; encrypted-media; picture-in-picture'; f.referrerPolicy = 'strict-origin-when-cross-origin';
+      f.title = 'Video';
+      media.prepend(f);
+      shown = true;
+    }
+  } else if(started && source === 'web'){
+    const web = webSource(settings.web);
+    if(web && web.isVideo){
+      const v = document.createElement('video');
+      v.src = web.href;
+      v.loop = true; v.autoplay = true; v.playsInline = true; v.muted = videoMuted;
+      media.prepend(v);
+      v.play().catch(() => { v.muted = true; v.play().catch(()=>{}); });
+      shown = true;
+    } else if(web){
+      const f = document.createElement('iframe');
+      f.src = web.href;
+      // No allow-top-navigation: the embedded page can never take the TV
+      // away from the queue screen.
+      f.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-presentation');
+      f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      f.referrerPolicy = 'strict-origin-when-cross-origin';
+      f.title = 'Laman web';
+      media.prepend(f);
+      shown = true;
+    }
+  }
+  $('mediaIdle').hidden = shown;
+}
+
+/* ---------- polling ---------- */
+let lastSettings = { enabled:true, source:'own', youtube:'', web:'' };
+async function poll(){
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 15000);
+  try{
+    const res = await fetch(`${GAS_URL}?action=queueBoard&_ts=${Date.now()}`, { cache:'no-store', signal:controller.signal });
+    const data = await res.json();
+    if(!data || data.error) throw new Error(data && data.error || 'no data');
+    failures = 0;
+    $('offline').hidden = true;
+    lastSettings = data.settings || lastSettings;
+    $('offCover').hidden = data.enabled !== false;
+    if(data.enabled === false){ renderQueue([]); firstLoad = true; }
+    else renderQueue(Array.isArray(data.orders) ? data.orders : []);
+    showMedia(data.enabled === false ? { source:'none', youtube:'' } : lastSettings);
+  }catch(e){
+    // Keep the last numbers on screen; only say so after a few misses.
+    failures += 1;
+    if(failures >= 3) $('offline').hidden = false;
+  }finally{
+    clearTimeout(timer);
+    setTimeout(poll, POLL_GAP_MS);
+  }
+}
+
+/* ---------- set up from the admin panel ----------
+   This screen faces customers, so it has no buttons. The video file and the
+   sound switch are chosen in the admin panel (Admin > Skrin TV) opened on this
+   same laptop; both pages share the browser's storage, and a change there
+   reaches this page through the 'storage' event. */
+function toggleFullscreen(){
+  if(document.fullscreenElement) document.exitFullscreen();
+  else document.documentElement.requestFullscreen().catch(()=>{});
+}
+window.addEventListener('storage', async e => {
+  if(e.key === 'kfeDisplayVideoStamp'){
+    ownVideoBlob = await loadVideo();
+    showMedia(lastSettings);
+  } else if(e.key === 'kfeDisplayMuted'){
+    videoMuted = e.newValue === '1';
+    const v = $('media').querySelector('video');
+    if(v){ v.muted = videoMuted; currentMediaKey = currentMediaKey.replace(/\|(true|false)\|/, `|${videoMuted}|`); }
+    else showMedia(lastSettings); // YouTube: reload with the new mute setting
+  }
+});
+document.addEventListener('dblclick', toggleFullscreen); // for whoever sets it up
+
+// The mouse pointer hides after a few seconds without movement.
+let idleTimer = null;
+function wake(){
+  document.body.style.cursor = '';
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(() => { document.body.style.cursor = 'none'; }, 3000);
+}
+['mousemove', 'touchstart', 'keydown'].forEach(evt => document.addEventListener(evt, wake, { passive:true }));
+
+/* ---------- keep the laptop screen awake ---------- */
+let wakeLock = null;
+async function keepAwake(){
+  if(!('wakeLock' in navigator) || wakeLock || document.visibilityState !== 'visible') return;
+  try{ wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release', () => { wakeLock = null; }); }catch(e){}
+}
+document.addEventListener('visibilitychange', keepAwake);
+
+/* ---------- start ---------- */
+$('startBtn').onclick = () => {
+  started = true;
+  $('startCover').hidden = true;
+  ding(); // also unlocks audio for later
+  document.documentElement.requestFullscreen().catch(()=>{}); // Esc or double-click leaves full screen
+  keepAwake();
+  wake();
+  showMedia(lastSettings);
+};
+(async () => {
+  ownVideoBlob = await loadVideo();
+  poll();
+})();
+</script>
+</body>
+</html>

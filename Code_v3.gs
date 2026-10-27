@@ -42,6 +42,8 @@
  *         setiap order kawan yang Selesai memberi RM1 kepada pengajak, untuk 3
  *         order pertama sahaja (meta 'referral-rm', 'referral-max'). Kolum
  *         SemuaPelanggan 9-12, sheet DuitLog; admin tolak baki ('useBalance').
+ *         Profil: jantina & tarikh lahir (pilihan) dalam SemuaPelanggan kolum
+ *         13-14, diisi pelanggan semasa daftar / di Account ('setProfile').
  */
 
 function ss_(){ return SpreadsheetApp.getActiveSpreadsheet(); }
@@ -114,6 +116,7 @@ function allCustomersSheet_(){
   }
   ensurePointsColumns_(sheet);
   ensureReferralColumns_(sheet);
+  ensureProfileColumns_(sheet);
   return sheet;
 }
 
@@ -189,7 +192,8 @@ function getAllCustomers_(){
     phone: String(r[0]), name: String(r[1] || ''), firstSeen: String(r[2] || ''), lastOrder: String(r[3] || ''),
     orders: Number(r[4]) || 0, cups: Number(r[5]) || 0,
     points: Number(r[6]) || 0, referralCode: String(r[7] || ''),
-    referredBy: String(r[8] || ''), rm: rm2_(r[9]), rmEarned: rm2_(r[10]), friends: friends[String(r[7] || '')] || 0
+    referredBy: String(r[8] || ''), rm: rm2_(r[9]), rmEarned: rm2_(r[10]), friends: friends[String(r[7] || '')] || 0,
+    gender: String(r[12] || ''), birthday: birthdayStr_(r[13])
   }));
 }
 
@@ -267,13 +271,14 @@ function getMyPoints_(phone, name){
     rows = findRowsByColumn_(sheet, 1, key);
     if(!rows.length) return null;
   }
-  const r = sheet.getRange(rows[0], 1, 1, 12).getValues()[0];
+  const r = sheet.getRange(rows[0], 1, 1, 14).getValues()[0];
   const code = String(r[7] || '');
   const last = sheet.getLastRow();
   const friends = last < 2 ? 0 : sheet.getRange(2, 9, last - 1, 1).getValues().filter(x => String(x[0]) === code).length;
   return { points: Number(r[6]) || 0, referralCode: code, perCup: pointsPerCup_(),
     rm: rm2_(r[9]), rmEarned: rm2_(r[10]), friends: friends, referredBy: String(r[8] || ''),
-    canEnterCode: !String(r[8] || '') && !(Number(r[4]) > 0), refRm: referralRm_(), refMax: referralMax_() };
+    canEnterCode: !String(r[8] || '') && !(Number(r[4]) > 0), refRm: referralRm_(), refMax: referralMax_(),
+    gender: String(r[12] || ''), birthday: birthdayStr_(r[13]) };
 }
 
 /* ---------- v3.10.0: duit referral (RM) ----------
@@ -351,6 +356,46 @@ function creditReferral_(phone, name, orderId){
       title: '💰 +RM' + rm.toFixed(2) + ' duit referral!',
       body: who + ' beli air guna kod anda (' + (paid + 1) + '/' + max + '). Baki duit anda RM' + balance.toFixed(2) + '.' });
   }catch(err){ console.error('Referral gagal: ' + err); }
+}
+
+/* ---------- v3.10.0: profil pelanggan ----------
+   Kolum 13 'gender' = 'L' (Lelaki) / 'P' (Perempuan) / kosong,
+   kolum 14 'birthday' = 'yyyy-MM-dd' (teks) / kosong. Kedua-duanya pilihan. */
+function ensureProfileColumns_(sheet){
+  const head = sheet.getRange(1, 13, 1, 2).getValues()[0].map(String);
+  if(head[0] === 'gender' && head[1] === 'birthday') return;
+  sheet.getRange(1, 13, 1, 2).setValues([['gender', 'birthday']]);
+  sheet.getRange('N:N').setNumberFormat('@');
+}
+// Sheet boleh tukar teks tarikh jadi Date; pulangkan sentiasa 'yyyy-MM-dd'
+function birthdayStr_(v){
+  if(Object.prototype.toString.call(v) === '[object Date]' && !isNaN(v)) return Utilities.formatDate(v, SHOP_TZ_, 'yyyy-MM-dd');
+  const t = String(v || '');
+  return /^\d{4}-\d{2}-\d{2}$/.test(t) ? t : '';
+}
+// Pelanggan simpan jantina / tarikh lahir. Hanya medan yang dihantar dikemas kini.
+// Caller must hold the script lock.
+function setProfile_(body){
+  const key = phoneKey_(body.phone);
+  if(!/^\d{9,15}$/.test(key)) return { ok:false, error:'NO_CUSTOMER' };
+  const hasGender = Object.prototype.hasOwnProperty.call(body, 'gender');
+  const hasBirthday = Object.prototype.hasOwnProperty.call(body, 'birthday');
+  const gender = String(body.gender || '');
+  const birthday = String(body.birthday || '');
+  if(hasGender && ['', 'L', 'P'].indexOf(gender) === -1) return { ok:false, error:'INVALID_GENDER' };
+  if(hasBirthday && birthday){
+    const d = new Date(birthday + 'T00:00:00');
+    const year = Number(birthday.slice(0, 4));
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(birthday) || isNaN(d) || year < 1920 || d.getTime() > Date.now()) return { ok:false, error:'INVALID_BIRTHDAY' };
+  }
+  const sheet = allCustomersSheet_();
+  let rows = findRowsByColumn_(sheet, 1, key);
+  if(!rows.length){ upsertAllCustomer_(key, String(body.name || '').slice(0, 60), {}); rows = findRowsByColumn_(sheet, 1, key); }
+  if(!rows.length) return { ok:false, error:'NO_CUSTOMER' };
+  if(hasGender) sheet.getRange(rows[0], 13).setValue(gender);
+  if(hasBirthday) setTextCell_(sheet, rows[0], 14, birthday);
+  const r = sheet.getRange(rows[0], 13, 1, 2).getValues()[0];
+  return { ok:true, gender:String(r[0] || ''), birthday:birthdayStr_(r[1]) };
 }
 
 // Admin tolak baki duit di kaunter (diskaun atau tunai). Caller must hold the script lock.
@@ -1408,6 +1453,13 @@ function doPost_(e){
     const lock = LockService.getScriptLock();
     lock.waitLock(10000);
     try{ return jsonOut_(setReferral_(body.phone, body.name, body.code)); }
+    finally{ lock.releaseLock(); }
+  }
+
+  if(action === 'setProfile'){
+    const lock = LockService.getScriptLock();
+    lock.waitLock(10000);
+    try{ return jsonOut_(setProfile_(body)); }
     finally{ lock.releaseLock(); }
   }
 

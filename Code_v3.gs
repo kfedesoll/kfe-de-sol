@@ -44,6 +44,9 @@
  *         SemuaPelanggan 9-12, sheet DuitLog; admin tolak baki ('useBalance').
  *         Profil: jantina & tarikh lahir (pilihan) dalam SemuaPelanggan kolum
  *         13-14, diisi pelanggan semasa daftar / di Account ('setProfile').
+ * v3.10.2: Daftar sekali sahaja ('registerCustomer': nama, profil & kod kawan
+ *         sekali gus; nombor yang sudah ada ditolak). Masuk dengan no. telefon
+ *         sahaja: 'customerLookup' pulangkan nama pelanggan berdaftar.
  */
 
 function ss_(){ return SpreadsheetApp.getActiveSpreadsheet(); }
@@ -396,6 +399,44 @@ function setProfile_(body){
   if(hasBirthday) setTextCell_(sheet, rows[0], 14, birthday);
   const r = sheet.getRange(rows[0], 13, 1, 2).getValues()[0];
   return { ok:true, gender:String(r[0] || ''), birthday:birthdayStr_(r[1]) };
+}
+
+/* ---------- v3.10.2: Masuk & Daftar ----------
+   Pelanggan berdaftar = ada baris dalam SemuaPelanggan. Masuk perlukan no.
+   telefon sahaja (nama diambil daripada sheet); Daftar sekali sahaja. */
+function customerLookup_(phone){
+  const key = phoneKey_(phone);
+  if(!/^\d{9,15}$/.test(key)) return { exists:false, error:'INVALID_PHONE' };
+  const sheet = allCustomersSheet_();
+  const rows = findRowsByColumn_(sheet, 1, key);
+  if(!rows.length) return { exists:false };
+  return { exists:true, name:String(sheet.getRange(rows[0], 2).getValue() || '') };
+}
+// Caller must hold the script lock.
+function registerCustomer_(body){
+  const key = phoneKey_(body.phone);
+  const name = String(body.name || '').trim().slice(0, 60);
+  if(!/^\d{9,15}$/.test(key)) return { ok:false, error:'INVALID_PHONE' };
+  if(!name) return { ok:false, error:'NAME_EMPTY' };
+  const sheet = allCustomersSheet_();
+  const found = findRowsByColumn_(sheet, 1, key);
+  if(found.length) return { ok:false, error:'ALREADY_REGISTERED', name:String(sheet.getRange(found[0], 2).getValue() || '') };
+  upsertAllCustomer_(key, name, {});
+  const out = { ok:true, name:name };
+  const profile = { phone:key };
+  if(body.gender) profile.gender = String(body.gender);
+  if(body.birthday) profile.birthday = String(body.birthday);
+  if(profile.gender || profile.birthday){
+    const p = setProfile_(profile);
+    if(!p.ok) out.profileError = p.error;
+  }
+  if(body.code){
+    const r = setReferral_(key, name, body.code);
+    if(r.ok) out.referrerName = r.referrerName; else out.refError = r.error;
+  }
+  const rows = findRowsByColumn_(sheet, 1, key);
+  out.referralCode = rows.length ? String(sheet.getRange(rows[0], 8).getValue() || '') : '';
+  return out;
 }
 
 // Admin tolak baki duit di kaunter (diskaun atau tunai). Caller must hold the script lock.
@@ -1036,7 +1077,7 @@ function doGet_(e){
   const action = e.parameter.action;
 
   if(action === 'version'){
-    return jsonOut_({ version: 'v3.10.0-secure' });
+    return jsonOut_({ version: 'v3.10.2-secure' });
   }
 
   // Admin: senarai kekal semua pelanggan + no. telefon yang sudah hidupkan notifikasi
@@ -1064,6 +1105,11 @@ function doGet_(e){
     let points = null;
     try{ points = getMyPoints_(e.parameter.phone, e.parameter.name); }catch(err){ console.error('myPoints gagal: ' + err); }
     return jsonOut_({ customer:getMyLoyalty_(e.parameter.phone), points:points });
+  }
+
+  // v3.10.2: Masuk dengan no. telefon sahaja — semak sama ada sudah berdaftar
+  if(action === 'customerLookup'){
+    return jsonOut_(customerLookup_(e.parameter.phone));
   }
 
   // v3.10.0: katalog hadiah. Pelanggan nampak yang dipaparkan sahaja; admin nampak semua.
@@ -1453,6 +1499,13 @@ function doPost_(e){
     const lock = LockService.getScriptLock();
     lock.waitLock(10000);
     try{ return jsonOut_(setReferral_(body.phone, body.name, body.code)); }
+    finally{ lock.releaseLock(); }
+  }
+
+  if(action === 'registerCustomer'){
+    const lock = LockService.getScriptLock();
+    lock.waitLock(10000);
+    try{ return jsonOut_(registerCustomer_(body)); }
     finally{ lock.releaseLock(); }
   }
 

@@ -221,7 +221,24 @@ body{
 .closed-poster{ width:100%; max-width:440px; margin:auto; padding:28px 20px 26px; display:flex; flex-direction:column; align-items:center; gap:14px; color:var(--coffee-dark); background:radial-gradient(120% 90% at 50% 0%, #FFF8EC 0%, #F7E8D0 100%); border-radius:22px; box-shadow:0 10px 30px rgba(43,24,16,.12); }
 .closed-logo{ width:76px; height:76px; border-radius:50%; }
 .closed-brand{ font:700 30px 'Dancing Script','Fraunces',serif; color:var(--coffee-dark); margin-top:-6px; }
-.closed-sign{ position:relative; width:100%; padding:18px 12px 20px; text-align:center; border-radius:16px; background:linear-gradient(180deg,#5A3320 0%,#3E2216 100%); box-shadow:inset 0 2px 0 rgba(255,255,255,.12), 0 6px 0 #2B1810, 0 12px 18px rgba(43,24,16,.25); transform:rotate(-1.5deg); }
+.closed-sign{ position:relative; width:100%; padding:18px 12px 20px; text-align:center; border-radius:16px; background:linear-gradient(180deg,#5A3320 0%,#3E2216 100%); box-shadow:inset 0 2px 0 rgba(255,255,255,.12), 0 6px 0 #2B1810, 0 12px 18px rgba(43,24,16,.25);
+  margin-top:26px; transform-origin:50% -26px; animation:closed-sway 4.5s ease-in-out infinite; }
+/* tali & paku: papan nampak tergantung */
+.closed-sign::before{ content:''; position:absolute; left:50%; top:-26px; width:46%; height:28px; transform:translateX(-50%);
+  border:2px solid #8A6A4F; border-bottom:0; border-radius:50% 50% 0 0 / 100% 100% 0 0; }
+.closed-sign::after{ content:''; position:absolute; left:50%; top:-31px; width:10px; height:10px; margin-left:-5px; border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #E7C27A, #8A6A4F); box-shadow:0 1px 2px rgba(0,0,0,.3); }
+@keyframes closed-sway{ 0%,100%{ transform:rotate(-2.6deg); } 50%{ transform:rotate(2.6deg); } }
+/* ikon Waktu Buka: berkelip merah gelap + kilauan */
+.closed-row-icon{ position:relative; overflow:hidden; animation:closed-icon-blink 2.4s ease-in-out var(--sway, 0s) infinite; }
+.closed-row-icon::after{ content:''; position:absolute; top:-20%; left:-60%; width:45%; height:140%; transform:rotate(20deg);
+  background:linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent); animation:closed-icon-shine 2.4s ease-in-out var(--sway, 0s) infinite; }
+@keyframes closed-icon-blink{
+  0%,100%{ background:var(--coffee-dark); box-shadow:0 0 0 0 rgba(143,29,44,0); }
+  50%{ background:#8F1D2C; box-shadow:0 0 14px 3px rgba(198,40,40,.55); }
+}
+@keyframes closed-icon-shine{ 0%,40%{ left:-60%; } 70%,100%{ left:120%; } }
+@media (prefers-reduced-motion: reduce){ .closed-sign, .closed-row-icon, .closed-row-icon::after{ animation:none; } }
 .closed-sign span{ display:block; font:400 46px/1 'Anton','Fraunces',sans-serif; letter-spacing:3px; color:#FFF8EC; }
 .closed-sign strong{ display:block; margin-top:4px; font:400 62px/1 'Anton','Fraunces',sans-serif; letter-spacing:4px; color:var(--sol-gold); }
 .closed-heading{ margin-top:8px; padding:4px 22px; font:700 30px 'Dancing Script','Fraunces',serif; background:linear-gradient(100deg,transparent 0%,#F6C453 12%,#F6C453 88%,transparent 100%); border-radius:8px; }
@@ -1496,6 +1513,21 @@ body{
   -webkit-mask-image:linear-gradient(to bottom, transparent 0%, #000 38%); mask-image:linear-gradient(to bottom, transparent 0%, #000 38%);
   animation:fadein .8s ease both;
 }
+.auth-video{
+  position:absolute; inset:0; width:100%; height:100%; display:block; object-fit:cover; object-position:center;
+  -webkit-mask-image:linear-gradient(to bottom, transparent 0%, #000 38%); mask-image:linear-gradient(to bottom, transparent 0%, #000 38%);
+  pointer-events:none; animation:fadein .8s ease both;
+}
+.auth-fog{
+  position:absolute; inset:-6%; pointer-events:none; opacity:0; transition:opacity .6s ease;
+  background:
+    radial-gradient(ellipse at 24% 48%,rgba(255,255,255,.92) 0%,rgba(232,226,216,.55) 28%,transparent 58%),
+    radial-gradient(ellipse at 76% 56%,rgba(255,255,255,.86) 0%,rgba(218,211,201,.50) 32%,transparent 62%),
+    rgb(238,231,221);
+  filter:blur(4px);
+  -webkit-mask-image:linear-gradient(to bottom, transparent 0%, #000 38%); mask-image:linear-gradient(to bottom, transparent 0%, #000 38%);
+}
+.auth-fog.on{ opacity:1; }
 .auth-submit{
   flex:0 0 auto; position:relative; display:flex; align-items:center; justify-content:center; gap:18px;
   min-height:74px; padding:0 26px calc(4px + env(safe-area-inset-bottom)); border:0; cursor:pointer;
@@ -1841,8 +1873,24 @@ body{
 .account-chip-copy{ color:var(--sol-orange); font-size:15px; }
 .push-card-inline{ margin-top:-8px; }
 /* daftar: pilihan jantina sama gaya dengan kotak lain */
-.auth-select{ width:100%; padding:10px 0 11px; border:0; border-bottom:1.5px solid #DCCBB8; border-radius:0; background:transparent; color:var(--coffee-dark); font:500 16px 'Work Sans',sans-serif; }
+.auth-select{ width:100%; padding:10px 2px 11px; border:0; border-bottom:1.5px solid #DCCBB8; border-radius:0; background:transparent; color:var(--coffee-dark); font:500 16px 'Work Sans',sans-serif; -webkit-appearance:none; appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,#B9A48D 50%),linear-gradient(135deg,#B9A48D 50%,transparent 50%); background-position:calc(100% - 14px) 52%,calc(100% - 9px) 52%; background-size:5px 5px,5px 5px; background-repeat:no-repeat; }
+.auth-select option{ color:var(--coffee-dark); font-weight:500; }
+/* kosong (belum dipilih) = pudar & nipis, sama macam "Contoh: Faizal" */
+.auth-select:invalid, .auth-field input[type=date]:invalid{ color:#C4B09C; font-weight:400; }
+.auth-field input[type=date]{ min-height:44px; }
+.auth-field input[type=date]::-webkit-calendar-picker-indicator{ opacity:.35; cursor:pointer; }
+/* Daftar: tajuk naik ke atas, jarak lebih rapat */
+.auth-body.compact{ padding-top:clamp(18px,4vh,40px); gap:14px; }
+.auth-body.compact .auth-sub{ margin-bottom:4px; }
 .auth-select:focus{ outline:none; border-bottom-color:var(--sol-orange); }
+.auth-switch{ align-self:flex-start; margin-top:-4px; padding:6px 0; border:0; background:transparent; color:var(--coffee-mid); font:500 14px 'Work Sans',sans-serif; cursor:pointer; }
+.auth-switch b{ color:var(--sol-orange); }
+.auth-push{ display:flex; align-items:center; gap:12px; padding:12px 14px; border:1px solid #EADCC8; border-radius:12px; background:#FFF8EA; cursor:pointer; }
+.auth-push span{ flex:1; display:flex; flex-direction:column; gap:2px; }
+.auth-push b{ color:var(--coffee-dark); font-size:14px; }
+.auth-push small{ color:var(--coffee-mid); font-size:12px; }
+.auth-push input{ width:22px; height:22px; accent-color:var(--sol-orange); }
 .auth-field label small{ text-transform:none; letter-spacing:0; font-weight:500; }
 /* Account: Maklumat Peribadi */
 .profile-card{ margin:0 6px 18px; border:1px solid #E6DCCF; border-radius:14px; background:#FFFDF9; box-shadow:0 4px 12px rgba(43,24,16,.06); overflow:hidden; }
@@ -2510,11 +2558,40 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbwJeSEszdLBr_UnwFq-W1kX
    Keluaran baru: tukar APP_VERSION + BUILD_DATE dan tambah catatan di ATAS
    senarai CHANGELOG. Tajuk tab, skrin pembuka, log masuk admin dan
    Admin > Sistem semuanya baca dari sini. */
-const APP_VERSION = '3.10.0';
+const APP_VERSION = '3.10.5';
 const BUILD_DATE = '2026-10-27';
 // Versi Apps Script (action=version) yang app ini perlukan
-const REQUIRED_SERVER_VERSION = '3.10.0';
+const REQUIRED_SERVER_VERSION = '3.10.2';
 const CHANGELOG = [
+  { version:'3.10.5', date:'2026-10-27', title:'Notifikasi diminta setiap kali login', items:[
+    'Selepas Masuk: jika telefon belum Allow notifikasi, kotak ajakan terus dipaparkan (abaikan "Nanti" sebelum ini)',
+    'Sudah Allow: tidak ditanya lagi; langganan nombor ini didaftar senyap pada telefon tersebut',
+    'Daftar dengan suis notifikasi dimatikan: tidak ditanya semasa daftar, ditanya pada login seterusnya',
+    'Disekat (Block): papar cara benarkan di tetapan browser',
+    'Skrin Kedai Tutup: papan KEDAI TUTUP tergantung & bergoyang perlahan; ikon Waktu Buka berkelip merah gelap dengan kilauan',
+    'Pelanggan lama yang belum pernah Allow dilog keluar sekali (bukan semasa ada pesanan aktif); no. telefon terisi, tekan Masuk terus tanya Allow'
+  ]},
+  { version:'3.10.4', date:'2026-10-27', title:'Video di skrin Masuk & Admin', items:[
+    'Gambar di skrin Masuk dan Admin kini video pendek senyap yang berulang (Daftar kekal gambar)',
+    'Video dikecilkan (854px, 10 saat, ~0.6–1.2 MB); hanya video tab yang dibuka dimuat turun',
+    'Kabus menutup video semasa ia mula semula supaya tidak nampak tersangkut',
+    'Frame pertama video dipaparkan semasa memuat & kekal jika video tidak dapat dimainkan atau Reduce Motion aktif'
+  ]},
+  { version:'3.10.3', date:'2026-10-27', title:'Borang Daftar lebih kemas', items:[
+    'Jantina, Tarikh Lahir & Kod Kawan ikut gaya tulisan Nama; pilihan kosong nampak pudar seperti contoh',
+    'Tajuk Daftar Akaun dinaikkan ke atas (kurang ruang kosong)'
+  ]},
+  { version:'3.10.2', date:'2026-10-27', title:'Masuk dengan no. telefon, Daftar sekali sahaja', items:[
+    'Tab baru: Masuk · Daftar · Admin (Semak Pesanan dibuang; sejarah pesanan ada di Account > Orders)',
+    'Masuk: isi no. telefon sahaja, nama diambil daripada database',
+    'Daftar sekali sahaja: nama, no. telefon, jantina, tarikh lahir, kod kawan & suis notifikasi; nombor yang sudah berdaftar diminta Masuk',
+    'Izin notifikasi diminta terus semasa tekan Daftar (jika suis dihidupkan)'
+  ]},
+  { version:'3.10.1', date:'2026-10-27', title:'Profil pelanggan & Senarai Pelanggan', items:[
+    'Jantina & tarikh lahir (pilihan) semasa daftar dan di Account > Maklumat Peribadi; titik merah di Account selagi tarikh lahir belum diisi (untuk hadiah hari jadi)',
+    'Admin > Pelanggan: jadual Senarai Pelanggan (kod referral, nama, no. HP, tarikh daftar, jantina, tarikh lahir); hari jadi bulan ini & hari ini ditanda 🎂',
+    'Dibaiki: gambar Terkini di K\'fe De Sol kadang-kadang "rewind" (gambar hujung keluar dua kali) selepas skrin ditutup / app ke background'
+  ]},
   { version:'3.10.0', date:'2026-10-27', title:'Points & katalog Reward', items:[
     'Setiap cawan yang dibayar (pesanan Selesai) memberi 2 points; points kekal dan tidak reset bulanan',
     'Pelanggan lama terus dapat points untuk semua cawan yang pernah dibeli',
@@ -2530,9 +2607,6 @@ const CHANGELOG = [
     'Pengajak dapat RM1 setiap pembelian kawan yang selesai, untuk 3 pembelian pertama (maksimum RM3 seorang kawan); baki duit di header sebelah Points',
     'Popup kod: ayat Ajak Kawan, baki duit, bilangan kawan & jumlah pernah dapat; page peraturan terangkan cara dapat duit',
     'Admin > Reward: tolak baki duit di kaunter, tetapan RM setiap pembelian & bilangan pembelian; Admin > Pelanggan papar duit & kawan',
-    'Jantina & tarikh lahir (pilihan) semasa daftar dan di Account > Maklumat Peribadi; titik merah di Account selagi tarikh lahir belum diisi (untuk hadiah hari jadi)',
-    'Admin > Pelanggan: jadual Senarai Pelanggan (kod referral, nama, no. HP, tarikh daftar, jantina, tarikh lahir); hari jadi bulan ini & hari ini ditanda 🎂',
-    'Dibaiki: gambar Terkini di K\'fe De Sol kadang-kadang "rewind" (gambar hujung keluar dua kali) selepas skrin ditutup / app ke background',
     'Apps Script v3.10.0: sheet Rewards, PointsLog dan DuitLog (rekod setiap tambah / tolak points & duit)'
   ]},
   { version:'3.9.1', date:'2026-10-27', title:'Kesan air di page menu & Laporan dan Resit lebih kemas', items:[
@@ -2830,7 +2904,7 @@ let state = {
 /* Restore the current page/session after a browser refresh. */
 try{
   const saved = JSON.parse(sessionStorage.getItem('kfedeSolAppSession') || 'null');
-  const allowedViews = ['register','check-order','menu','item-detail','preview','waiting','promo','rewards','location','account','receipts','admin-login','admin'];
+  const allowedViews = ['register','signup','check-order','menu','item-detail','preview','waiting','promo','rewards','location','account','receipts','admin-login','admin'];
   if(saved && allowedViews.includes(saved.view)){
     state.view = saved.view;
     state.customer = saved.customer || null;
@@ -3983,7 +4057,7 @@ function renderPage(){
       start.dataset.started = '1';
       start.disabled=true;
       const splash=frame.querySelector('.hero'); if(splash) splash.classList.add('playing');
-      state.view=state.customer?'promo':'register';
+      state.view=state.customer?'promo':'signup'; // peranti baru: kebanyakannya pelanggan baru
       render();
     };
     return;
@@ -4004,6 +4078,8 @@ function renderPage(){
     body = renderAdminLogin();
   } else if(state.view === 'register'){
     body = renderRegister();
+  } else if(state.view === 'signup'){
+    body = renderSignup();
   } else if(state.view === 'check-order'){
     body = renderCheckOrder();
   } else if(state.view === 'waiting'){
@@ -4110,6 +4186,7 @@ function renderPage(){
   // Background refreshes (loyalty, menu, orders) re-render the page. Keep the
   // live promo carousel node so its slide animation and loaded images survive.
   const liveCarousel = frame.querySelector('.promo-carousel');
+  const liveAuthVideo = frame.querySelector('.auth-video');
   // The admin panel draws its own sidebar and top bar.
   frame.innerHTML = isAuthView ? `${body}${submittingOverlay}`
     : state.view === 'admin' ? `${body}${zoomModal}${receiptModal}` : `
@@ -4136,6 +4213,16 @@ function renderPage(){
     ${receiptModal}
   `;
 
+  // Video skrin Masuk/Daftar/Admin: guna semula elemen yang sama (tidak mula semula / berkelip)
+  const freshAuthVideo = frame.querySelector('.auth-video');
+  if(liveAuthVideo && freshAuthVideo && liveAuthVideo.getAttribute('src') === freshAuthVideo.getAttribute('src')){
+    freshAuthVideo.replaceWith(liveAuthVideo);
+  } else if(freshAuthVideo){
+    // Poster (frame pertama video) dipapar serta-merta; jika video gagal, poster kekal
+    const p = freshAuthVideo.play && freshAuthVideo.play();
+    if(p && p.catch) p.catch(() => {});
+  }
+  bindAuthVideoFog(frame.querySelector('.auth-video'));
   const freshCarousel = frame.querySelector('.promo-carousel');
   if(liveCarousel && freshCarousel && liveCarousel.dataset.promoKey === freshCarousel.dataset.promoKey){
     freshCarousel.replaceWith(liveCarousel);
@@ -4452,12 +4539,12 @@ function renderOutsideHours(){
     <div class="closed-poster">
       <img class="closed-logo" src="${LOGO_URL}" alt="">
       <div class="closed-brand">K'fe De Sol</div>
-      <div class="closed-sign"><span>KEDAI</span><strong>TUTUP</strong></div>
+      <div class="closed-sign" style="animation-delay:-${(Date.now() / 1000 % 4.5).toFixed(2)}s"><span>KEDAI</span><strong>TUTUP</strong></div>
       <div class="closed-heading">Waktu Buka</div>
       <div class="closed-hours">
-        ${summarizeShopHours(shopHours()).map(g => `
+        ${summarizeShopHours(shopHours()).map((g, i) => `
           <div class="closed-row ${g.closed ? 'is-closed' : ''}">
-            <span class="closed-row-icon" aria-hidden="true">${ICON_CALENDAR}</span>
+            <span class="closed-row-icon" aria-hidden="true" style="--sway:-${((Date.now() / 1000 + i * 0.6) % 2.4).toFixed(2)}s">${ICON_CALENDAR}</span>
             <span><strong>${g.label}</strong>${g.text}</span>
           </div>`).join('')}
       </div>
@@ -4471,17 +4558,42 @@ function renderOutsideHours(){
    left, cream panel with the form, a photo, and a full-width submit bar. */
 const AUTH_TABS = [
   { view:'register', label:'Masuk' },
-  { view:'check-order', label:'Semak Pesanan' },
+  { view:'signup', label:'Daftar' },
   { view:'admin-login', label:'Admin' }
 ];
 // One photo per tab. `focus` is the object-position that keeps the subject
 // (the cup) in view when the photo is cropped to the space left on screen.
 const AUTH_PHOTOS = {
-  'register':    { src:'masuk-kopi-buku.png',      focus:'center 62%' },
+  'register':    { src:'masuk-kopi-buku.png',      focus:'center 62%', video:'auth-masuk.mp4', poster:'auth-masuk.jpg' },
   'check-order': { src:'semak-phone-kopi.webp',    focus:'center 45%' },
-  'admin-login': { src:'admin-komputer-kopi.webp', focus:'70% 68%' }
+  'signup':      { src:'semak-phone-kopi.webp',    focus:'center 45%' },
+  'admin-login': { src:'admin-komputer-kopi.webp', focus:'70% 68%', video:'auth-admin.mp4', poster:'auth-admin.jpg' }
 };
-function renderAuthShell({ title, sub, fields, error, submitId, submitLabel, version }){
+/* Video Masuk/Admin: bila hampir habis, kabus naik; video mula semula di belakang
+   kabus, kemudian kabus hilang. (Ulangan 'loop' biasa nampak tersangkut sekejap.)
+   Kabus dicari semula setiap kali kerana page dilukis semula tetapi video dikekalkan. */
+function bindAuthVideoFog(video){
+  if(!video || video.dataset.fog) return;
+  video.dataset.fog = '1';
+  const fog = () => video.parentElement && video.parentElement.querySelector('.auth-fog');
+  const show = on => { const f = fog(); if(f) f.classList.toggle('on', on); };
+  video.addEventListener('timeupdate', () => {
+    const d = video.duration;
+    if(Number.isFinite(d) && d - video.currentTime < 1.3) show(true);
+    else if(video.currentTime > 0.8 && video.currentTime < 2.5) show(false);
+  });
+  video.addEventListener('ended', () => {
+    show(true);
+    setTimeout(() => {
+      if(!video.isConnected) return;
+      video.currentTime = 0;
+      const p = video.play();
+      if(p && p.catch) p.catch(() => {});
+    }, 300);
+  });
+}
+function prefersReducedMotion(){ return !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches); }
+function renderAuthShell({ title, sub, fields, error, submitId, submitLabel, version, compact }){
   const photo = AUTH_PHOTOS[state.view] || AUTH_PHOTOS.register;
   const tabs = AUTH_TABS.map(tab => `
     <button type="button" class="auth-tab ${tab.view === state.view ? 'active' : ''}" data-auth-view="${tab.view}" ${tab.view === state.view ? 'aria-current="page"' : ''}>
@@ -4495,13 +4607,15 @@ function renderAuthShell({ title, sub, fields, error, submitId, submitLabel, ver
       </nav>
       <section class="auth-panel">
         ${version ? `<span class="auth-version" title="Versi app">v${APP_VERSION}</span>` : ''}
-        <div class="auth-body">
+        <div class="auth-body${compact ? ' compact' : ''}">
           <h2 class="auth-title">${title}</h2>
           <p class="auth-sub">${sub}</p>
           ${fields}
           <div class="form-error auth-error">${error || ''}</div>
         </div>
-        <div class="auth-photo" aria-hidden="true"><img src="${photo.src}" alt="" style="object-position:${photo.focus}"></div>
+        <div class="auth-photo" aria-hidden="true">${!photo.video ? `<img src="${photo.src}" alt="" style="object-position:${photo.focus}">`
+          : prefersReducedMotion() ? `<img src="${photo.poster}" alt="">`
+          : `<video class="auth-video" src="${photo.video}" poster="${photo.poster}" muted autoplay playsinline preload="auto" disablepictureinpicture></video><div class="auth-fog"></div>`}</div>
         <button type="button" class="auth-submit" id="${submitId}">${submitLabel}<span class="auth-arrows" aria-hidden="true"><i>›</i><i>›</i><i>›</i></span></button>
       </section>
     </div>
@@ -4515,25 +4629,45 @@ function authField(id, label, attrs){
     </div>`;
 }
 
+/* v3.10.2: Masuk = no. telefon sahaja (nama diambil daripada database).
+   Daftar = sekali sahaja, untuk pelanggan baru. */
 function renderRegister(){
   return renderAuthShell({
-    title:'Selamat Datang',
-    sub:'Nikmati Pelbagai Pilihan Kopi Istimewa K’fe De Sol',
+    title: state.reloginForPush ? 'Masuk Semula' : 'Selamat Datang',
+    sub: state.reloginForPush ? 'Kami dah kemas kini app. Tekan Masuk &amp; <b>Allow</b> notifikasi supaya anda tahu bila kopi siap 🔔' : 'Masuk dengan no. telefon yang anda daftar',
+    fields:
+      authField('loginPhone', 'No. Telefon', `type="tel" inputmode="numeric" placeholder="Contoh: 0123456789" value="${escapeHtml(state.loginPhone||'')}"`) +
+      `<button type="button" class="auth-switch" data-auth-view="signup">Pelanggan baru? <b>Daftar di sini →</b></button>`,
+    error: state.loginError,
+    submitId:'loginSubmit', submitLabel: state.loginBusy ? 'Menyemak...' : 'Masuk'
+  });
+}
+
+function renderSignup(){
+  const pushOk = pushSupported() && (typeof Notification === 'undefined' || Notification.permission !== 'denied');
+  return renderAuthShell({
+    title:'Daftar Akaun',
+    sub:'Sekali sahaja. Lepas ini masuk dengan no. telefon.',
     fields:
       authField('custName', 'Nama', `type="text" placeholder="Contoh: Faizal" value="${escapeHtml(state.regName||'')}"`) +
       authField('custPhone', 'No. Telefon', `type="tel" inputmode="numeric" placeholder="Contoh: 0123456789" value="${escapeHtml(state.regPhone||'')}"`) +
       `<div class="auth-field">
         <label for="custGender">Jantina <small>(pilihan)</small></label>
-        <select id="custGender" class="auth-select">
+        <select id="custGender" class="auth-select" required>
           <option value="" ${!state.regGender ? 'selected' : ''}>— Pilih —</option>
           <option value="L" ${state.regGender === 'L' ? 'selected' : ''}>Lelaki</option>
           <option value="P" ${state.regGender === 'P' ? 'selected' : ''}>Perempuan</option>
         </select>
       </div>` +
-      authField('custBirthday', 'Tarikh Lahir <small>(pilihan · untuk hadiah hari jadi 🎂)</small>', `type="date" min="1920-01-01" max="${todayYmd()}" value="${escapeHtml(state.regBirthday||'')}"`) +
-      authField('custRefCode', 'Kod Kawan <small>(pilihan, pelanggan baru)</small>', `type="text" inputmode="numeric" maxlength="6" placeholder="Contoh: 482915" value="${escapeHtml(state.regRefCode||'')}"`),
+      authField('custBirthday', 'Tarikh Lahir <small>(pilihan · untuk hadiah hari jadi 🎂)</small>', `type="date" required min="1920-01-01" max="${todayYmd()}" value="${escapeHtml(state.regBirthday||'')}"`) +
+      authField('custRefCode', 'Kod Kawan <small>(pilihan)</small>', `type="text" inputmode="numeric" maxlength="6" placeholder="Contoh: 482915" value="${escapeHtml(state.regRefCode||'')}"`) +
+      (pushOk ? `<label class="auth-push" for="custPush">
+        <span><b>🔔 Benarkan notifikasi</b><small>Pesanan siap, promosi &amp; duit referral terus ke telefon.</small></span>
+        <input id="custPush" type="checkbox" ${state.regPush === false ? '' : 'checked'}>
+      </label>` : ''),
     error: state.regError,
-    submitId:'regSubmit', submitLabel:'Teruskan'
+    submitId:'regSubmit', submitLabel: state.regBusy ? 'Mendaftar...' : 'Daftar',
+    compact:true
   });
 }
 
@@ -5448,6 +5582,51 @@ async function turnOnPush(){
   }
   state.pushBusy = false;
   if(state.view !== 'account' && state.pushMsg) showToast(state.pushStatus === 'on' ? '🔔 Notifikasi telefon aktif!' : state.pushMsg, state.pushStatus === 'on' ? 'success' : 'error');
+  render();
+}
+
+/* v3.10.5: notifikasi selepas login (Masuk / Daftar).
+   - Sudah Allow pada telefon ini → daftar langganan nombor ini secara senyap, tidak ditanya.
+   - Belum Allow → kotak ajakan terus dipaparkan (abaikan "Nanti" sebelum ini), setiap kali login.
+   - Disekat → browser tidak benarkan kami tanya lagi; beritahu cara benarkan di tetapan.
+   Soalan "Allow" daripada browser hanya keluar bila pelanggan tekan "Ya, hidupkan" (perlu klik). */
+async function pushAfterLogin(){
+  if(!state.customer) return;
+  const s = await loadPushStatus();
+  if(!state.customer || s === 'on') return;
+  if(pushSupported() && Notification.permission === 'granted'){
+    state.pushNudgeHidden = true;
+    enablePush(state.customer.phone).then(st => { state.pushStatus = st; render(); }).catch(e => console.error('login enablePush failed', e));
+    return;
+  }
+  if(s === 'blocked'){
+    showToast('🔕 Notifikasi disekat. Benarkan di tetapan browser (ikon 🔒 sebelah alamat → Notifications → Allow).', 'error');
+    return;
+  }
+  if(s === 'off' || s === 'ios'){
+    try{ localStorage.removeItem(PUSH_NUDGE_KEY); }catch(e){}
+    state.pushNudgeHidden = false;
+    render();
+  }
+}
+
+/* v3.10.5: pelanggan lama yang belum pernah Allow dilog keluar SEKALI pada telefon ini,
+   supaya tekan Masuk semula dan Allow. Tidak dibuat jika: sudah Allow / disekat (Block)
+   / browser tidak sokong push (cth. iPhone di Safari biasa) / ada pesanan aktif / admin. */
+const PUSH_RELOGIN_KEY = 'kfedeSolPushRelogin';
+function shouldReloginForPush(status){
+  if(!state.customer || state.view === 'admin' || status !== 'off') return false;
+  if(!pushSupported() || Notification.permission !== 'default') return false;
+  if((state.myOrderIds || []).length) return false;
+  try{ return !localStorage.getItem(PUSH_RELOGIN_KEY); }catch(e){ return false; }
+}
+function forceReloginForPush(){
+  try{ localStorage.setItem(PUSH_RELOGIN_KEY, String(Date.now())); }catch(e){}
+  const phone = state.customer.phone;
+  clearCustomerSession();
+  state.loginPhone = phone;
+  state.loginError = '';
+  state.reloginForPush = true;
   render();
 }
 
@@ -8139,6 +8318,7 @@ function bindViewEvents(){
       const next = tab.dataset.authView;
       if(next === state.view) return;
       state.regError = '';
+      state.loginError = '';
       state.checkOrderError = '';
       state.adminLoginError = '';
       state.view = next;
@@ -8146,7 +8326,51 @@ function bindViewEvents(){
     };
   });
 
+  // v3.10.2: Masuk — no. telefon sahaja
   if(state.view === 'register'){
+    const loginPhone = document.getElementById('loginPhone');
+    const loginSubmit = document.getElementById('loginSubmit');
+    if(loginPhone) loginPhone.oninput = (e) => {
+      const cleaned = e.target.value.replace(/[^0-9]/g, '');
+      if(cleaned !== e.target.value) e.target.value = cleaned;
+      state.loginPhone = cleaned;
+    };
+    if(loginSubmit) loginSubmit.onclick = async () => {
+      const phone = (state.loginPhone || '').trim();
+      if(state.loginBusy) return;
+      if(phone.length < 9){ state.loginError = 'Masukkan no. telefon (sekurang-kurangnya 9 digit).'; render(); return; }
+      // Log masuk semula kerana notifikasi: soalan Allow mesti keluar dalam klik ini
+      const permission = state.reloginForPush && pushSupported() && Notification.permission === 'default'
+        ? Notification.requestPermission().catch(() => 'default') : null;
+      state.loginBusy = true; state.loginError = ''; render();
+      const r = await gasGet('customerLookup', { phone }, 20000);
+      state.loginBusy = false;
+      if(!r || r.error === 'unknown action'){
+        state.loginError = !r ? 'Tidak dapat menyemak. Semak internet dan cuba lagi.' : 'Sistem sedang dikemas kini. Cuba sebentar lagi.';
+      } else if(!r.exists){
+        state.loginError = 'Nombor ini belum berdaftar. Tekan "Daftar di sini" untuk daftar.';
+        state.regPhone = phone;
+      } else {
+        state.customer = { name: r.name || 'Pelanggan', phone };
+        state.loginPhone = '';
+        state.loginError = '';
+        state.view = 'promo';
+        state.myLoyalty = undefined;
+        state.myPoints = null;
+      }
+      render();
+      if(state.customer){
+        state.reloginForPush = false;
+        if(permission){
+          state.pushNudgeHidden = true;
+          if(await permission === 'granted') turnOnPush(); else pushAfterLogin();
+        } else pushAfterLogin();
+      }
+    };
+  }
+
+  // v3.10.2: Daftar — sekali sahaja
+  if(state.view === 'signup'){
     const nameInput = document.getElementById('custName');
     const phoneInput = document.getElementById('custPhone');
     const submitBtn = document.getElementById('regSubmit');
@@ -8170,56 +8394,54 @@ function bindViewEvents(){
       if(cleaned !== e.target.value) e.target.value = cleaned;
       state.regRefCode = cleaned;
     };
-    if(submitBtn){
-      submitBtn.onclick = () => {
-        const name = (nameInput.value || '').trim();
-        const phone = (phoneInput.value || '').trim();
-        if(!name || !phone){
-          state.regError = 'Sila isi nama dan no. telefon.';
-          render();
-          return;
-        }
-        if(phone.length < 9){
-          state.regError = 'No. telefon mesti sekurang-kurangnya 9 digit.';
-          render();
-          return;
-        }
-        const refCode = (state.regRefCode || '').trim();
-        if(refCode && !/^\d{6}$/.test(refCode)){
-          state.regError = 'Kod kawan mesti 6 nombor.';
-          render();
-          return;
-        }
-        const profile = {};
-        if(state.regGender) profile.gender = state.regGender;
-        if(state.regBirthday) profile.birthday = state.regBirthday;
-        state.regRefCode = '';
-        state.regGender = '';
-        state.regBirthday = '';
-        state.customer = { name, phone };
-        if(refCode) applyReferralCode(refCode);
-        if(Object.keys(profile).length) saveProfile(profile, true);
-        state.regError = '';
-        state.view = 'promo';
-        state.myLoyalty = undefined;
-        state.myPoints = null;
+    const pushInput = document.getElementById('custPush');
+    if(pushInput) pushInput.onchange = () => { state.regPush = pushInput.checked; };
+    if(submitBtn) submitBtn.onclick = async () => {
+      if(state.regBusy) return;
+      const name = (state.regName || '').trim();
+      const phone = (state.regPhone || '').trim();
+      const refCode = (state.regRefCode || '').trim();
+      const birthday = state.regBirthday || '';
+      const fail = msg => { state.regError = msg; render(); };
+      if(!name || !phone) return fail('Sila isi nama dan no. telefon.');
+      if(phone.length < 9) return fail('No. telefon mesti sekurang-kurangnya 9 digit.');
+      if(refCode && !/^\d{6}$/.test(refCode)) return fail('Kod kawan mesti 6 nombor.');
+      if(birthday && birthday > todayYmd()) return fail('Tarikh lahir tidak sah.');
+      // Izin notifikasi MESTI diminta dalam klik ini, sebelum tunggu server
+      // (iPhone & Chrome sekat soalan "Allow" yang tidak datang terus daripada klik).
+      const wantPush = state.regPush !== false && pushSupported() && Notification.permission === 'default';
+      const permission = wantPush ? Notification.requestPermission().catch(() => 'default') : null;
+      state.regBusy = true; state.regError = ''; render();
+      const r = await gasPost('registerCustomer', { phone, name, gender: state.regGender || '', birthday, code: refCode }, 30000);
+      state.regBusy = false;
+      if(r && r.error === 'ALREADY_REGISTERED'){
+        state.loginPhone = phone;
+        state.loginError = `Nombor ini sudah berdaftar${r.name ? ' atas nama ' + r.name : ''}. Tekan Masuk.`;
+        state.view = 'register';
         render();
-        // v3.6.0: lepas scan QR & tekan Teruskan, terus minta izin notifikasi.
-        // Mesti dalam klik yang sama (Chrome/iPhone sekat popup tanpa klik).
-        if(pushSupported() && Notification.permission === 'default'){
-          state.pushNudgeHidden = true;
-          turnOnPush();
-        }
-      };
-    }
-    const checkLink = document.getElementById('checkOrderLink');
-    if(checkLink){
-      checkLink.onclick = () => {
-        state.checkOrderError = '';
-        state.view = 'check-order';
-        render();
-      };
-    }
+        return;
+      }
+      if(!r || !r.ok){
+        const map = { NAME_EMPTY:'Sila isi nama.', INVALID_PHONE:'No. telefon tidak sah.', 'unknown action':'Sistem sedang dikemas kini. Cuba sebentar lagi.' };
+        return fail((r && map[r.error]) || 'Tidak dapat daftar. Semak internet dan cuba lagi.');
+      }
+      Object.assign(state, { regName:'', regPhone:'', regGender:'', regBirthday:'', regRefCode:'', regError:'' });
+      state.customer = { name, phone };
+      state.view = 'promo';
+      state.myLoyalty = undefined;
+      state.myPoints = null;
+      if(r.refError) showToast('Akaun didaftar. ' + (REFERRAL_ERRORS[r.refError] || 'Kod kawan tidak diterima.'), 'error');
+      else showToast(`🎉 Selamat datang, ${name}!${r.referrerName ? ' Kod kawan (' + r.referrerName + ') diterima.' : ''}`, 'success');
+      render();
+      if(permission){
+        state.pushNudgeHidden = true;
+        if(await permission === 'granted') turnOnPush();
+      } else if(state.regPush !== false){
+        pushAfterLogin();
+      } else {
+        state.pushNudgeHidden = true; // suis dimatikan: tidak ditanya sekarang, ditanya pada login seterusnya
+      }
+    };
   }
 
   if(state.view === 'check-order'){
@@ -9743,6 +9965,7 @@ loadShopStatus().then(changed=>{ if(changed) render(); }).catch(()=>{});
 // Push: status telefon ini, dan daftar semula langganan pelanggan (sekali sehari)
 loadPushStatus().then(s=>{
   if(!state.customer) return;
+  if(shouldReloginForPush(s)){ forceReloginForPush(); return; }
   // v3.7.1: sudah Allow tetapi belum berdaftar (cth. app ditutup sebelum sempat) →
   // daftar sendiri tanpa popup, kerana izin sudah diberi.
   if(s === 'off' && Notification.permission === 'granted'){

@@ -1,4 +1,29 @@
 K'fe De Sol Web GUI
+Version: v3.10.5
+Build: 2026-10-27
+Backend: Code_v3_for_v3.10.2.gs (tiada perubahan; version action returns v3.10.2-secure)
+Features: v3.10.5 (frontend sahaja): notifikasi diminta setiap kali Masuk selagi telefon belum Allow; sudah Allow = daftar senyap; disekat = cara benarkan; pelanggan lama yang belum pernah Allow dilog keluar sekali (bukan semasa ada pesanan aktif) dan Masuk terus tanya Allow. Skrin Kedai Tutup: papan tergantung bergoyang, ikon Waktu Buka berkelip merah gelap dengan kilauan. Termasuk semua v3.10.4.
+Previous: v3.10.4
+Version: v3.10.4
+Build: 2026-10-27
+Backend: Code_v3_for_v3.10.2.gs (tiada perubahan; version action returns v3.10.2-secure)
+Features: v3.10.4 (frontend sahaja): video pendek senyap berulang di skrin Masuk (auth-masuk.mp4) & Admin (auth-admin.mp4), Daftar kekal gambar, dikecilkan daripada 4K kepada 854px 10s; gambar asal sebagai sandaran. Termasuk semua v3.10.3.
+Previous: v3.10.3
+Version: v3.10.3
+Build: 2026-10-27
+Backend: Code_v3_for_v3.10.2.gs (tiada perubahan; version action returns v3.10.2-secure)
+Features: v3.10.3 (frontend sahaja): borang Daftar kemas — Jantina/Tarikh Lahir/Kod Kawan ikut gaya Nama, kosong nampak pudar; tajuk Daftar naik ke atas. Termasuk semua v3.10.2.
+Previous: v3.10.2
+Version: v3.10.2
+Build: 2026-10-27
+Backend: Code_v3_for_v3.10.2.gs (WAJIB; version action returns v3.10.2-secure; action customerLookup, registerCustomer)
+Features: v3.10.2: tab Masuk (no. telefon sahaja) · Daftar (sekali sahaja, dengan suis notifikasi) · Admin; Semak Pesanan dibuang. Termasuk semua v3.10.1.
+Previous: v3.10.1
+Version: v3.10.1
+Build: 2026-10-27
+Backend: Code_v3_for_v3.10.1.gs (WAJIB; version action returns v3.10.1-secure; action setProfile; SemuaPelanggan kolum gender, birthday)
+Features: v3.10.1: jantina & tarikh lahir (daftar + Account, titik merah untuk hadiah hari jadi), Admin > Pelanggan jadual Senarai Pelanggan, carousel Terkini tidak lagi rewind.
+Previous: v3.10.0
 Version: v3.10.0
 Build: 2026-10-27
 Backend: Code_v3_for_v3.10.0.gs (WAJIB; version action returns v3.10.0-secure; sheet SemuaPelanggan tambah kolum points & referralCode, kolum referredBy, rmBalance, rmEarned, refPaid; sheet Rewards, PointsLog & DuitLog baru; action rewards, saveReward, deleteReward, redeemReward, setReferral, useBalance; myLoyalty pulangkan points)

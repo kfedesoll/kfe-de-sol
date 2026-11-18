@@ -1166,10 +1166,10 @@ body{
 .kpi-top{ display:flex; align-items:center; gap:10px; }
 .kpi-icon{ width:36px; height:36px; flex:0 0 auto; border-radius:10px; background:#FDE8D4; color:#B45F1F; display:flex; align-items:center; justify-content:center; }
 .kpi-icon svg{ width:20px; height:20px; }
-.dash-card.kpi-card .dash-label{ margin:0; font-size:12px; line-height:1.3; letter-spacing:.3px; text-transform:none; font-weight:700; }
-.dash-card.kpi-card .dash-value{ font-size:26px; line-height:1.1; }
-.kpi-foot{ font-size:11px; color:#A08870; }
-.kpi-delta{ display:inline-block; margin-right:4px; padding:2px 7px; border-radius:6px; font-weight:800; font-size:11px; }
+.dash-card.kpi-card .dash-label{ margin:0; font-size:11px; line-height:1.3; letter-spacing:.3px; text-transform:none; font-weight:700; }
+.dash-card.kpi-card .dash-value{ font-size:20px; line-height:1.1; }
+.kpi-foot{ font-size:10px; color:#A08870; }
+.kpi-delta{ display:inline-block; margin-right:4px; padding:2px 6px; border-radius:6px; font-weight:800; font-size:10px; }
 .kpi-delta.up{ background:#E3F1E4; color:#2E7D32; }
 .kpi-delta.down{ background:#FBE3E1; color:#C62828; }
 .kpi-delta.flat{ background:#F1E9DE; color:var(--coffee-mid); }
@@ -1178,22 +1178,52 @@ body{
 .mini-grid{ display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:10px; }
 .dash-card.mini-card{ display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:14px; cursor:pointer; }
 .dash-card.mini-card::before{ display:none; }
-.dash-card.mini-card .dash-value{ font-size:22px; min-width:26px; }
-.dash-card.mini-card .dash-label{ margin:0; font-size:12px; text-transform:none; letter-spacing:0; line-height:1.25; }
+.dash-card.mini-card .dash-value{ font-size:18px; min-width:22px; }
+.dash-card.mini-card .dash-label{ margin:0; font-size:11px; text-transform:none; letter-spacing:0; line-height:1.25; }
 .mini-card.tone-baru{ border-left:5px solid var(--sol-orange); }
 .mini-card.tone-siap{ border-left:5px solid #2E7D32; }
 .mini-card.tone-done{ border-left:5px solid #C9B8A8; }
 .mini-card.tone-gold{ border-left:5px solid #F6C453; }
 .dash2-panel{ padding:18px; background:#FFFEFB; border:1px solid #EADCC8; border-radius:18px; box-shadow:0 4px 14px rgba(43,24,16,.06); }
 .dash2-panel-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
-.dash2-panel-head h3{ margin:0; font:700 18px 'Fraunces',serif; color:var(--coffee-dark); }
-.dash2-legend{ display:flex; gap:14px; font-size:12px; color:var(--coffee-mid); }
+.dash2-panel-head h3{ margin:0; font:700 16px 'Fraunces',serif; color:var(--coffee-dark); }
+.dash2-legend{ display:flex; gap:14px; font-size:11px; color:var(--coffee-mid); }
 .lg-sales::before, .lg-cups::before{ content:''; display:inline-block; width:9px; height:9px; margin-right:6px; border-radius:50%; }
 .lg-sales::before{ background:var(--coffee-mid); }
 .lg-cups::before{ background:#F6C453; }
-.dash2-line{ display:block; width:100%; height:auto; }
+.dash2-line{ display:block; width:100%; height:auto; touch-action:pan-y; }
+/* v3.15.0: pilihan Hari / Bulan / Tahun + bacaan graf */
+.sc-controls{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+.sc-seg{ display:inline-flex; padding:3px; border-radius:12px; background:#F3EADF; }
+.sc-seg button{ border:0; background:none; padding:7px 16px; border-radius:9px; font:700 12px 'Work Sans',sans-serif; color:var(--coffee-mid); cursor:pointer; }
+.sc-seg button.active{ background:#fff; color:var(--coffee-dark); box-shadow:0 1px 4px rgba(43,24,16,.12); }
+.sc-pick{ display:flex; align-items:center; gap:6px; }
+.sc-pick button{ width:32px; height:32px; border:1px solid #EADCC8; border-radius:9px; background:#fff; color:var(--coffee-dark); font-size:18px; line-height:1; cursor:pointer; }
+.sc-pick button:disabled{ opacity:.35; cursor:default; }
+.sc-input{ height:32px; padding:0 10px; border:1px solid #EADCC8; border-radius:9px; background:#fff; font:600 13px 'Work Sans',sans-serif; color:var(--coffee-dark); }
+.sc-totals{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin-bottom:8px; }
+.sc-totals div{ padding:10px 12px; border-radius:12px; background:#FBF4EA; }
+.sc-totals small{ display:block; font-size:11px; color:#A08870; }
+.sc-totals b{ font:700 17px 'Fraunces',serif; color:var(--coffee-dark); }
+.sc-period{ font-size:12px; color:var(--coffee-mid); margin-bottom:4px; }
+.sc-loading{ color:#B45F1F; }
+.sc-wrap{ position:relative; }
+.sc-guide{ position:absolute; top:4%; bottom:10%; width:0; border-left:1.5px dashed #B45F1F; pointer-events:none; }
+.sc-tip{ position:absolute; top:0; z-index:2; display:flex; flex-direction:column; gap:2px; min-width:150px; padding:9px 12px; border-radius:12px; background:var(--coffee-dark); color:#fff; font-size:12px; box-shadow:0 8px 20px rgba(43,24,16,.25); pointer-events:none; }
+.sc-tip strong{ font-size:12px; color:#F6C453; margin-bottom:2px; }
+.sc-tip b{ font-weight:700; }
+.sc-tip i{ display:inline-block; width:8px; height:8px; margin-right:6px; border-radius:50%; }
+.sc-tip i.d-s{ background:#C8936B; }
+.sc-tip i.d-c{ background:#F6C453; }
+.sc-tip-sub{ color:#D9CBB8; font-size:11px; }
+.sc-tip[hidden], .sc-guide[hidden]{ display:none; }
+/* v3.15.0: banner versi baru (bila restart automatik ditangguh) */
+.update-banner{ position:fixed; left:0; right:0; margin:0 auto; width:max-content; bottom:calc(18px + env(safe-area-inset-bottom)); z-index:10050; max-width:calc(100vw - 32px); padding:11px 18px; border:0; border-radius:24px; background:var(--coffee-dark); color:#FFF3E2; font:600 13px 'Work Sans',sans-serif; box-shadow:0 10px 28px rgba(43,24,16,.35); cursor:pointer; white-space:nowrap; animation:confirm-pop .32s cubic-bezier(.2,1.4,.4,1) both; }
+.update-banner b{ color:#F6C453; }
+.sc-hint{ margin-top:4px; font-size:11px; color:#A08870; text-align:center; }
+@media (max-width:520px){ .sc-totals b{ font-size:14px; } .sc-seg button{ padding:7px 12px; } }
 .lc-grid{ stroke:#EFE4D6; stroke-width:1; stroke-dasharray:3 4; }
-.lc-axis{ fill:#A08870; font:500 10px 'Work Sans',sans-serif; }
+.lc-axis{ fill:#A08870; font:500 14px 'Work Sans',sans-serif; }
 .lc-sales{ fill:none; stroke:var(--coffee-mid); stroke-width:3; stroke-linecap:round; }
 .lc-cups{ fill:none; stroke:#F6C453; stroke-width:3; stroke-linecap:round; }
 .lc-today{ fill:url(#lcTodayGrad); }
@@ -1221,18 +1251,18 @@ body{
 .dash2-gauge svg{ display:block; width:100%; max-width:240px; margin:0 auto; }
 .gauge-track{ fill:none; stroke:#EFE4D6; stroke-width:18; stroke-linecap:round; }
 .gauge-fill{ fill:none; stroke:#F6C453; stroke-width:18; stroke-linecap:round; transition:stroke-dashoffset 1s ease; }
-.gauge-value{ margin-top:-12px; font:700 26px 'Fraunces',serif; color:var(--coffee-dark); }
-.gauge-caption{ margin-top:4px; font-size:12px; color:#A08870; }
-.gauge-rows{ display:flex; justify-content:space-between; gap:10px; margin-top:14px; padding-top:12px; border-top:1px dashed #EADCC8; text-align:left; font-size:12px; color:var(--coffee-mid); }
-.gauge-rows strong{ display:block; margin-top:2px; font-size:15px; color:var(--coffee-dark); }
+.gauge-value{ margin-top:-12px; font:700 21px 'Fraunces',serif; color:var(--coffee-dark); }
+.gauge-caption{ margin-top:4px; font-size:11px; color:#A08870; }
+.gauge-rows{ display:flex; justify-content:space-between; gap:10px; margin-top:14px; padding-top:12px; border-top:1px dashed #EADCC8; text-align:left; font-size:11px; color:var(--coffee-mid); }
+.gauge-rows strong{ display:block; margin-top:2px; font-size:13px; color:var(--coffee-dark); }
 .dash2-live-dot{ font-size:11px; font-weight:800; letter-spacing:.8px; color:#C62828; animation:holiday-blink-soft 1.4s ease-in-out infinite; }
 @keyframes holiday-blink-soft{ 50%{ opacity:.35; } }
 .dash2-live{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; padding:10px 0; border-bottom:1px solid #F2E7D8; font-size:13px; color:var(--coffee-dark); }
 .dash2-live:last-of-type{ border-bottom:0; }
 .top-total{ margin:-4px 0 10px; font-size:13px; color:var(--coffee-mid); }
-.top-total strong{ font:700 22px 'Fraunces',serif; color:var(--coffee-dark); margin-right:4px; }
+.top-total strong{ font:700 18px 'Fraunces',serif; color:var(--coffee-dark); margin-right:4px; }
 .top-row{ margin-bottom:10px; }
-.top-label{ display:flex; justify-content:space-between; gap:8px; font-size:13px; color:var(--coffee-dark); margin-bottom:5px; }
+.top-label{ display:flex; justify-content:space-between; gap:8px; font-size:12px; color:var(--coffee-dark); margin-bottom:5px; }
 .top-label span:last-child{ color:var(--coffee-mid); font-weight:700; }
 .top-bar{ height:8px; border-radius:4px; background:#F1E9DE; overflow:hidden; }
 .top-bar span{ display:block; height:100%; border-radius:4px; background:linear-gradient(90deg,var(--coffee-mid),#B45F1F); }
@@ -1245,7 +1275,7 @@ body{
 @media (max-width: 520px){
   .dash2-welcome{ flex-wrap:wrap; }
   .dash2-logo{ display:none; }
-  .dash-card.kpi-card .dash-value{ font-size:22px; }
+  .dash-card.kpi-card .dash-value{ font-size:19px; }
 }
 
 /* ---------- Admin shell: sidebar + top bar + activity bell ---------- */
@@ -1267,6 +1297,68 @@ body{
 .admin-nav-item .admin-tab-count{ margin-left:auto; }
 .admin-side-logout{ margin-top:auto; display:flex; align-items:center; gap:12px; width:100%; padding:11px 12px; border:0; border-radius:12px; background:#FBE3E1; color:#C62828; font:700 15px 'Work Sans',sans-serif; cursor:pointer; text-align:left; }
 .admin-side-logout:hover{ background:#C62828; color:#fff; }
+/* v3.15.0: kotak Support atas Log Keluar */
+.admin-support{ margin-top:auto; margin-bottom:6px; border:1px solid #F1D9BD; border-radius:16px; overflow:hidden; background:linear-gradient(180deg,#FFF1E2 0%,#FFFDF9 62%); font-family:'Work Sans',sans-serif; box-shadow:0 6px 16px rgba(180,95,31,.10); }
+.admin-support + .admin-support-mini + .admin-side-logout{ margin-top:0; }
+.admin-support, .admin-support-mini, .admin-side-logout{ flex-shrink:0; }
+.admin-support-anim{ position:relative; height:118px; margin-bottom:-6px; }
+.admin-support-anim::before{ content:''; position:absolute; left:50%; top:52%; width:120px; height:120px; transform:translate(-50%,-50%); border-radius:50%; background:radial-gradient(circle, rgba(255,179,67,.28), rgba(255,179,67,0) 70%); }
+.admin-support-anim-inner{ position:relative; width:100%; height:100%; }
+.admin-support-anim-inner svg{ display:block; }
+.admin-support-body{ position:relative; padding:4px 12px 12px; text-align:center; }
+.admin-support-tag{ display:inline-block; padding:2px 9px; border-radius:20px; background:#FDE3C6; color:#B45F1F; font:800 9.5px 'Work Sans',sans-serif; letter-spacing:.6px; text-transform:uppercase; }
+.admin-support-title{ margin-top:6px; font:700 13.5px 'Fraunces',serif; color:var(--coffee-dark); line-height:1.25; }
+.admin-support-num{ display:flex; align-items:center; justify-content:center; gap:6px; margin:6px 0 10px; font:700 15px 'Space Mono',monospace; color:var(--coffee-dark); letter-spacing:.3px; }
+.admin-support-num svg{ width:14px; height:14px; color:#B45F1F; }
+.admin-support-mini svg{ width:17px; height:17px; }
+.admin-support-actions{ display:flex; gap:6px; }
+.admin-support-actions a{ flex:1; padding:8px 4px; border-radius:10px; font:700 12px 'Work Sans',sans-serif; text-align:center; text-decoration:none; white-space:nowrap; transition:transform .12s, filter .2s; }
+.admin-support-actions a.call{ background:#fff; border:1px solid #EADCC8; color:var(--coffee-dark); }
+.admin-support-actions a.wa{ background:#25A35A; border:1px solid #25A35A; color:#fff; }
+.admin-support-actions a:hover{ filter:brightness(.95); }
+.admin-support-actions a:active{ transform:scale(.96); }
+@media (max-height:780px){ .admin-support-anim{ height:84px; } .admin-support-anim::before{ width:84px; height:84px; } }
+@media (max-height:660px){ .admin-support-anim{ display:none; } .admin-support-body{ padding-top:10px; } }
+/* v3.16.0: Support System (gambar + popup) */
+.sys-guard{ background:#FFFDF9; border-color:#D9C7AE; }
+@media (max-height:780px){ .sys-guard-pic{ height:112px; } }
+@media (max-height:660px){ .sys-guard-pic{ height:78px; } }
+.sys-guard-pic{ position:relative; display:block; width:100%; height:150px; padding:0; border:0; background:#1B2430; cursor:pointer; overflow:hidden; }
+.sys-guard-pic img{ width:100%; height:100%; object-fit:cover; object-position:50% 12%; display:block; transition:transform .4s ease; }
+.sys-guard-pic:hover img, .sys-guard-pic:focus-visible img{ transform:scale(1.05); }
+.sys-guard-pic::after{ content:''; position:absolute; inset:auto 0 0 0; height:40%; background:linear-gradient(180deg,rgba(27,36,48,0),rgba(27,36,48,.75)); pointer-events:none; }
+.sys-guard-shine{ position:absolute; top:0; left:-60%; width:40%; height:100%; background:linear-gradient(100deg,rgba(255,255,255,0),rgba(255,255,255,.28),rgba(255,255,255,0)); animation:sysGuardShine 4.5s ease-in-out infinite; pointer-events:none; z-index:1; }
+@keyframes sysGuardShine{ 0%,60%{ left:-60%; } 100%{ left:130%; } }
+.sys-guard-dot{ position:absolute; top:10px; right:10px; z-index:2; width:10px; height:10px; border-radius:50%; background:#3BD16F; box-shadow:0 0 0 0 rgba(59,209,111,.6); animation:sysGuardPulse 2s infinite; }
+@keyframes sysGuardPulse{ 0%{ box-shadow:0 0 0 0 rgba(59,209,111,.6); } 70%{ box-shadow:0 0 0 9px rgba(59,209,111,0); } 100%{ box-shadow:0 0 0 0 rgba(59,209,111,0); } }
+.sys-guard .admin-support-body{ padding-top:10px; }
+.sys-guard .admin-support-tag{ background:#1B2430; color:#E9D9A6; font-size:10.5px; padding:3px 11px; }
+.sys-guard .admin-support-num{ margin:8px 0 2px; font-size:14px; }
+.sys-guard-mini{ padding:0; border:0; overflow:hidden; cursor:pointer; background:#1B2430; }
+.sys-guard-mini img{ width:100%; height:100%; object-fit:cover; object-position:50% 10%; }
+.confirm-box.sys-guard-box{ max-width:360px; padding:0 0 20px; overflow:hidden; text-align:center; }
+.sys-guard-hero{ height:200px; background:#1B2430; }
+.sys-guard-hero img{ width:100%; height:100%; object-fit:cover; object-position:50% 10%; display:block; }
+.sys-guard-badge{ display:inline-block; margin:-14px auto 0; position:relative; padding:5px 14px; border-radius:999px; background:#1B2430; color:#E9D9A6; font:800 12px 'Work Sans',sans-serif; letter-spacing:.5px; }
+.sys-guard-box h3{ margin:12px 18px 6px; font:700 24px 'Fraunces',serif; color:var(--coffee-dark); }
+.sys-guard-box p{ margin:0 22px 10px; font-size:14px; color:var(--coffee-mid); line-height:1.5; }
+.sys-guard-box .sys-guard-small{ font-size:12px; }
+.sys-guard-box .sys-guard-small a{ color:#B45F1F; font-weight:700; white-space:nowrap; }
+.sys-guard-box .confirm-ok{ display:block; margin:8px 22px 0; width:calc(100% - 44px); min-height:46px; border:0; border-radius:12px; background:#1B2430; color:#E9D9A6; font:800 14px 'Work Sans',sans-serif; cursor:pointer; }
+.sys-guard-box .confirm-ok:focus-visible{ outline:3px solid #E9D9A6; outline-offset:2px; }
+.sys-guard-overlay.closing{ opacity:0; transition:opacity .18s; }
+/* gambar "bernafas": zoom & goyang perlahan */
+.sys-guard-pic img, .sys-guard-hero img{ animation:sgBreathe 7s ease-in-out infinite; transform-origin:50% 30%; will-change:transform; }
+@keyframes sgBreathe{ 0%,100%{ transform:scale(1.04) translate(0,0) rotate(0deg); } 50%{ transform:scale(1.1) translate(-1.5%,-2%) rotate(-.6deg); } }
+.sys-guard-pic:hover img{ animation-duration:3.5s; }
+.sys-guard-hero{ position:relative; overflow:hidden; }
+.sg-fx{ position:absolute; inset:0; pointer-events:none; z-index:1; overflow:hidden; }
+.sg-scan{ position:absolute; left:0; right:0; top:-10%; height:18%; background:linear-gradient(180deg,rgba(90,200,255,0),rgba(90,200,255,.22) 70%,rgba(160,230,255,.85) 96%,rgba(90,200,255,0)); mix-blend-mode:screen; animation:sgScan 3.6s cubic-bezier(.45,0,.55,1) infinite; }
+@keyframes sgScan{ 0%{ top:-20%; opacity:0; } 10%{ opacity:1; } 85%{ opacity:1; } 100%{ top:105%; opacity:0; } }
+.sg-dust{ position:absolute; bottom:-6px; width:3px; height:3px; border-radius:50%; background:#F3E3B0; box-shadow:0 0 6px 1px rgba(243,227,176,.8); opacity:0; animation:sgDust 5.5s linear infinite; }
+@keyframes sgDust{ 0%{ transform:translate(0,0); opacity:0; } 15%{ opacity:.9; } 100%{ transform:translate(14px,-170px); opacity:0; } }
+@media (prefers-reduced-motion: reduce){ .sys-guard-shine, .sys-guard-dot, .sys-guard-pic img, .sys-guard-hero img, .sg-scan, .sg-dust{ animation:none; } .sg-fx{ display:none; } }
+.admin-support-mini{ display:none; margin-top:auto; margin-bottom:4px; width:48px; height:44px; align-items:center; justify-content:center; border-radius:12px; background:#FDE8D4; color:#B45F1F; }
 .admin-main{ flex:1; min-width:0; display:flex; flex-direction:column; min-height:0; }
 .admin-bar{ position:relative; display:flex; align-items:center; gap:14px; padding:14px 28px; background:#FFFEFB; border-bottom:1px solid #EADCC8; z-index:20; }
 .admin-burger{ display:none; width:42px; height:42px; flex:0 0 auto; border:1px solid #EADCC8; border-radius:12px; background:#FFFEFB; color:var(--coffee-dark); align-items:center; justify-content:center; cursor:pointer; }
@@ -1278,6 +1370,16 @@ body{
 .admin-bell{ position:relative; width:44px; height:44px; border:1px solid #EADCC8; border-radius:50%; background:#FFFEFB; color:var(--coffee-dark); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background .2s; }
 .admin-bell:hover, .admin-bell.open{ background:#F6EEE3; }
 .admin-bell svg{ width:21px; height:21px; }
+/* v3.15.0: video latar header admin + lapisan gelap supaya tulisan jelas */
+.admin-bar-bg{ position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none; background:#3A2418 url('header-bg.jpg') center/cover no-repeat; }
+.admin-bar-bg video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 55%; }
+.admin-bar-bg::after{ content:''; position:absolute; inset:0; background:linear-gradient(90deg, rgba(36,20,12,.82) 0%, rgba(36,20,12,.5) 45%, rgba(36,20,12,.55) 70%, rgba(36,20,12,.82) 100%); }
+.admin-main .admin-bar{ border-bottom-color:#2B1810; }
+.admin-main .admin-bar > *:not(.admin-bar-bg){ position:relative; z-index:1; }
+.admin-main .admin-bar .admin-datetime{ color:#FFF3E2; text-shadow:0 1px 3px rgba(0,0,0,.45); }
+.admin-main .admin-bar .admin-datetime #adminClock{ color:#F6C453; }
+.admin-main .admin-bar .admin-profile-text strong{ color:#FFF3E2; }
+.admin-main .admin-bar .admin-profile-text small{ color:#E3CDB2; }
 .admin-bell-badge{ position:absolute; top:-3px; right:-3px; min-width:20px; height:20px; padding:0 5px; border-radius:10px; background:#C62828; color:#fff; font:800 11px/20px 'Work Sans',sans-serif; text-align:center; border:2px solid #FFFEFB; animation:bell-pop .4s cubic-bezier(.2,1.6,.4,1); }
 @keyframes bell-pop{ from{ transform:scale(0); } to{ transform:scale(1); } }
 .admin-profile{ display:flex; align-items:center; gap:10px; }
@@ -1304,6 +1406,8 @@ body{
   .admin-side-brand{ padding:0 0 14px; justify-content:center; }
   .admin-side-brand > div, .admin-nav-label, .admin-side-logout .admin-nav-label{ display:none; }
   .admin-tab.admin-nav-item, .admin-side-logout{ justify-content:center; padding:12px; }
+  .admin-support{ display:none; }
+  .admin-support-mini{ display:flex; }
   .admin-tab.admin-nav-item.active::before{ left:-10px; }
   .admin-nav-item .admin-tab-count{ position:absolute; top:2px; right:2px; margin:0; padding:0 5px; min-width:18px; font-size:10px; line-height:16px; }
   .admin-profile-text{ display:none; }
@@ -1316,6 +1420,8 @@ body{
   .admin-side-brand{ justify-content:flex-start; padding:0 6px 18px; }
   .admin-side-brand > div, .admin-nav-label, .admin-side-logout .admin-nav-label{ display:block; }
   .admin-tab.admin-nav-item, .admin-side-logout{ justify-content:flex-start; padding:12px; }
+  .admin-support{ display:block; }
+  .admin-support-mini{ display:none; }
   .admin-tab.admin-nav-item.active::before{ left:-14px; }
   .admin-nav-item .admin-tab-count{ position:static; margin-left:auto; }
   .admin-shell.nav-open .admin-side{ transform:none; }
@@ -1675,6 +1781,33 @@ body{
 
 .reward-rules-box{ display:flex; align-items:center; gap:12px; width:calc(100% - 12px); margin:0 6px 14px; padding:12px 14px; border:1px solid #EADCC8; border-radius:14px; background:#FFFEFB; text-align:left; cursor:pointer; box-shadow:0 3px 10px rgba(43,24,16,.05); font-family:'Work Sans',sans-serif; }
 .reward-rules-box:active{ transform:scale(.99); }
+/* v3.11.0: air percuma hari jadi */
+.bday-gift{ display:flex; align-items:center; gap:12px; width:calc(100% - 12px); margin:0 6px 14px; padding:14px; border:1px solid #E8C26A; border-radius:14px; background:linear-gradient(135deg,#FFF6DD,#FFE9B8); box-shadow:0 4px 14px rgba(201,146,42,.18); font-family:'Work Sans',sans-serif; color:#2B1810; }
+.bday-gift-icon{ font-size:34px; line-height:1; animation:bdayBob 2.4s ease-in-out infinite; }
+.bday-gift-text{ display:flex; flex-direction:column; gap:3px; font-size:13px; line-height:1.4; }
+.bday-gift-text b{ font-family:'Fraunces',serif; font-size:17px; }
+@keyframes bdayBob{ 0%,100%{ transform:translateY(0) rotate(-4deg); } 50%{ transform:translateY(-4px) rotate(4deg); } }
+@media (prefers-reduced-motion: reduce){ .bday-gift-icon{ animation:none; } }
+.rw-redeem-row.bday{ background:#FFF6DD; border-radius:12px; }
+.rw-bday-icon{ width:44px; height:44px; display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0; }
+.auto-push-block{ border:1px solid #EADCC8; border-radius:12px; padding:12px; margin-bottom:12px; background:#FFFEFB; }
+.auto-push-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; font-weight:600; margin-bottom:8px; }
+.push-admin-form .auto-push-head input{ width:22px; height:22px; padding:0; flex-shrink:0; accent-color:#2B1810; }
+.auto-push-row{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; font-size:13px; line-height:1.45; margin:6px 0 10px; color:#6B5446; }
+.push-admin-form .auto-push-row input{ width:64px; padding:6px 8px; text-align:center; }
+.auto-push-block textarea{ margin-top:8px; }
+/* v3.12.0: Ringkasan Kewangan Bulanan */
+.kew-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; border:1px solid #EADCC8; border-radius:12px; background:#FFFEFB; margin-bottom:8px; }
+.kew-table{ width:100%; min-width:680px; border-collapse:collapse; font:400 13px 'Work Sans',sans-serif; color:#2B1810; font-variant-numeric:tabular-nums; }
+.kew-table th, .kew-table td{ padding:10px 12px; text-align:right; border-bottom:1px solid #F1E7DA; white-space:nowrap; vertical-align:top; }
+.kew-table th:first-child{ text-align:left; position:sticky; left:0; background:#FFFEFB; }
+.kew-table thead th{ font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.04em; color:#8A6F5E; background:#F8F1E6; }
+.kew-table thead th:first-child{ background:#F8F1E6; }
+.kew-table small{ display:block; font-size:11px; color:#8A6F5E; margin-top:2px; }
+.kew-table .kew-money{ font-weight:600; }
+.kew-table tr.current th, .kew-table tr.current td{ background:#FFF6DD; }
+.kew-table tr.total th, .kew-table tr.total td{ font-weight:700; border-bottom:0; border-top:2px solid #E6DCCF; }
+.auto-push-today{ font-size:13px; line-height:1.5; padding:10px 12px; border-radius:10px; background:#F6EFE4; margin-bottom:12px; }
 .reward-rules-icon{ flex:none; width:42px; height:42px; display:grid; place-items:center; border-radius:50%; background:linear-gradient(145deg,#FFE3B8,#F6C453); color:var(--sol-orange); }
 .reward-rules-icon svg{ width:22px; height:22px; }
 .reward-rules-text{ flex:1; min-width:0; display:flex; flex-direction:column; gap:2px; }
@@ -1731,8 +1864,15 @@ body{
 .referral-box p, .reward-detail-box .reward-detail-need{ margin:0 0 16px; color:var(--coffee-mid); font-size:14px; line-height:1.5; }
 .referral-box .confirm-ok, .reward-detail-box .confirm-ok{ width:100%; min-height:46px; border:0; border-radius:12px; font:700 15px 'Work Sans',sans-serif; cursor:pointer; }
 .reward-detail-photo .reward-status{ position:absolute; top:10px; left:10px; }
-.reward-detail-photo{ position:relative; overflow:hidden; margin:-6px -2px 14px; border-radius:14px; aspect-ratio:4/3; background:#F3E8DA; }
-.reward-detail-img{ width:100%; height:100%; display:block; object-fit:cover; }
+/* v3.16.0: gambar penuh (tidak dipotong) + pusing 360° */
+.reward-detail-photo{ position:relative; margin:-6px -2px 14px; border-radius:14px; background:#F3E8DA; perspective:1100px; }
+.rd-spin{ position:relative; transform-style:preserve-3d; cursor:grab; touch-action:pan-y; user-select:none; -webkit-user-select:none; outline:none; }
+.rd-spin:active{ cursor:grabbing; }
+.rd-face{ backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:14px; overflow:hidden; background:#F3E8DA; }
+.rd-back{ position:absolute; inset:0; transform:rotateY(180deg); }
+.reward-detail-img{ width:100%; height:auto; max-height:56vh; display:block; object-fit:contain; margin:0 auto; pointer-events:none; -webkit-user-drag:none; }
+span.reward-detail-img{ height:200px; display:flex; align-items:center; justify-content:center; }
+.rd-hint{ position:absolute; right:10px; bottom:10px; z-index:2; padding:3px 9px; border-radius:999px; background:rgba(43,24,16,.65); color:#fff; font:700 11px 'Work Sans',sans-serif; pointer-events:none; }
 .reward-detail-box h3{ margin:0 0 4px; color:var(--coffee-dark); font:700 20px 'Fraunces',serif; }
 .reward-detail-pts{ margin-bottom:14px; color:var(--coffee-mid); font-size:14px; }
 .reward-detail-pts b{ color:var(--sol-orange); font-size:22px; }
@@ -1917,8 +2057,8 @@ body{
 /* Admin > Pelanggan: Senarai Pelanggan */
 .cust-table-title{ margin-top:22px; }
 .cust-table-wrap{ overflow-x:auto; margin-bottom:22px; }
-.cust-table{ min-width:680px; }
-.cust-trow{ display:grid; grid-template-columns:100px 1.4fr 1.1fr 1.1fr 80px 1.2fr; gap:10px; align-items:center; padding:10px 14px; border-bottom:1px solid #F2E7D8; font-size:13px; color:var(--coffee-dark); }
+.cust-table{ min-width:860px; }
+.cust-trow{ display:grid; grid-template-columns:124px minmax(150px,1.6fr) 100px 90px minmax(110px,1fr) 70px 100px 104px 176px; gap:8px; align-items:center; min-height:52px; padding:8px 0 8px 14px; border-bottom:1px solid #F2E7D8; background:#FFFDF9; font-size:13px; color:var(--coffee-dark); }
 .cust-trow:last-child{ border-bottom:0; }
 .cust-trow.head{ background:#F7EEE3; color:var(--coffee-mid); font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; }
 .cust-trow .ct-code{ font:700 13px 'Space Mono',monospace; }
@@ -1927,6 +2067,57 @@ body{
 .cust-trow.bday-month{ background:#FFF8EA; }
 .cust-trow.bday-today{ background:#FDE8D4; }
 .cust-trow.bday-today .ct-bday{ color:#B45F1F; font-weight:700; }
+/* v3.16.0: Points / Reward (RM) / Air Percuma + butang tebus */
+.cust-trow .ct-num{ text-align:right; font-variant-numeric:tabular-nums; font-weight:600; }
+.cust-trow .ct-free-has{ color:#1F7A3A; font-weight:800; }
+/* Kolum Tebus melekat di kanan: sentiasa nampak walaupun jadual di-scroll ke tepi */
+.cust-trow .ct-actions, .cust-trow .ct-actions-head{ position:sticky; right:0; z-index:1; align-self:stretch; display:flex; align-items:center; justify-content:center; gap:6px; padding:0 12px 0 10px; background:inherit; box-shadow:-8px 0 10px -8px rgba(43,24,16,.18); }
+.cust-trow .ct-actions .ct-btn{ flex:1 1 0; min-width:0; text-align:center; padding:7px 6px; }
+/* Data di tengah, sejajar dengan tajuk kolum (kecuali Nama / No. HP) */
+.cust-trow > span:not(.ct-who):not(.ct-actions):not(.ct-actions-head){ text-align:center; }
+.cust-trow .ct-num{ text-align:center !important; }
+.cust-trow.head > span{ white-space:nowrap; letter-spacing:.3px; }
+.cust-trow .ct-gender, .cust-trow .ct-bday, .cust-trow .ct-date, .cust-trow .ct-phone{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+/* Tablet: kolum Jantina disorok supaya Points, Reward, Air & Tebus muat tanpa scroll */
+@media (max-width:1400px){
+  .cust-table{ min-width:820px; }
+  .cust-trow{ grid-template-columns:104px minmax(116px,1.4fr) 86px minmax(88px,1fr) 56px 90px 94px 154px; }
+  .cust-trow .ct-gender{ display:none; }
+}
+.cust-trow .ct-who{ display:flex; flex-direction:column; gap:1px; min-width:0; }
+.cust-trow .ct-who .ct-name{ display:block; }
+.cust-trow .ct-who .ct-phone{ display:block; font-size:11.5px; }
+.ct-btn{ border:1px solid #E6D6C2; background:#fff; color:var(--coffee-dark); border-radius:999px; padding:6px 10px; font-family:inherit; font-size:12px; font-weight:600; cursor:pointer; white-space:nowrap; }
+.ct-btn:hover:not(:disabled){ border-color:var(--coffee-mid); }
+.ct-btn.active{ background:#F7EEE3; border-color:var(--coffee-mid); }
+.ct-btn.primary{ background:#8E1B2C; border-color:#8E1B2C; color:#fff; }
+.ct-btn:disabled{ opacity:.4; cursor:not-allowed; }
+.ct-free-menu{ grid-column:1 / -1; display:flex; flex-wrap:wrap; align-items:center; justify-content:flex-end; gap:8px; padding:10px 12px; background:#F7EEE3; border-radius:12px; font-size:13px; }
+.ct-free-menu span{ margin-right:auto; }
+/* v3.16.0: suis Aktif / Tidak Aktif */
+@media (max-width:600px){ .prog-switch{ flex-wrap:wrap; } .prog-switch .push-btn{ width:100% !important; } }
+.prog-switch{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-top:16px; padding:12px 14px; border-radius:14px; border:1px dashed #E6D6C2; }
+.prog-switch.on{ background:#EEF8F0; border-color:#BFE3C8; }
+.prog-switch.off{ background:#FBF4EA; }
+.prog-switch-text{ display:flex; flex-direction:column; gap:4px; min-width:0; flex:1 1 0; }
+.prog-switch .push-btn, .prog-switch .push-btn.primary{ flex:0 0 auto; width:auto; min-width:200px; margin-top:0; }
+.prog-switch-text small{ color:var(--text-soft); font-size:12px; }
+.prog-pill{ align-self:flex-start; font-weight:800; font-size:12px; padding:3px 10px; border-radius:999px; }
+.prog-pill.on{ background:#1F7A3A; color:#fff; }
+.prog-pill.off{ background:#E6D6C2; color:var(--coffee-dark); }
+/* v3.16.0: Publish / Draf hadiah + pratonton */
+.rw-admin-card{ position:relative; }
+.rw-admin-card.is-draft .rw-admin-img{ opacity:.6; }
+.rw-pub-badge{ position:absolute; top:8px; left:8px; z-index:2; font-size:11px; font-weight:800; padding:3px 9px; border-radius:999px; }
+.rw-pub-badge.on{ background:#1F7A3A; color:#fff; }
+.rw-pub-badge.off{ background:#E6D6C2; color:var(--coffee-dark); }
+.rw-pub-btn{ width:100%; margin-top:8px; min-height:36px; border:1px solid #E6D6C2; border-radius:10px; background:#fff; color:var(--coffee-dark); font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; }
+.rw-pub-btn.primary{ background:#1F7A3A; border-color:#1F7A3A; color:#fff; }
+.rw-pub-btn:disabled{ opacity:.6; cursor:default; }
+.reward-status.draft{ background:#E6D6C2; color:var(--coffee-dark); margin-right:4px; }
+.rw-preview-phone{ max-width:420px; margin:0 auto; padding:6px 10px 14px; border:8px solid #2B1810; border-radius:28px; background:var(--cream, #FBF6EF); }
+.rw-preview-phone .reward-catalog{ margin:12px 2px 4px; }
+.reward-info-paused{ background:#FBF4EA; border-radius:10px; padding:8px 12px; font-size:13px; }
 .push-pill.bad{ background:#FBE0DE; color:#A32020; }
 .push-card-text{ margin:9px 0 0; color:var(--coffee-mid); font-size:13px; line-height:1.5; }
 .push-ios-steps{ margin:10px 0 0; padding-left:20px; color:var(--coffee-mid); font-size:13px; line-height:1.6; }
@@ -2297,6 +2488,31 @@ body{
 .pmenu-save-btn:active{ transform:scale(.97); }
 .pmenu-publish-btn{width:100%;margin-top:7px;padding:9px 10px;border:1px solid #2e7d32;border-radius:20px;background:#eaf7ed;color:#23672b;font:700 12px 'Work Sans',sans-serif;cursor:pointer}.pmenu-publish-btn.unpublished{border-color:#a43b32;background:#f8e7e4;color:#93372f}.pmenu-publish-btn:hover{filter:brightness(.96)}
 .pmenu-file-input{ display:none; }
+/* v3.15.0: tambah / padam kategori & menu */
+.pmenu-toolbar{ display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
+.pmenu-toolbar p{ margin:0; font-size:13px; color:var(--text-soft); }
+.pmenu-add-cat{ border:0; border-radius:22px; padding:10px 18px; background:var(--coffee-dark); color:#fff; font:700 13px 'Work Sans',sans-serif; cursor:pointer; }
+.pmenu-add-cat:active{ transform:scale(.97); }
+.pmenu-section-header{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+.pmenu-section-header small{ font:500 12px 'Work Sans',sans-serif; color:var(--coffee-mid); }
+.pmenu-cat-actions{ display:flex; gap:6px; }
+.pmenu-cat-actions button{ border:1px solid var(--coffee-dark); background:#FFF6E8; color:var(--coffee-dark); border-radius:16px; padding:5px 11px; font:600 12px 'Work Sans',sans-serif; cursor:pointer; }
+.pmenu-cat-actions button.danger{ border-color:#a43b32; color:#93372f; }
+.pmenu-delete-item{ width:100%; margin-top:2px; padding:5px; border:0; background:none; color:#93372f; font:600 11px 'Work Sans',sans-serif; cursor:pointer; text-decoration:underline; }
+.pmenu-add-col{ justify-content:center; }
+.pmenu-add-item{ width:100%; min-height:200px; border:2px dashed #E2C9A8; border-radius:12px; background:#FFF9F0; color:var(--coffee-mid); font:700 13px 'Work Sans',sans-serif; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; }
+.pmenu-add-item span{ font-size:34px; line-height:1; color:var(--sol-orange); }
+.pmenu-add-item:hover{ border-color:var(--sol-orange); background:#FDE9D0; }
+.confirm-box.menu-form-box{ text-align:left; width:min(100%,400px); }
+.menu-form-box .confirm-title{ text-align:center; }
+.menu-form-fields{ display:flex; flex-direction:column; gap:12px; margin-bottom:14px; }
+.menu-form-field{ display:flex; flex-direction:column; gap:5px; }
+.menu-form-field span{ font-size:12px; font-weight:700; color:var(--coffee-mid); }
+.menu-form-field input, .menu-form-field textarea{ width:100%; box-sizing:border-box; padding:10px 12px; border:1.5px solid #EFE2D2; border-radius:10px; background:var(--cream); font:15px 'Work Sans',sans-serif; color:var(--coffee-dark); resize:vertical; }
+.menu-form-field input:focus, .menu-form-field textarea:focus{ outline:2px solid var(--sol-orange); border-color:var(--sol-orange); }
+.menu-form-check{ display:flex; align-items:center; gap:8px; font-size:14px; color:var(--coffee-dark); cursor:pointer; }
+.menu-form-check input{ width:18px; height:18px; accent-color:var(--sol-orange); }
+.menu-form-error{ margin:0 0 12px; color:#C62828; font-size:13px; font-weight:600; }
 
 /* ---------- Toast Notification ---------- */
 .toast-container{
@@ -2558,11 +2774,61 @@ const GAS_URL = 'https://script.google.com/macros/s/AKfycbwJeSEszdLBr_UnwFq-W1kX
    Keluaran baru: tukar APP_VERSION + BUILD_DATE dan tambah catatan di ATAS
    senarai CHANGELOG. Tajuk tab, skrin pembuka, log masuk admin dan
    Admin > Sistem semuanya baca dari sini. */
-const APP_VERSION = '3.10.5';
-const BUILD_DATE = '2026-10-27';
+const APP_VERSION = '3.16.0';
+const BUILD_DATE = '2026-11-18';
 // Versi Apps Script (action=version) yang app ini perlukan
-const REQUIRED_SERVER_VERSION = '3.10.2';
+const REQUIRED_SERVER_VERSION = '3.16.0';
 const CHANGELOG = [
+  { version:'3.16.0', date:'2026-11-18', title:'Suis Aktif points & referral, tebus dari Senarai Pelanggan', items:[
+    'Admin > Reward: Tetapan Points dan Tetapan Duit Referral ada suis Aktif / Tidak Aktif. Tidak Aktif = order Selesai tidak beri points / duit (baki lama kekal)',
+    'Admin > Pelanggan > Senarai Pelanggan: kolum Points, Duit (RM) dan Air Percuma',
+    'Butang Tebus Points (terus ke Reward dengan pelanggan dipilih) dan Tebus Air Percuma (Beli 5 Percuma 1: tebus 1 air atau semua)',
+    'Senarai Pelanggan kemas: disusun ikut tarikh daftar (terbaru di atas), tarikh dibaca betul, No. HP di bawah nama, kolum Tebus sentiasa nampak',
+    'Page Reward pelanggan: gambar hadiah dipapar penuh (tidak dipotong); tekan atau leret gambar untuk pusing 360°',
+    'Kotak Support di menu kiri kini gambar Support System; tekan gambar untuk mesej "It will recover"',
+    'Senarai Hadiah: butang Publish / Not Publish. Hadiah baru disimpan sebagai Draf (pelanggan tidak nampak); Pratonton Page Reward tunjuk rupa sebenar termasuk Draf'
+  ]},
+  { version:'3.15.1', date:'2026-11-10', title:'Senarai pelanggan lebih stabil', items:[
+    'Admin > Pelanggan cuba semula sendiri jika server lambat, dan tunjuk sebab sebenar jika gagal'
+  ]},
+  { version:'3.15.0', date:'2026-11-10', title:'Urus kategori & menu sendiri', items:[
+    'Admin > Menu: Tambah Kategori baru, tukar nama atau padam kategori (kategori kosong)',
+    'Tambah Menu baru dalam mana-mana kategori: nama, harga, pilihan Hot/Ice & penerangan',
+    'Padam menu yang tidak dijual lagi; gambar menu baru dimuat naik dengan Tukar Gambar',
+    'Dashboard: graf Jualan vs Cawan boleh pilih Hari / Bulan / Tahun & tarikh, dengan jumlah jualan, cawan & pesanan',
+    'Sentuh / letak tetikus pada graf untuk lihat bacaan; tulisan Dashboard dikecilkan',
+    'Header admin kini berlatarkan video kafe (ringan, ~0.6MB) & kotak Support atas Log Keluar',
+    'Restart automatik: bila versi baru dimuat naik ke Netlify, semua app pelanggan & admin muat semula sendiri (tanpa log keluar)'
+  ]},
+  { version:'3.14.0', date:'2026-11-10', title:'Menu baru: Coklat & Milk', items:[
+    'Kategori baru Coklat & Milk: Fresh Milk with Vanilla, Fresh Milk with Hazelnut, Fresh Milk with Honey, Coklat Mint, Coklat Original, Strawberry Milkshake',
+    'Gambar, nama, harga & penerangan boleh diubah di Admin > Menu seperti menu lain'
+  ]},
+  { version:'3.13.0', date:'2026-10-29', title:'Keselamatan untuk kedai lain', items:[
+    'Harga & jumlah pesanan dikira di server mengikut menu; harga daripada telefon diabaikan',
+    'Kata laluan admin disimpan sebagai hash, tidak dipaparkan lagi; kosongkan ruang kata laluan semasa Edit untuk kekalkan',
+    'Kata laluan admin baru: minimum 8 aksara, ada huruf & nombor; log masuk dikunci 15 minit selepas 5 kali salah',
+    'Tiada akaun admin lalai; kedai baru guna buatAdminPertama dalam Apps Script',
+    'Had pesanan (5 aktif seorang) & had permintaan untuk elak spam; mesej mesra bila sistem sibuk',
+    'Log Audit setiap tindakan admin dalam sheet AuditLog',
+    'Header keselamatan Netlify (CSP dll) & jsPDF disimpan dalam app (tidak lagi dari CDN)'
+  ]},
+  { version:'3.12.0', date:'2026-10-29', title:'Keselamatan & laporan bulanan', items:[
+    'Nama, no. telefon & item pesanan ditapis sebelum dipaparkan di admin dan dibersihkan di server (elak kod jahat)',
+    'Laporan bulan lepas disimpan dalam sheet LaporanBulanan (setiap pelanggan) & KewanganBulanan (ringkasan kedai), tiada lagi had 50,000 aksara',
+    'Laporan lama dipindah automatik ke sheet baru; jualan bulan lama dikira daripada OrdersArkib',
+    'Laporan dan Resit: jadual Ringkasan Kewangan Bulanan (jualan, pesanan, cawan, pelanggan, air percuma, points, duit referral)'
+  ]},
+  { version:'3.11.0', date:'2026-10-29', title:'Notifikasi automatik & hadiah hari jadi', items:[
+    'Ucapan hari jadi automatik pukul 10 pagi + 1 air percuma, sah 7 hari dari hari jadi, sekali setahun',
+    'Air percuma hari jadi dipaparkan di page Reward pelanggan; admin tebus di Reward > Tebus',
+    'Ingatan "Apa khabar" automatik: setiap pelanggan sekali setiap 3 hari, hari berlainan untuk orang berlainan',
+    'Ingatan hanya pada hari kedai buka, dan tidak dihantar kepada pelanggan yang baru beli',
+    'Admin > Promosi dan Hebahan > Notifikasi Automatik: hidup/mati, tukar teks, lihat siapa dapat hari ini'
+  ]},
+  { version:'3.10.6', date:'2026-10-29', title:'Tiada popup notifikasi jika sudah Allow', items:[
+    'Telefon yang sudah Allow: kotak "Nak tahu bila kopi anda siap?" tidak lagi muncul sekejap selepas Masuk; langganan didaftar semula secara senyap'
+  ]},
   { version:'3.10.5', date:'2026-10-27', title:'Notifikasi diminta setiap kali login', items:[
     'Selepas Masuk: jika telefon belum Allow notifikasi, kotak ajakan terus dipaparkan (abaikan "Nanti" sebelum ini)',
     'Sudah Allow: tidak ditanya lagi; langganan nombor ini didaftar senyap pada telefon tersebut',
@@ -2742,12 +3008,15 @@ function freeDrinksAvailable(c){ return Math.max(0, freeDrinksEarned(c) - ((c &&
 const ICON_SEARCH_CUP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h11v6a4 4 0 0 1-4 4H8a3 3 0 0 1-3-3V8z"/><path d="M16 10h1.5a2 2 0 0 1 0 4H16"/><path d="M8 5c0-1 1-1 1-2M12 5c0-1 1-1 1-2"/><circle cx="18.5" cy="18.5" r="3"/><line x1="20.7" y1="20.7" x2="22.5" y2="22.5"/></svg>';
 const ICON_BACK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>';
 
-const CATEGORIES = [
+const BUILTIN_CATEGORIES = [
   { id:'fresh', label:'Fresh Brew' },
   { id:'americano', label:'Americano' },
   { id:'mocktail', label:'Fruits / Mocktail' },
   { id:'matcha', label:'Matcha World' },
+  { id:'coklat', label:'Coklat & Milk' },
 ];
+// v3.15.0: senarai sebenar datang dari server (admin boleh tambah / tukar nama / padam)
+let CATEGORIES = BUILTIN_CATEGORIES.slice();
 
 // menuImages: stores base64 image per item id (persisted in memory this session, admin can update)
 let menuImages = {};   // { itemId: 'data:image/...' }
@@ -2797,6 +3066,13 @@ const TRANSPARENT_MENU_IMAGES = {
   'matcha-strawberry':'23-matcha-strawberry.webp',
   'matcha-watermelon':'24-matcha-watermelon.webp',
   'matcha-mango':'25-matcha-mango.webp',
+  // v3.15.0: Coklat & Milk (latar dibuang, logo K'fe De Sol pada gelas)
+  'fresh-milk-vanilla':'26-fresh-milk-vanilla.webp',
+  'fresh-milk-hazelnut':'27-fresh-milk-hazelnut.webp',
+  'fresh-milk-honey':'28-fresh-milk-honey.webp',
+  'coklat-mint':'29-coklat-mint.webp',
+  'coklat-original':'30-coklat-original.webp',
+  'strawberry-milkshake':'31-strawberry-milkshake.webp',
 };
 function getItemImage(item){
   const transparentImage = TRANSPARENT_MENU_IMAGES[item.id];
@@ -2840,6 +3116,14 @@ const MENU = [
   {id:'matcha-strawberry', name:'Matcha Strawberry', price:9.00, category:'matcha', image:'https://picsum.photos/seed/matcha-strawberry/120/120', description:'Matcha dipadankan dengan strawberry segar. Kombinasi sempurna!'},
   {id:'matcha-watermelon', name:'Matcha Watermelon', price:9.00, category:'matcha', image:'https://picsum.photos/seed/matcha-watermelon/120/120', description:'Matcha dengan tembikai segar. Unik dan menyegarkan.'},
   {id:'matcha-mango', name:'Matcha Mango', price:9.00, category:'matcha', image:'https://picsum.photos/seed/matcha-mango/120/120', description:'Matcha dengan mangga tropika. Kombinasi yang menakjubkan!'},
+
+  // Coklat & Milk (v3.14.0) - gambar dimuat naik admin di Admin > Menu
+  {id:'fresh-milk-vanilla', name:'Fresh Milk with Vanilla', price:9.00, category:'coklat', temp:'both', image:'', description:'Susu segar yang lembut dengan aroma vanilla. Ringan, creamy dan menenangkan.'},
+  {id:'fresh-milk-hazelnut', name:'Fresh Milk with Hazelnut', price:9.00, category:'coklat', temp:'both', image:'', description:'Susu segar dengan perisa hazelnut yang wangi dan kaya. Lemak-lemak manis!'},
+  {id:'fresh-milk-honey', name:'Fresh Milk with Honey', price:9.00, category:'coklat', temp:'both', image:'', description:'Susu segar dimaniskan dengan madu asli. Manis semula jadi, sedap dan berkhasiat.'},
+  {id:'coklat-mint', name:'Coklat Mint', price:8.00, category:'coklat', temp:'both', image:'', description:'Coklat pekat dengan sentuhan mint yang segar. Manis dan menyegarkan sekaligus.'},
+  {id:'coklat-original', name:'Coklat Original', price:7.00, category:'coklat', temp:'both', image:'', description:'Coklat klasik yang pekat dan creamy. Kegemaran semua peringkat umur.'},
+  {id:'strawberry-milkshake', name:'Strawberry Milkshake', price:9.00, category:'coklat', image:'', description:'Milkshake strawberry yang pekat, sejuk dan creamy. Manis buah yang menyegarkan!'},
 ];
 
 // Apply any locally-saved name/price overrides to MENU array immediately
@@ -2852,6 +3136,56 @@ if(Object.keys(_localMenuOverrides).length > 0){
     }
   });
 }
+
+/* ---------- v3.15.0: kategori & menu ciptaan admin ----------
+   Server (action menuMeta) pulangkan senarai kategori aktif dan baris MenuMeta
+   dengan category/temp/custom/deleted. Salinan terakhir disimpan dalam
+   localStorage supaya menu baru terus kelihatan semasa app dibuka. */
+const MENU_STRUCTURE_KEY = 'kfedeSolMenuStructure';
+function isTrue(v){ return v === true || String(v).toUpperCase() === 'TRUE'; }
+function addCustomMenuItem(m){
+  const existing = MENU.find(x => x.id === m.id);
+  if(existing){
+    if(m.category) existing.category = String(m.category);
+    if(existing.custom) existing.temp = isTrue(m.temp) ? 'both' : undefined;
+    return false;
+  }
+  MENU.push({ id:String(m.id), name:String(m.name || ''), price:Number(m.price) || 0, category:String(m.category || ''),
+    temp: isTrue(m.temp) ? 'both' : undefined, image:'', description:String(m.desc || ''), custom:true });
+  return true;
+}
+function removeMenuItem(id){
+  const idx = MENU.findIndex(m => m.id === id);
+  if(idx === -1) return false;
+  MENU.splice(idx, 1);
+  if(typeof state !== 'undefined' && state.cart && state.cart[id]) delete state.cart[id];
+  return true;
+}
+// Pulangkan true jika susunan kategori / menu berubah
+function applyMenuStructure(data){
+  if(!data) return false;
+  const before = JSON.stringify([CATEGORIES, MENU.map(m => m.id + ':' + m.category + ':' + (m.temp || ''))]);
+  if(Array.isArray(data.categories) && data.categories.length){
+    CATEGORIES = data.categories.filter(c => c && c.id).map(c => ({ id:String(c.id), label:String(c.label || ''), custom:!!c.custom }));
+  }
+  (data.items || []).forEach(m => {
+    if(!m || !m.id) return;
+    if(isTrue(m.deleted)) removeMenuItem(String(m.id));
+    else if(isTrue(m.custom) && String(m.name || '').trim()) addCustomMenuItem(m);
+  });
+  if(typeof state !== 'undefined' && state.menuCategory && !CATEGORIES.some(c => c.id === state.menuCategory)) state.menuCategory = null;
+  return before !== JSON.stringify([CATEGORIES, MENU.map(m => m.id + ':' + m.category + ':' + (m.temp || ''))]);
+}
+function saveMenuStructureCache(data){
+  try{
+    localStorage.setItem(MENU_STRUCTURE_KEY, JSON.stringify({
+      categories: data.categories || [],
+      items: (data.items || []).filter(m => isTrue(m.custom) || isTrue(m.deleted))
+        .map(m => ({ id:m.id, name:m.name, price:m.price, category:m.category, temp:m.temp, desc:m.desc, custom:m.custom, deleted:m.deleted }))
+    }));
+  }catch(e){}
+}
+// (salinan localStorage dipakai semasa app mula, sebelum render() pertama)
 
 let state = {
   view: 'splash',
@@ -3037,7 +3371,7 @@ function buildReceiptHtml(order){
   const rejected = isOrderRejected(order);
   const rejectReason = getRejectReason(order);
   const itemsHtml = (order.items||[]).map(i =>
-    `<div class="shop-receipt-row"><span>${i.name} x${i.qty}</span><span>${fmt(i.price*i.qty)}</span></div>`
+    `<div class="shop-receipt-row"><span>${escapeHtml(i.name)} x${i.qty}</span><span>${fmt(i.price*i.qty)}</span></div>`
   ).join('');
   return `
     <div class="shop-receipt">
@@ -3048,8 +3382,8 @@ function buildReceiptHtml(order){
       <div class="shop-receipt-meta">
         <div class="shop-receipt-row"><span>No. Giliran</span><span>${String(order.queueNo).padStart(3,'0')}</span></div>
         <div class="shop-receipt-row"><span>Tarikh/Masa</span><span>${dateTimeStr}</span></div>
-        ${order.customerName ? `<div class="shop-receipt-row"><span>Nama</span><span>${order.customerName}</span></div>` : ''}
-        ${order.customerPhone ? `<div class="shop-receipt-row"><span>No. Hp</span><span>${order.customerPhone}</span></div>` : ''}
+        ${order.customerName ? `<div class="shop-receipt-row"><span>Nama</span><span>${escapeHtml(order.customerName)}</span></div>` : ''}
+        ${order.customerPhone ? `<div class="shop-receipt-row"><span>No. Hp</span><span>${escapeHtml(order.customerPhone)}</span></div>` : ''}
         ${rejected ? `<div class="shop-receipt-row"><span>Status</span><span>DITOLAK</span></div>` : ''}
         ${rejected ? `<div class="shop-receipt-row"><span>Sebab</span><span>${rejectReason || 'Lain-lain'}</span></div>` : ''}
       </div>
@@ -3531,6 +3865,11 @@ async function loadMenuMeta(){
   try{
     const data = await gasGet('menuMeta');
     if(!data || data.error) return;
+    // v3.15.0: kategori & menu ciptaan admin (server lama tiada 'categories': tiada perubahan)
+    const structureChanged = Array.isArray(data.categories) ? applyMenuStructure(data) : false;
+    if(Array.isArray(data.categories)) saveMenuStructureCache(data);
+    if(structureChanged && state.view === 'menu') render();
+    if(structureChanged && state.view === 'admin' && (state.adminTab || 'pesanan') !== 'menu') render();
     if(data.items && data.items.length > 0){
       let changed = false;
       data.items.forEach(item => {
@@ -3697,12 +4036,14 @@ async function archiveCustomersIfNeeded(){
 }
 
 /* ---------- admin accounts ---------- */
+// v3.13.0: sama dengan server — minimum 8 aksara, ada huruf & nombor
 function isValidAdminPassword(pw){
-  if(!pw || pw.length < 3) return false;
-  if(!/[a-zA-Z]/.test(pw)) return false;                                  // sekurang-kurangnya 1 huruf
-  if(!/[!@#$%^&*(),.?":{}|<>_\-+=~`[\]\\/;']/.test(pw)) return false;     // sekurang-kurangnya 1 simbol
-  return true;
+  return !!pw && pw.length >= 8 && /[a-zA-Z]/.test(pw) && /\d/.test(pw);
 }
+const ADMIN_MGMT_ERRORS = { WEAK_PASSWORD:'Kata laluan mesti sekurang-kurangnya 8 aksara, ada huruf dan nombor.',
+  USERNAME_TAKEN:'ID admin sudah digunakan.', EMPTY:'Sila isi semua maklumat.', NOT_FOUND:'Admin tidak dijumpai. Muat semula page.',
+  LAST_ADMIN:'Tidak boleh padam admin terakhir.', SELF:'Tidak boleh padam akaun sendiri.', SESSION_INVALID:'Sesi Admin tamat. Log masuk semula.' };
+function adminMgmtError(r){ return !r ? 'Tidak berjaya. Semak internet dan cuba lagi.' : r.ok ? '' : (ADMIN_MGMT_ERRORS[r.error] || 'Tidak berjaya disimpan.'); }
 async function loadAdmins(){
   const data = await gasGet('admins');
   return (data && data.admins) ? data.admins : [];
@@ -3737,13 +4078,13 @@ function forceAdminLogout(message){
   render();
 }
 async function addAdminApi(name, username, password){
-  await gasPost('addAdmin', { name, username, password });
+  return gasPost('addAdmin', { name, username, password });
 }
 async function updateAdminApi(id, name, username, password){
-  await gasPost('updateAdmin', { id, name, username, password });
+  return gasPost('updateAdmin', { id, name, username, password });
 }
 async function deleteAdminApi(id){
-  await gasPost('deleteAdmin', { id });
+  return gasPost('deleteAdmin', { id });
 }
 
 /* Record a purchase against the customer's monthly tally */
@@ -3810,6 +4151,8 @@ async function loadRewards(){
       if(data.perCup != null) state.pointsPerCup = Number(data.perCup);
       if(data.refRm != null) state.refRm = Number(data.refRm);
       if(data.refMax != null) state.refMax = Number(data.refMax);
+      if(data.pointsOn != null) state.pointsOn = data.pointsOn !== false;
+      if(data.refOn != null) state.refOn = data.refOn !== false;
       state.rewardsError = false;
     } else {
       state.rewardsError = true;
@@ -3990,7 +4333,67 @@ function scrollKey(){
   return [state.view, state.menuCategory || '', state.adminTab || '', state.adminSubTab || '', state.activeQueueId || '', state.itemDetailId || ''].join('|');
 }
 // Hanya kotak ini (borang notifikasi & carian pelanggan) dikekalkan fokus semasa lukis semula
-const KEEP_FOCUS_IDS = ['custSearch', 'custPushTitle', 'custPushBody', 'pushPromoTitle', 'pushPromoBody', 'rwSearch', 'rwTitle', 'rwPoints', 'rwPerCup', 'refCodeInput', 'rwUseRm', 'rwRefRm', 'rwRefMax'];
+const KEEP_FOCUS_IDS = ['custSearch', 'custPushTitle', 'custPushBody', 'pushPromoTitle', 'pushPromoBody', 'rwSearch', 'rwTitle', 'rwPoints', 'rwPerCup', 'refCodeInput', 'rwUseRm', 'rwRefRm', 'rwRefMax', 'apEvery', 'apRemindTitle', 'apRemindBody', 'apBdayTitle', 'apBdayBody'];
+/* v3.15.0: video latar header admin. Satu elemen <video> sahaja, dicipta sekali
+   dan dipindah ke header baru selepas setiap render (dalam task yang sama, jadi
+   video tidak berhenti / bermula semula setiap kali page dilukis). */
+let adminHeaderBg = null;
+function attachAdminHeaderVideo(frame){
+  const bar = frame && frame.querySelector('.admin-bar');
+  if(!bar) return;
+  if(!adminHeaderBg){
+    adminHeaderBg = document.createElement('div');
+    adminHeaderBg.className = 'admin-bar-bg';
+    adminHeaderBg.setAttribute('aria-hidden', 'true');
+    const v = document.createElement('video');
+    v.muted = true; v.defaultMuted = true; v.loop = true; v.playsInline = true;
+    v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+    v.preload = 'auto';
+    v.poster = 'header-bg.jpg';
+    let reduce = false;
+    try{ reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+    v.autoplay = !reduce;
+    v.src = 'header-bg.mp4';
+    adminHeaderBg.appendChild(v);
+  }
+  if(adminHeaderBg.parentNode !== bar) bar.insertBefore(adminHeaderBg, bar.firstChild);
+  const v = adminHeaderBg.firstChild;
+  if(v.autoplay && v.paused) v.play().catch(() => {});
+}
+
+/* v3.15.0: animasi Lottie (budak customer service) dalam kotak Support.
+   Pemain lottie_light disimpan dalam vendor/ (CSP tidak benarkan CDN) dan hanya
+   dimuat bila panel admin dibuka. Satu elemen tetap dipindah ke kotak baru
+   selepas setiap render supaya animasi tidak bermula semula. */
+let supportAnimEl = null, supportAnim = null, supportAnimLoading = false;
+function attachSupportAnimation(frame){
+  const slot = frame && frame.querySelector('[data-support-anim]');
+  if(!slot) return;
+  if(!supportAnimEl){
+    supportAnimEl = document.createElement('div');
+    supportAnimEl.className = 'admin-support-anim-inner';
+  }
+  if(supportAnimEl.parentNode !== slot) slot.appendChild(supportAnimEl);
+  const visible = slot.offsetParent !== null;
+  if(supportAnim){ visible && !document.hidden ? supportAnim.play() : supportAnim.pause(); return; }
+  if(supportAnimLoading) return;
+  supportAnimLoading = true;
+  const start = () => fetch('support-anim.json').then(r => r.json()).then(data => {
+    let reduce = false;
+    try{ reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+    supportAnim = window.lottie.loadAnimation({ container:supportAnimEl, renderer:'svg', loop:true, autoplay:!reduce, animationData:data,
+      rendererSettings:{ preserveAspectRatio:'xMidYMid meet', progressiveLoad:true } });
+    if(reduce) supportAnim.goToAndStop(45, true);
+    document.addEventListener('visibilitychange', () => { if(!supportAnim) return; document.hidden || reduce ? supportAnim.pause() : supportAnim.play(); });
+  }).catch(e => { console.warn('animasi support gagal dimuat', e); });
+  if(window.lottie){ start(); return; }
+  const s = document.createElement('script');
+  s.src = 'vendor/lottie_light.min.js';
+  s.onload = start;
+  s.onerror = () => { supportAnimLoading = false; };
+  document.head.appendChild(s);
+}
+
 function render(){
   const frame = document.getElementById('app-frame');
   const key = scrollKey();
@@ -4003,6 +4406,8 @@ function render(){
   const focusId = active && KEEP_FOCUS_IDS.includes(active.id) && frame.contains(active) ? active.id : null;
   const caret = focusId ? [active.selectionStart, active.selectionEnd] : null;
   renderPage();
+  attachAdminHeaderVideo(frame);
+  attachSupportAnimation(frame);
   if(focusId){
     const el = document.getElementById(focusId);
     if(el && el !== document.activeElement){
@@ -4072,6 +4477,8 @@ function renderPage(){
     if(state.adminTab === 'pengurusan' && state.adminPushStatus === undefined){ state.adminPushStatus = 'loading'; loadAdminPushStatus(); }
     if(!state.adminPushRefreshTried){ state.adminPushRefreshTried = true; refreshAdminPush(); }
     if(state.adminTab === 'promosi' && state.adminPromotions === null && !state.adminPromotionsLoading){ loadAdminPromotions(); }
+    if(state.adminTab === 'promosi' && PUSH_URL && state.autoPush === undefined && !state.autoPushLoading){ loadAutoPush(); }
+    if(state.adminTab === 'simpanan' && state.kewangan === undefined && !state.kewanganLoading){ loadKewangan(); }
     if(state.adminTab === 'sistem' && state.serverVersion === undefined && !state.serverVersionLoading){ loadServerVersion(); }
     if((state.adminTab === 'pelanggan' || state.adminTab === 'reward') && state.allCustomers === undefined && !state.allCustomersLoading){ loadAllCustomers(); }
   } else if(state.view === 'admin-login'){
@@ -4260,6 +4667,7 @@ function renderPage(){
     overlay.onclick = e => { if(e.target === overlay) close(); };
     document.getElementById(closeId).onclick = close;
   });
+  bindRewardSpin(document.getElementById('rdSpin'));
 
   const accountLogout = document.getElementById('accountLogout');
   if(accountLogout) accountLogout.onclick = () => { clearCustomerSession(); render(); };
@@ -4934,11 +5342,27 @@ function renderRewards(){
       <span class="reward-rules-text"><b>Beli 5, Dapat 1 Percuma</b><small>Peraturan reward, points, duit referral &amp; cara tebus</small></span>
       <span class="reward-rules-arrow" aria-hidden="true">›</span>
     </button>
+    ${renderBirthdayGift()}
     ${renderRewardProgress()}
     ${renderLoyaltyStats()}
     ${renderRewardCatalog()}
     ${renderRewardDetailModal()}
   </div>`;
+}
+
+/* v3.11.0: air percuma hari jadi (sah beberapa hari dari hari jadi, sekali setahun) */
+function formatDayMonth(ymd){
+  const d = new Date(ymd + 'T00:00:00');
+  return isNaN(d) ? ymd : d.toLocaleDateString('ms-MY', { day:'numeric', month:'long' });
+}
+function renderBirthdayGift(){
+  const g = state.myPoints && state.myPoints.bdayGift;
+  if(!g) return '';
+  return `<div class="bday-gift" role="status">
+      <div class="bday-gift-icon" aria-hidden="true">🎂</div>
+      <div class="bday-gift-text"><b>Selamat Hari Jadi${state.customer && state.customer.name ? ', ' + escapeHtml(state.customer.name.split(' ')[0]) : ''}!</b>
+        <span>Anda dapat <strong>1 air percuma</strong>. Tunjuk skrin ini kepada staf di kaunter sebelum <strong>${escapeHtml(formatDayMonth(g.until))}</strong>.</span></div>
+    </div>`;
 }
 
 /* ---------- v3.10.0: points, kod referral & katalog hadiah ---------- */
@@ -4959,6 +5383,8 @@ function rewardImageHtml(item, cls){
    Tidak Tersedia tidak dipaparkan kepada pelanggan; hanya Tersedia boleh ditebus. */
 const REWARD_STATUS = { available:'Tersedia', soldout:'Habis', unavailable:'Tidak Tersedia', comingsoon:'Akan Datang' };
 function rewardStatus(item){ return item && REWARD_STATUS[item.status] ? item.status : (item && item.visible === false ? 'unavailable' : 'available'); }
+// v3.16.0: Draf = belum publish (admin sahaja nampak, untuk pratonton)
+function rewardPublished(item){ return !!item && item.published !== false; }
 
 /* Header: points & kod referral sebelah butang log keluar, nampak di semua page pelanggan */
 function renderTopPoints(){
@@ -4976,6 +5402,9 @@ function renderTopPoints(){
 function formatRM(n){ const v = Math.round((Number(n) || 0) * 100) / 100; return 'RM' + (Number.isInteger(v) ? v : v.toFixed(2)); }
 function referralRmNow(){ const p = state.myPoints; const n = p && p.refRm != null ? p.refRm : state.refRm; return n != null ? Number(n) : 1; }
 function referralMaxNow(){ const p = state.myPoints; const n = p && p.refMax != null ? p.refMax : state.refMax; return n != null ? Number(n) : 3; }
+// v3.16.0: program Aktif / Tidak Aktif (asal aktif; server lama tidak hantar = aktif)
+function pointsOnNow(){ const p = state.myPoints; const v = p && p.pointsOn != null ? p.pointsOn : state.pointsOn; return v !== false; }
+function refOnNow(){ const p = state.myPoints; const v = p && p.refOn != null ? p.refOn : state.refOn; return v !== false; }
 function renderReferralModal(){
   const code = state.myPoints && state.myPoints.referralCode;
   const mp = state.myPoints || {};
@@ -4993,16 +5422,17 @@ function renderReferralModal(){
         <div><b>${Number(mp.friends) || 0}</b><small>Kawan diajak</small></div>
         <div><b>${formatRM(mp.rmEarned || 0)}</b><small>Jumlah dapat</small></div>
       </div>
-      <p class="referral-rule">${formatRM(referralRmNow())} setiap pembelian kawan, untuk ${referralMaxNow()} pembelian pertama (maksimum ${formatRM(referralRmNow() * referralMaxNow())} seorang kawan).</p>
+      <p class="referral-rule">${refOnNow() ? `${formatRM(referralRmNow())} setiap pembelian kawan, untuk ${referralMaxNow()} pembelian pertama (maksimum ${formatRM(referralRmNow() * referralMaxNow())} seorang kawan).` : 'Duit referral belum dibuka buat masa ini. Baki duit anda kekal.'}</p>
       <button type="button" class="confirm-ok" id="referralClose">Tutup</button>
     </div>
   </div>`;
 }
 
-function renderRewardCatalog(){
-  const list = state.rewards && state.rewards.filter(r => rewardStatus(r) !== 'unavailable');
+function renderRewardCatalog(preview){
+  // preview (admin): tunjuk Draf juga, ditanda; pelanggan: yang sudah publish sahaja
+  const list = state.rewards && state.rewards.filter(r => rewardStatus(r) !== 'unavailable' && (preview || rewardPublished(r)));
   const pts = myPointsBalance();
-  const head = `<div class="reward-catalog-head"><h2>Tebus dengan Points</h2><p>Dapat <b>${pointsPerCupNow()} points</b> untuk setiap cawan yang dibayar. Tekan hadiah untuk lihat.</p></div>`;
+  const head = `<div class="reward-catalog-head"><h2>Tebus dengan Points</h2><p>${pointsOnNow() ? `Dapat <b>${pointsPerCupNow()} points</b> untuk setiap cawan yang dibayar.` : 'Kutipan points <b>belum dibuka</b> buat masa ini. Points sedia ada kekal.'} Tekan hadiah untuk lihat.</p></div>`;
   if(!list) return `<section class="reward-catalog">${head}<div class="empty-msg">${state.rewardsError ? 'Senarai hadiah belum dapat dimuat. Cuba sebentar lagi.' : 'Memuat senarai hadiah...'}</div></section>`;
   if(!list.length) return `<section class="reward-catalog">${head}<div class="empty-msg">Hadiah akan datang tidak lama lagi. Teruskan kumpul points!</div></section>`;
   const rows = list.map(item => {
@@ -5010,8 +5440,9 @@ function renderRewardCatalog(){
     const open = status === 'available';
     const enough = open && pts !== null && pts >= item.points;
     const need = pts === null ? null : item.points - pts;
-    const badge = !open ? `<span class="reward-status ${status}">${REWARD_STATUS[status]}</span>`
-      : enough ? '<span class="reward-status can">Boleh tebus</span>' : '';
+    const badge = (preview && !rewardPublished(item) ? '<span class="reward-status draft">Draf</span>' : '')
+      + (!open ? `<span class="reward-status ${status}">${REWARD_STATUS[status]}</span>`
+      : enough ? '<span class="reward-status can">Boleh tebus</span>' : '');
     return `<button type="button" class="reward-item ${enough ? 'can' : ''} ${open ? '' : 'closed'}" data-reward-open="${escapeHtml(item.id)}">
       <span class="reward-item-thumb">${rewardImageHtml(item, 'reward-item-img')}</span>
       <span class="reward-item-body">
@@ -5024,6 +5455,34 @@ function renderRewardCatalog(){
   return `<section class="reward-catalog">${head}<div class="reward-list">${rows}</div></section>`;
 }
 
+/* v3.16.0: gambar hadiah boleh dipusing 360°: tekan = pusing satu pusingan,
+   leret kiri/kanan = pusing ikut jari, lepas = kembali ke depan. */
+function bindRewardSpin(el){
+  if(!el) return;
+  let angle = 0, startX = 0, startAngle = 0, dragging = false, moved = false;
+  const set = (deg, anim) => {
+    el.style.transition = anim ? 'transform .9s cubic-bezier(.22,.8,.25,1)' : 'none';
+    el.style.transform = `rotateY(${deg}deg)`;
+    angle = deg;
+  };
+  const spin = () => { set(angle - (((angle % 360) + 360) % 360) + 360, true); };
+  el.onpointerdown = e => { dragging = true; moved = false; startX = e.clientX; startAngle = angle; try{ el.setPointerCapture(e.pointerId); }catch(err){} };
+  el.onpointermove = e => {
+    if(!dragging) return;
+    const dx = e.clientX - startX;
+    if(Math.abs(dx) > 6) moved = true;
+    if(moved) set(startAngle + dx * 0.9, false);
+  };
+  const end = () => {
+    if(!dragging) return;
+    dragging = false;
+    if(!moved){ spin(); return; }
+    set(Math.round(angle / 360) * 360, true); // kembali ke depan (pusingan terdekat)
+  };
+  el.onpointerup = end;
+  el.onpointercancel = end;
+  el.onkeydown = e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); spin(); } };
+}
 function renderRewardDetailModal(){
   const item = state.rewardDetailId && (state.rewards || []).find(r => r.id === state.rewardDetailId);
   if(!item) return '';
@@ -5043,7 +5502,14 @@ function renderRewardDetailModal(){
     : `<div class="reward-detail-need">${pts === null ? 'Points anda sedang disemak...' : `Points anda <b>${pts.toLocaleString('ms-MY')}</b>. Kumpul <b>${(item.points - pts).toLocaleString('ms-MY')} points</b> lagi untuk tebus hadiah ini.`}</div>`;
   return `<div class="confirm-overlay reward-detail-overlay" id="rewardDetailOverlay" role="dialog" aria-modal="true" aria-label="${escapeHtml(item.title)}">
     <div class="confirm-box reward-detail-box">
-      <div class="reward-detail-photo">${rewardImageHtml(item, 'reward-detail-img')}${status !== 'available' ? `<span class="reward-status ${status}">${REWARD_STATUS[status]}</span>` : ''}</div>
+      <div class="reward-detail-photo">
+        <div class="rd-spin" id="rdSpin" role="button" tabindex="0" aria-label="Pusing gambar 360 darjah">
+          <div class="rd-face">${rewardImageHtml(item, 'reward-detail-img')}</div>
+          <div class="rd-face rd-back" aria-hidden="true">${rewardImageHtml(item, 'reward-detail-img')}</div>
+        </div>
+        ${status !== 'available' ? `<span class="reward-status ${status}">${REWARD_STATUS[status]}</span>` : ''}
+        <span class="rd-hint" aria-hidden="true">↻ 360°</span>
+      </div>
       <h3>${escapeHtml(item.title)}</h3>
       <div class="reward-detail-pts"><b>${item.points.toLocaleString('ms-MY')}</b> points</div>
       ${info}
@@ -5061,6 +5527,7 @@ function renderRewardRules(){
       <div class="reward-info-art" aria-hidden="true">★</div>
       <h2>Points K'fe De Sol</h2>
       <p>Setiap cawan yang anda beli memberi points. Kumpul dan tebus hadiah di page Reward.</p>
+      ${pointsOnNow() ? '' : '<p class="reward-info-paused">⏸ Kutipan points belum dibuka buat masa ini. Points sedia ada kekal.</p>'}
       <ul>
         <li><strong>${per} points</strong> untuk setiap cawan.</li>
         <li>Points masuk bila pesanan anda <strong>selesai dibayar</strong> di kaunter.</li>
@@ -5072,12 +5539,23 @@ function renderRewardRules(){
       <div class="reward-info-art" aria-hidden="true">💰</div>
       <h2>Ajak Kawan, Dapat Duit</h2>
       <p>Kongsikan kod referral anda (di atas, sebelah butang log keluar) kepada kawan yang belum pernah beli di K'fe De Sol.</p>
+      ${refOnNow() ? '' : '<p class="reward-info-paused">⏸ Duit referral belum dibuka buat masa ini. Baki duit sedia ada kekal.</p>'}
       <ul>
         <li>Kawan masukkan kod anda semasa <strong>daftar kali pertama</strong>.</li>
         <li>Setiap kali kawan itu beli, anda dapat <strong>${formatRM(referralRmNow())}</strong>, untuk <strong>${referralMaxNow()} pembelian pertama</strong> (maksimum ${formatRM(referralRmNow() * referralMaxNow())} seorang kawan). Satu pesanan dikira satu pembelian.</li>
         <li>Duit masuk bila pesanan kawan <strong>selesai dibayar</strong> di kaunter.</li>
         <li>Lagi ramai kawan, lagi banyak duit! Baki duit nampak di atas, sebelah Points.</li>
         <li>Untuk guna duit, <strong>beritahu staf di kaunter</strong>. Staf akan tolak baki anda dalam sistem.</li>
+      </ul>
+    </section>
+    <section class="reward-info">
+      <div class="reward-info-art" aria-hidden="true">🎂</div>
+      <h2>Hadiah Hari Jadi</h2>
+      <p>Isi tarikh lahir anda di Account &gt; Maklumat Peribadi.</p>
+      <ul>
+        <li>Pada hari jadi anda, dapat <strong>1 air percuma</strong>, sekali setahun.</li>
+        <li>Hadiah sah selama <strong>7 hari</strong> bermula hari jadi, dan dipaparkan di atas page Reward.</li>
+        <li>Untuk tebus, <strong>tunjukkan skrin kepada staf</strong> di kaunter.</li>
       </ul>
     </section>
   </div>`;
@@ -5239,6 +5717,21 @@ function formatBirthday(ymd){
   const d = new Date(ymd + 'T00:00:00');
   return isNaN(d) ? ymd : d.toLocaleDateString('ms-MY', { day:'numeric', month:'short', year:'numeric' });
 }
+/* v3.16.0: tarikh daripada Sheet boleh datang sebagai "2026-10-29 10:00", "2026-10"
+   atau teks Date ("Thu Oct 29 2026 ..."). Tukar kepada ms (untuk susun) & teks pendek. */
+function looseDateMs(v){
+  const s = String(v || '').trim();
+  if(!s) return 0;
+  let m = s.match(/^(\d{4})-(\d{2})(?:-(\d{2}))?(?:[ T](\d{2}):(\d{2}))?/);
+  if(m) return new Date(+m[1], +m[2] - 1, +(m[3] || 1), +(m[4] || 0), +(m[5] || 0)).getTime();
+  const t = Date.parse(s);
+  return isNaN(t) ? 0 : t;
+}
+function formatLooseDate(v){
+  const ms = looseDateMs(v);
+  if(!ms) return String(v || '') || '—';
+  return new Date(ms).toLocaleDateString('ms-MY', /^\d{4}-\d{2}$/.test(String(v).trim()) ? { month:'short', year:'numeric' } : { day:'numeric', month:'short', year:'numeric' });
+}
 function profileNeedsUpdate(){ return !!(state.customer && state.myPoints && state.myPoints.referralCode && !state.myPoints.birthday); }
 function renderProfileRow(){
   const p = state.myPoints;
@@ -5267,7 +5760,7 @@ function renderProfileRow(){
     </div>` : ''}
   </div>`;
 }
-const PROFILE_ERRORS = { INVALID_BIRTHDAY:'Tarikh lahir tidak sah.', INVALID_GENDER:'Pilih jantina.', 'unknown action':'Sistem belum dikemas kini. Cuba lagi nanti.' };
+const PROFILE_ERRORS = { BUSY:'Terlalu banyak perubahan. Cuba lagi dalam sejam.', INVALID_BIRTHDAY:'Tarikh lahir tidak sah.', INVALID_GENDER:'Pilih jantina.', 'unknown action':'Sistem belum dikemas kini. Cuba lagi nanti.' };
 async function saveProfile(profile, quiet){
   const c = state.customer;
   if(!c || state.profileBusy) return;
@@ -5462,19 +5955,41 @@ function renderOrders(){
    titisan meleleh untuk Ice. Air tanpa pilihan Hot/Ice (mocktail, matcha)
    sentiasa sejuk. Kedudukan dalam % kotak gambar (cawan di tengah). */
 function drinkIsHot(item, temp){ return item.temp === 'both' && temp === 'hot'; }
-function drinkFxLayers(hot, src){
+/* v3.15.0: bentuk gelas tinggi (Coklat & Milk) dalam % gambar — diukur daripada
+   gambar sebenar: cx = tengah gelas, hw = separuh lebar, top/bot = atas/bawah. */
+const FX_SHAPES = {
+  'fresh-milk-vanilla':   { cx:61.4, hw:17.5, top:6,  bot:90 },
+  'fresh-milk-hazelnut':  { cx:61.1, hw:18.5, top:6,  bot:90 },
+  'fresh-milk-honey':     { cx:36.3, hw:18.5, top:6,  bot:90 },
+  'coklat-mint':          { cx:61.3, hw:19.5, top:8,  bot:88 },
+  'coklat-original':      { cx:60.4, hw:19,   top:9,  bot:90 },
+  'strawberry-milkshake': { cx:60.5, hw:19,   top:10, bot:90 }
+};
+function drinkFxLayers(hot, src, shape){
   if(hot) return `<canvas class="fx-steam-canvas" width="180" height="200" aria-hidden="true"></canvas>`;
   // susunan rawak tetap (seed) supaya embun tak melompat setiap kali page dilukis semula
   let seed = 7;
   const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-  const onCup = y => 50 + (rnd() * 2 - 1) * (27 - (y - 20) * 0.08) * 0.88; // cawan mengecil ke bawah
-  let beads = '';
-  for(let i = 0; i < 70; i++){
-    const y = 16 + rnd() * 78, s = 2 + Math.round(rnd() * rnd() * 5);
-    beads += `<span class="fx-bead" style="--x:${onCup(y).toFixed(1)}%;--y:${y.toFixed(1)}%;--s:${s}px"></span>`;
+  let beads = '', drops;
+  if(shape){
+    // gelas tinggi & ramping: embun sepanjang dinding gelas, sedikit mengecil ke bawah
+    const span = shape.bot - shape.top;
+    for(let i = 0; i < 64; i++){
+      const y = shape.top + rnd() * span, s = 2 + Math.round(rnd() * rnd() * 5);
+      const x = shape.cx + (rnd() * 2 - 1) * shape.hw * 0.86 * (1 - (y - shape.top) / span * 0.12);
+      beads += `<span class="fx-bead" style="--x:${x.toFixed(1)}%;--y:${y.toFixed(1)}%;--s:${s}px"></span>`;
+    }
+    drops = [[-0.62,0.12,0,7],[0.6,0.18,2.5,8.5],[-0.5,0.36,4.8,7.5],[0.52,0.4,1.2,9],[-0.6,0.56,6.5,8],[0.58,0.6,3.6,7.2]]
+      .map(([dx,fy,d,dur]) => [shape.cx + dx * shape.hw, shape.top + fy * span, d, dur]);
+  } else {
+    const onCup = y => 50 + (rnd() * 2 - 1) * (27 - (y - 20) * 0.08) * 0.88; // cawan mengecil ke bawah
+    for(let i = 0; i < 70; i++){
+      const y = 16 + rnd() * 78, s = 2 + Math.round(rnd() * rnd() * 5);
+      beads += `<span class="fx-bead" style="--x:${onCup(y).toFixed(1)}%;--y:${y.toFixed(1)}%;--s:${s}px"></span>`;
+    }
+    drops = [[33,26,0,7],[66,30,2.5,8.5],[37,46,4.8,7.5],[63,50,1.2,9],[35,62,6.5,8],[65,64,3.6,7.2]];
   }
-  const drops = [[33,26,0,7],[66,30,2.5,8.5],[37,46,4.8,7.5],[63,50,1.2,9],[35,62,6.5,8],[65,64,3.6,7.2]]
-    .map(([x,y,d,dur], i) => `<span class="fx-drop" style="--x:${x}%;--y:${y}%;--d:${d}s;--dur:${dur}s;--s:${6 + (i % 3)}px;--len:${48 + (i % 3) * 16}px"></span>`).join('');
+  drops = drops.map(([x,y,d,dur], i) => `<span class="fx-drop" style="--x:${x.toFixed ? x.toFixed(1) : x}%;--y:${y.toFixed ? y.toFixed(1) : y}%;--d:${d}s;--dur:${dur}s;--s:${6 + (i % 3)}px;--len:${48 + (i % 3) * 16}px"></span>`).join('');
   // bentuk gambar air jadi pemotong: embun hanya nampak di atas cawan
   const mask = `url(&quot;${String(src || '').replace(/"/g, '%22')}&quot;)`;
   return `<span class="fx-layer fx-wet" style="--mask:${mask}" aria-hidden="true">${beads}${drops}</span>`;
@@ -5539,7 +6054,7 @@ function renderProductDetail(){
     </div>` : '';
   return `<div class="product-detail-page">
     <button class="product-detail-back" id="productDetailBack" aria-label="Kembali ke menu">${ICON_BACK}<span>Kembali</span></button>
-    <div class="product-detail-visual"><div class="drink-fx ${drinkIsHot(item, temp) ? 'fx-hot' : 'fx-ice'}"><img src="${getItemImage(item)}" alt="${escapeHtml(getItemName(item))}">${drinkFxLayers(drinkIsHot(item, temp), getItemImage(item))}</div></div>
+    <div class="product-detail-visual"><div class="drink-fx ${drinkIsHot(item, temp) ? 'fx-hot' : 'fx-ice'}"><img src="${getItemImage(item)}" alt="${escapeHtml(getItemName(item))}">${drinkFxLayers(drinkIsHot(item, temp), getItemImage(item), FX_SHAPES[item.id])}</div></div>
     <h1 class="product-detail-name">${escapeHtml(getItemName(item))}</h1>
     <p class="product-detail-description">${escapeHtml(getItemDesc(item) || 'Minuman istimewa yang disediakan segar untuk dinikmati pada bila-bila masa.')}</p>
     ${tempOptions}
@@ -5644,6 +6159,8 @@ function renderPushNudge(){
   const s = state.pushStatus;
   if(!state.customer || state.pushNudgeHidden || state.pushBusy || !['promo','menu'].includes(state.view)) return '';
   if((s !== 'off' && s !== 'ios') || pushNudgeSnoozed()) return '';
+  // v3.10.6: sudah Allow = tidak perlu tanya; pushAfterLogin / buka app daftar semula secara senyap
+  if(pushSupported() && Notification.permission === 'granted') return '';
   if(s === 'ios') return `
     <div class="confirm-overlay push-nudge-overlay" role="dialog" aria-modal="true">
       <div class="confirm-box">
@@ -5727,6 +6244,11 @@ function renderItemDetailModal(){
 }
 
 /* ---------- menu ---------- */
+// v3.15.0: pelanggan hanya nampak kategori yang ada menu (kategori baru yang masih kosong disorok)
+function customerCategories(){
+  const list = CATEGORIES.filter(c => MENU.some(m => m.category === c.id));
+  return list.length ? list : CATEGORIES.slice(0, 1);
+}
 function renderMenu(){
   let totalQty = 0, totalPrice = 0;
   for(const item of MENU){
@@ -5735,7 +6257,8 @@ function renderMenu(){
     totalPrice += q * getItemPrice(item);
   }
 
-  const activeCat = state.menuCategory || CATEGORIES[0].id;
+  const custCats = customerCategories();
+  const activeCat = custCats.some(c => c.id === state.menuCategory) ? state.menuCategory : (custCats[0] || {}).id;
   const catItems = MENU.filter(m => m.category === activeCat);
 
   const cards = catItems.map(item => {
@@ -5768,8 +6291,8 @@ function renderMenu(){
     `;
   }).join('');
 
-  const tabs = CATEGORIES.map(c => `
-    <button class="menu-cat-tab ${c.id===activeCat?'active':''}" data-cat="${c.id}">${c.label}</button>
+  const tabs = custCats.map(c => `
+    <button class="menu-cat-tab ${c.id===activeCat?'active':''}" data-cat="${escapeHtml(c.id)}">${escapeHtml(c.label)}</button>
   `).join('');
 
   return `
@@ -6142,7 +6665,7 @@ function renderWaiting(){
   const collected = orderStatus(order) === 'selesai';
   const rejected = isOrderRejected(order);
   const rejectReason = getRejectReason(order);
-  const itemsHtml = order.items.map(i => `<div class="row"><span>${i.name} x${i.qty}</span><span>${fmt(i.price*i.qty)}</span></div>`).join('');
+  const itemsHtml = order.items.map(i => `<div class="row"><span>${escapeHtml(i.name)} x${i.qty}</span><span>${fmt(i.price*i.qty)}</span></div>`).join('');
   const progressIndex = collected ? 3 : (ready ? 2 : (making ? 1 : 0));
   const roadmapLabels = ['Pesanan diterima','Sedang dibuat','Siap diambil','Sudah diambil'];
   const roadmapHtml = rejected ? '' : `<div class="order-roadmap" aria-label="Status pesanan">${roadmapLabels.map((label,index) => {
@@ -6162,7 +6685,7 @@ function renderWaiting(){
   return `
     <div class="waiting">
       ${tabsHtml}
-      <div class="label">No. Giliran${order.customerName ? ' &middot; ' + order.customerName : ''}</div>
+      <div class="label">No. Giliran${order.customerName ? ' &middot; ' + escapeHtml(order.customerName) : ''}</div>
       <div class="queue-no">${String(order.queueNo).padStart(3,'0')}</div>
       ${roadmapHtml}
       ${statusVisual}
@@ -6190,14 +6713,14 @@ function renderReceipts(){
     const rejected = isOrderRejected(o);
     const active = orderStatus(o) !== 'selesai' && !rejected;
     const rejectReason = getRejectReason(o);
-    const itemsHtml = o.items.map(i => `<div class="row"><span>${i.name} x${i.qty}</span><span>${fmt(i.price*i.qty)}</span></div>`).join('');
+    const itemsHtml = o.items.map(i => `<div class="row"><span>${escapeHtml(i.name)} x${i.qty}</span><span>${fmt(i.price*i.qty)}</span></div>`).join('');
     return `
       <div class="receipt-card ${active?'active-card':''}">
         <div class="receipt-stamp ${active?'active':(rejected?'rejected':'')}">${active?'AKTIF':(rejected?'DITOLAK':'SELESAI')}</div>
-        <div class="label">No. Giliran${o.customerName ? ' &middot; ' + o.customerName : ''}</div>
+        <div class="label">No. Giliran${o.customerName ? ' &middot; ' + escapeHtml(o.customerName) : ''}</div>
         <div class="queue-no small">${String(o.queueNo).padStart(3,'0')}</div>
         <div class="receipt-datetime">${dateTimeStr}</div>
-        ${rejected ? `<div class="receipt-reject-reason">Sebab: ${rejectReason || 'Lain-lain'}</div>` : ''}
+        ${rejected ? `<div class="receipt-reject-reason">Sebab: ${escapeHtml(rejectReason || 'Lain-lain')}</div>` : ''}
         <div class="receipt-divider"></div>
         <div class="order-items">${itemsHtml}<div class="row" style="border-top:1px solid #EFE2D2; margin-top:6px; padding-top:8px; font-weight:600;"><span>Jumlah</span><span>${fmt(o.total)}</span></div></div>
         <div class="receipt-footer">${active ? orderStatusLabel(o) : (rejected ? 'Rekod pesanan ditolak — tiada bayaran/jualan direkodkan.' : 'Terima kasih atas sokongan anda &#9749;')}</div>
@@ -6245,6 +6768,7 @@ function renderAdmin(){
             ${n.tab === 'pesanan' && activeCount ? `<span class="admin-tab-count">${activeCount}</span>` : ''}
           </button>`).join('')}
       </nav>
+      ${renderAdminSupport()}
       <button class="admin-side-logout" id="modeToggle" title="Log Keluar">
         <span class="admin-nav-icon" aria-hidden="true">${ICON_LOGOUT}</span><span class="admin-nav-label">Log Keluar</span>
       </button>
@@ -6343,27 +6867,97 @@ function custKey(phone){
 }
 async function loadAllCustomers(){
   state.allCustomersLoading = true;
-  const r = await gasGet('allCustomers', {}, 30000);
+  let r = await gasGet('allCustomers', {}, 30000);
+  // v3.15.0: cuba sekali lagi (cth. Apps Script lambat kali pertama selepas deploy baru)
+  if(!(r && Array.isArray(r.customers)) && !(r && r.error === 'SESSION_INVALID')){
+    await new Promise(res => setTimeout(res, 2500));
+    r = await gasGet('allCustomers', {}, 40000);
+  }
   state.allCustomersLoading = false;
   if(r && Array.isArray(r.customers)){
     state.allCustomers = r.customers;
+    state.allCustomersError = '';
     state.pushPhones = Array.isArray(r.pushPhones) ? new Set(r.pushPhones.map(custKey)) : null;
   } else {
-    state.allCustomers = null; // null = gagal (cth. Apps Script belum v3.6.0)
+    state.allCustomers = null; // null = gagal
+    state.allCustomersError = r ? String(r.error || 'unknown') : 'NO_CONNECTION';
   }
   if(state.view === 'admin' && (state.adminTab === 'pelanggan' || state.adminTab === 'reward')) render();
 }
+/* v3.15.0: kotak Support di sidebar admin (atas Log Keluar) */
+const SUPPORT_PHONE = '011-1579 5908';
+const SUPPORT_INTL = '601115795908';
+// v3.16.0: kesan "hidup" atas gambar Support System (garisan scanner + habuk terapung)
+const SYS_GUARD_FX = '<span class="sg-fx" aria-hidden="true"><i class="sg-scan"></i>'
+  + [[12,0],[28,1.6],[44,3.1],[63,.8],[78,2.4],[90,4]].map(([x, d]) => `<i class="sg-dust" style="left:${x}%;animation-delay:${d}s"></i>`).join('') + '</span>';
+function renderAdminSupport(){
+  const wa = `https://wa.me/${SUPPORT_INTL}?text=${encodeURIComponent("Salam Support, saya admin K'fe De Sol. Saya ada masalah dengan sistem: ")}`;
+  const phoneIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>';
+  // v3.16.0: gambar Support System; tekan gambar = popup "It will recover"
+  return `<div class="admin-support sys-guard">
+      <button type="button" class="sys-guard-pic" data-support-open aria-label="Support System: tekan untuk maklumat">
+        <img src="support-system.webp" alt="" loading="lazy">
+        ${SYS_GUARD_FX}
+        <span class="sys-guard-shine" aria-hidden="true"></span>
+        <span class="sys-guard-dot" aria-hidden="true"></span>
+      </button>
+      <div class="admin-support-body">
+        <div class="admin-support-tag">Support System</div>
+        <div class="admin-support-num"><span aria-hidden="true">${phoneIcon}</span>${SUPPORT_PHONE}</div>
+      </div>
+    </div>
+    <button type="button" class="admin-support-mini sys-guard-mini" data-support-open title="Support System"><img src="support-system.webp" alt=""></button>`;
+}
+function openSupportPopup(){
+  if(document.querySelector('.sys-guard-overlay')) return;
+  const wa = `https://wa.me/${SUPPORT_INTL}?text=${encodeURIComponent("Salam Support, saya admin K'fe De Sol. Saya ada masalah dengan sistem: ")}`;
+  const overlay = document.createElement('div');
+  overlay.className = 'confirm-overlay sys-guard-overlay';
+  overlay.setAttribute('role', 'dialog');
+  overlay.setAttribute('aria-modal', 'true');
+  overlay.setAttribute('aria-label', 'Support System');
+  overlay.innerHTML = `
+    <div class="confirm-box sys-guard-box">
+      <div class="sys-guard-hero"><img src="support-system.webp" alt="">${SYS_GUARD_FX}</div>
+      <div class="sys-guard-badge">🛡️ Support System</div>
+      <h3>It will recover.</h3>
+      <p>Jangan risau. Sistem K'fe De Sol dilindungi dan akan pulih semula. Jika ada gangguan, muat semula page dan cuba sekali lagi.</p>
+      <p class="sys-guard-small">Masih ada masalah? Hubungi Support <a href="${wa}" target="_blank" rel="noopener">${SUPPORT_PHONE}</a></p>
+      <button type="button" class="confirm-ok">OK, faham</button>
+    </div>`;
+  const close = () => { overlay.classList.add('closing'); setTimeout(() => overlay.remove(), 180); document.removeEventListener('keydown', onKey); };
+  const onKey = e => { if(e.key === 'Escape') close(); };
+  overlay.addEventListener('click', e => { if(e.target === overlay || e.target.classList.contains('confirm-ok')) close(); });
+  document.addEventListener('keydown', onKey);
+  document.body.appendChild(overlay);
+  const ok = overlay.querySelector('.confirm-ok');
+  if(ok) ok.focus();
+}
 function pushInviteText(c){
-  return `Salam ${c.name || ''}! ☕ K'fe De Sol kini boleh hantar notifikasi terus ke telefon anda bila pesanan siap, mata ganjaran & promosi terkini.\n\n` +
-    `Cara hidupkan (sekali sahaja):\n1. Buka https://kefe-de-sol.netlify.app\n2. Masuk dengan no. telefon anda\n3. Tekan "Ya, hidupkan" → Allow\n\n` +
-    `iPhone: di Safari tekan Share → Add to Home Screen dahulu, kemudian buka dari ikon itu.\n\nTerima kasih! 🙏`;
+  // v3.15.0: untuk pelanggan yang sudah ada app tetapi notifikasi belum dihidupkan
+  return `Salam ${c.name || ''}! ☕\n\nK'fe De Sol kini boleh hantar notifikasi terus ke telefon anda 🔔 bila pesanan dah siap, mata ganjaran masuk, dan promosi terkini.\n\n` +
+    `Notifikasi anda masih *belum hidup*. Cara hidupkan (sekali sahaja, 1 minit):\n` +
+    `1. Buka app K'fe De Sol di telefon anda\n` +
+    `2. Tekan butang *Log Keluar* (ikon pintu di penjuru kanan atas)\n` +
+    `3. Masuk semula dengan no. telefon anda\n` +
+    `4. Bila ditanya, tekan *"Ya, hidupkan"* → kemudian *Allow / Benarkan*\n\n` +
+    `iPhone: pastikan anda buka app dari ikon K'fe De Sol di skrin utama (bukan dari Safari).\n\n` +
+    `Lepas ni, anda tak perlu tunggu lama di kaunter. Kami akan beritahu bila air anda dah siap, dan anda orang pertama tahu promosi terbaru! 🎉\n\nTerima kasih! 🙏`;
 }
 function renderAdminPelanggan(){
   const list = state.allCustomers;
   const head = `<section class="sys-hero"><div><h2>Pelanggan</h2><p>Senarai kekal semua pelanggan K'fe De Sol. Tidak dipadam setiap bulan.</p></div>
     <button class="sys-chip cust-refresh" id="custRefresh" type="button">↻ Muat semula</button></section>`;
   if(list === undefined || state.allCustomersLoading) return head + `<section class="promotion-admin-panel"><div class="empty-msg">Memuat senarai pelanggan...</div></section>`;
-  if(list === null) return head + `<section class="promotion-admin-panel"><div class="sys-warn">⚠️ Senarai tidak dapat dimuat. Pastikan Apps Script sudah dikemas kini ke <b>Code_v3_for_v3.6.0.gs</b> (Deploy → Manage deployments → ✏️ → New version).</div></section>`;
+  if(list === null){
+    // v3.15.0: tunjuk sebab sebenar (dahulu semua ralat dikatakan "Apps Script lama")
+    const err = state.allCustomersError || '';
+    const why = err === 'SESSION_INVALID' ? 'Sesi admin telah tamat. Sila <b>Log Keluar</b> dan masuk semula.'
+      : err === 'NO_CONNECTION' ? 'Tiada sambungan internet atau server lambat menjawab. Tekan <b>↻ Muat semula</b>.'
+      : err === 'unknown action' ? 'Apps Script masih versi lama. Salin <b>Code_v3_for_v' + REQUIRED_SERVER_VERSION + '.gs</b> → Deploy → Manage deployments → ✏️ → New version.'
+      : 'Ralat di server (' + escapeHtml(err) + '). Tekan <b>↻ Muat semula</b>. Jika berulang, hubungi Support ' + SUPPORT_PHONE + '.';
+    return head + `<section class="promotion-admin-panel"><div class="sys-warn">⚠️ Senarai pelanggan tidak dapat dimuat. ${why}</div></section>`;
+  }
   const push = state.pushPhones;
   const isOn = c => !!push && push.has(custKey(c.phone));
   const onCount = push ? list.filter(isOn).length : 0;
@@ -6380,7 +6974,7 @@ function renderAdminPelanggan(){
         <div class="cust-main"><b>${escapeHtml(c.name || 'Tanpa nama')}</b><small>${escapeHtml(c.phone)}</small></div>
         ${push ? `<span class="cust-bell ${on ? 'on' : ''}">${on ? '🔔 Aktif' : 'Belum aktif'}</span>` : ''}
       </div>
-      <div class="cust-meta">${c.orders} order · ${c.cups} cawan${c.points != null ? ` · ⭐ ${c.points} pts` : ''}${c.referralCode ? ` · Kod ${escapeHtml(c.referralCode)}` : ''}${c.rm ? ` · 💰 ${formatRM(c.rm)}` : ''}${c.friends ? ` · ${c.friends} kawan` : ''}${c.referredBy ? ` · diajak ${escapeHtml(c.referredBy)}` : ''} · Pertama: ${escapeHtml(c.firstSeen || '-')} · Terakhir: ${escapeHtml(c.lastOrder || '-')}</div>
+      <div class="cust-meta">${c.orders} order · ${c.cups} cawan${c.points != null ? ` · ⭐ ${c.points} pts` : ''}${c.referralCode ? ` · Kod ${escapeHtml(c.referralCode)}` : ''}${c.rm ? ` · 💰 ${formatRM(c.rm)}` : ''}${c.friends ? ` · ${c.friends} kawan` : ''}${c.referredBy ? ` · diajak ${escapeHtml(c.referredBy)}` : ''} · Pertama: ${escapeHtml(formatLooseDate(c.firstSeen))} · Terakhir: ${escapeHtml(c.lastOrder ? formatLooseDate(c.lastOrder) : '-')}</div>
       <div class="cust-actions">
         ${on ? `<button class="push-btn cust-btn" type="button" data-cust-push="${escapeHtml(key)}">🔔 Hantar notifikasi</button>` : ''}
         ${!on && wa ? `<a class="push-btn cust-btn cust-wa" href="https://wa.me/${wa}?text=${encodeURIComponent(pushInviteText(c))}" target="_blank" rel="noopener">WhatsApp Jemput</a>` : ''}
@@ -6418,24 +7012,66 @@ function renderCustomerTable(list){
   const mmdd = String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
   const mm = mmdd.slice(0, 2);
   const bdayThisMonth = list.filter(c => c.birthday && c.birthday.slice(5, 7) === mm);
-  const rows = list.slice().sort((a, b) => String(b.firstSeen).localeCompare(String(a.firstSeen))).map(c => {
+  // v3.16.0: air percuma (Beli 5 Percuma 1) datang daripada laporan bulanan, dipadankan ikut no. telefon
+  const report = state.customerReport || null;
+  const loyaltyByKey = {};
+  if(report) Object.keys(report).forEach(p => { loyaltyByKey[custKey(p)] = { phone:p, c:report[p] }; });
+  // Susun: pelanggan paling baru daftar di atas
+  const rows = list.slice().sort((a, b) => looseDateMs(b.firstSeen) - looseDateMs(a.firstSeen) || String(a.name).localeCompare(String(b.name))).map(c => {
     const today = c.birthday && c.birthday.slice(5) === mmdd;
     const month = c.birthday && c.birthday.slice(5, 7) === mm;
-    return `<div class="cust-trow ${today ? 'bday-today' : month ? 'bday-month' : ''}">
+    const key = custKey(c.phone);
+    const loy = loyaltyByKey[key];
+    const free = loy ? freeDrinksAvailable(loy.c) : 0;
+    const pts = Number(c.points) || 0;
+    const open = state.ctFreeOpen === key && free > 0;
+    const busy = state.ctFreeBusy === key;
+    return `<div class="cust-trow ${today ? 'bday-today' : month ? 'bday-month' : ''}" data-search="${escapeHtml((String(c.name || '') + ' ' + c.phone + ' ' + (c.referralCode || '')).toLowerCase())}">
       <span class="ct-code">${c.referralCode ? formatReferralCode(c.referralCode) : '—'}</span>
-      <span class="ct-name">${escapeHtml(c.name || 'Tanpa nama')}</span>
-      <span class="ct-phone">${escapeHtml(c.phone)}</span>
-      <span class="ct-date">${escapeHtml(c.firstSeen || '—')}</span>
+      <span class="ct-who"><b class="ct-name" title="${escapeHtml(c.name || '')}">${escapeHtml(c.name || 'Tanpa nama')}</b><small class="ct-phone">${escapeHtml(c.phone)}</small></span>
+      <span class="ct-date">${escapeHtml(formatLooseDate(c.firstSeen))}</span>
       <span class="ct-gender">${GENDER_LABEL[c.gender] || '—'}</span>
       <span class="ct-bday">${c.birthday ? (today ? '🎂 Hari ini! ' : month ? '🎂 ' : '') + formatBirthday(c.birthday) : '—'}</span>
+      <span class="ct-num">${pts.toLocaleString('ms-MY')}</span>
+      <span class="ct-num">${formatRM(c.rm || 0)}</span>
+      <span class="ct-num ${free ? 'ct-free-has' : ''}">${report ? free : '…'}</span>
+      <span class="ct-actions">
+        <button type="button" class="ct-btn" data-ct-points="${escapeHtml(key)}" ${pts > 0 ? '' : 'disabled'} title="Buka Reward untuk tebus hadiah dengan points">⭐ Points</button>
+        <button type="button" class="ct-btn ${open ? 'active' : ''}" data-ct-free="${escapeHtml(key)}" ${free > 0 && !busy ? '' : 'disabled'} title="Tebus air percuma (Beli 5 Percuma 1)">${busy ? '...' : `🥤 Air ${open ? '▴' : '▾'}`}</button>
+      </span>
+      ${open ? `<div class="ct-free-menu">
+        <span>${escapeHtml(c.name || c.phone)} ada <b>${free} air percuma</b> (Beli 5 Percuma 1). Tebus:</span>
+        <button type="button" class="ct-btn primary" data-ct-free-redeem="${escapeHtml(key)}" data-count="1">1 air</button>
+        ${free > 1 ? `<button type="button" class="ct-btn primary" data-ct-free-redeem="${escapeHtml(key)}" data-count="${free}">Semua (${free} air)</button>` : ''}
+        <button type="button" class="ct-btn" data-ct-free-close>Batal</button>
+      </div>` : ''}
     </div>`;
   }).join('');
   return `<div class="section-title cust-table-title">Senarai Pelanggan</div>
     <p class="report-note">${list.length} pelanggan · ${list.filter(c => c.birthday).length} sudah isi tarikh lahir${bdayThisMonth.length ? ` · <b>🎂 ${bdayThisMonth.length} hari jadi bulan ini</b>` : ''}. Pelanggan isi jantina & tarikh lahir sendiri (semasa daftar atau di Account).</p>
     <div class="report-table cust-table-wrap"><div class="cust-table">
-      <div class="cust-trow head"><span>Kod Referral</span><span>Nama</span><span>No. HP</span><span>Daftar</span><span>Jantina</span><span>Tarikh Lahir</span></div>
+      <div class="cust-trow head"><span>Kod Referral</span><span class="ct-who">Nama / No. HP</span><span>Daftar</span><span class="ct-gender">Jantina</span><span>Tarikh Lahir</span><span class="ct-num">Points</span><span class="ct-num">Reward (RM)</span><span class="ct-num">Air Percuma</span><span class="ct-actions-head">Tebus</span></div>
       ${rows || '<div class="empty-msg">Belum ada pelanggan.</div>'}
     </div></div>`;
+}
+// v3.16.0: tebus air percuma (Beli 5 Percuma 1) terus dari Senarai Pelanggan
+async function redeemFreeFromTable(key, count){
+  const report = state.customerReport || {};
+  const phone = Object.keys(report).find(p => custKey(p) === key);
+  const all = (state.allCustomers || []).find(x => custKey(x.phone) === key);
+  if(!phone || state.ctFreeBusy) return;
+  const name = (all && all.name) || (report[phone] && report[phone].name) || phone;
+  if(!(await confirmDialog({ title:'Tebus air percuma?', message:`Tebus ${count} air percuma untuk ${name}?`, confirmText:'Ya, tebus', cancelText:'Tidak' }))) return;
+  state.ctFreeBusy = key; state.ctFreeOpen = null; render();
+  try{
+    const result = await redeemFreeDrinks(phone, count);
+    if(result && result.ok){ showToast(`✅ ${result.redeemed || count} air percuma ditebus untuk ${name}.`, 'success'); logActivity('redeem:' + phone + ':' + Date.now(), 'redeem', `${name} tebus ${result.redeemed || count} air percuma`); }
+    else if(result && result.error === 'NO_FREE_DRINKS') showToast('Pelanggan ini tiada air percuma untuk ditebus.', 'error');
+    else showToast('Gagal tebus. Cuba lagi.', 'error');
+  }finally{
+    state.ctFreeBusy = null;
+    await loadCustomerReport();
+  }
 }
 function applyCustSearch(){
   const q = (state.custSearch || '').trim().toLowerCase();
@@ -6588,7 +7224,77 @@ function renderAdminPromotions(){
       ${state.promoUploadStatus ? `<div class="promotion-upload-status" role="status">${state.promoUploadStatus}</div>` : ''}
       <div class="promotion-admin-grid">${rows || (state.adminPromotionsLoading ? '<div class="empty-msg">Memuat senarai gambar...</div>' : '<div class="empty-msg">Belum ada gambar dimuat naik. Poster semasa pelanggan masih dikekalkan.</div>')}</div>
     </section>
-    ${PUSH_URL ? renderAdminPushPromo() : ''}`;
+    ${PUSH_URL ? renderAdminPushPromo() + renderAdminAutoPush() : ''}`;
+}
+
+/* v3.11.0: notifikasi automatik (trigger harian Apps Script, pukul 10 pagi):
+   ingatan "Apa khabar" setiap N hari & ucapan + air percuma hari jadi */
+async function loadAutoPush(){
+  state.autoPushLoading = true;
+  const r = await gasGet('autoPush', {}, 30000);
+  state.autoPushLoading = false;
+  state.autoPush = r && r.settings ? r : null;
+  if(state.autoPush) state.apDraft = Object.assign({}, r.settings);
+  if(state.view === 'admin' && state.adminTab === 'promosi') render();
+}
+function renderAdminAutoPush(){
+  const a = state.autoPush;
+  let body;
+  if(a === undefined || state.autoPushLoading) body = '<div class="empty-msg">Memuat tetapan...</div>';
+  else if(a === null) body = '<div class="sys-warn">⚠️ Tetapan tidak dapat dimuat. Pastikan Apps Script sudah dikemas kini ke <b>Code_v3_for_v3.11.0.gs</b>.</div>';
+  else {
+    const d = state.apDraft || a.settings;
+    const busy = state.apBusy ? 'disabled' : '';
+    const t = a.today || {};
+    const doneToday = t.sent && a.last && a.last.date === todayYmd();
+    const today = t.error ? `⚠️ Tidak dapat semak senarai hari ini (${escapeHtml(t.error)}).`
+      : doneToday ? `✅ Hari ini (${escapeHtml(String(a.last.at || '').slice(11))}): ${a.last.remind} ingatan, ${a.last.birthday} ucapan hari jadi dihantar.${a.last.error ? ' ⚠️ ' + escapeHtml(a.last.error) : ''}`
+      : `Hari ini pukul 10 pagi: ${!a.settings.remind ? 'ingatan dimatikan' : t.shopOpen ? `ingatan kepada <b>${t.remind}</b> pelanggan${t.skipped ? ` (${t.skipped} dilangkau kerana baru beli)` : ''}` : 'kedai tutup, tiada ingatan'} · ${t.birthday && t.birthday.length ? '🎂 <b>' + t.birthday.map(escapeHtml).join(', ') + '</b>' : 'tiada hari jadi'}.`;
+    body = `
+      ${!a.trigger ? '<div class="sys-warn">⚠️ Belum aktif. Buka Apps Script, pilih fungsi <b>pasangNotifHarian</b>, tekan <b>Run</b> sekali.</div>' : ''}
+      ${!a.pushKey ? '<div class="sys-warn">⚠️ PUSH_KEY belum diisi dalam Script Properties.</div>' : ''}
+      <div class="auto-push-today">${today}</div>
+      <div class="push-admin-form">
+        <div class="auto-push-block">
+          <label class="auto-push-head"><span>☕ Ingatan "Apa khabar"</span><input type="checkbox" id="apRemind" ${d.remind ? 'checked' : ''} ${busy}></label>
+          <div class="auto-push-row">Setiap pelanggan dapat sekali setiap <input id="apEvery" class="rw-input" type="number" min="1" max="30" inputmode="numeric" value="${escapeHtml(String(d.remindEvery))}" ${busy}> hari. Hari kedai tutup & pelanggan yang baru beli dilangkau.</div>
+          <input id="apRemindTitle" maxlength="60" value="${escapeHtml(d.remindTitle)}" ${busy}>
+          <textarea id="apRemindBody" maxlength="200" ${busy}>${escapeHtml(d.remindBody)}</textarea>
+        </div>
+        <div class="auto-push-block">
+          <label class="auto-push-head"><span>🎂 Ucapan &amp; air percuma hari jadi</span><input type="checkbox" id="apBday" ${d.birthday ? 'checked' : ''} ${busy}></label>
+          <div class="auto-push-row">Dihantar pada hari jadi. 1 air percuma, sah ${a.settings.birthdayDays} hari, sekali setahun; tebus di Reward. Dimatikan = tiada ucapan & tiada hadiah.</div>
+          <input id="apBdayTitle" maxlength="60" value="${escapeHtml(d.birthdayTitle)}" ${busy}>
+          <textarea id="apBdayBody" maxlength="200" ${busy}>${escapeHtml(d.birthdayBody)}</textarea>
+        </div>
+        <div class="push-admin-count">{nama} = nama pertama pelanggan · {hingga} = tarikh akhir hadiah hari jadi · tajuk maks 60, mesej maks 200 aksara</div>
+        <button class="push-btn primary" id="apSave" type="button" ${busy}>${state.apBusy ? 'Menyimpan...' : 'Simpan Tetapan'}</button>
+        ${state.apStatus ? `<div class="push-msg" role="status">${state.apStatus}</div>` : ''}
+      </div>`;
+  }
+  return `
+    <section class="promotion-admin-panel">
+      <div class="promotion-admin-heading">
+        <h3>🤖 Notifikasi Automatik</h3>
+        <p>Dihantar sendiri setiap hari sekitar pukul 10 pagi kepada pelanggan yang hidupkan notifikasi. Setiap hari orang berlainan.</p>
+      </div>
+      ${body}
+    </section>`;
+}
+async function saveAutoPush(){
+  if(state.apBusy || !state.apDraft) return;
+  if(document.activeElement) document.activeElement.blur();
+  state.apBusy = true; state.apStatus = ''; render();
+  const r = await gasPost('saveAutoPush', { settings: state.apDraft }, 30000);
+  state.apBusy = false;
+  if(r && r.ok && r.settings){
+    state.apStatus = '✅ Tetapan disimpan.';
+    logActivity('autopush:' + Date.now(), 'admin', 'Tetapan notifikasi automatik dikemas kini');
+    await loadAutoPush();
+  } else {
+    state.apStatus = '❌ Tidak berjaya simpan' + (r && r.error ? ' (' + escapeHtml(r.error) + ')' : '') + '. Cuba lagi.';
+  }
+  render();
 }
 
 /* Admin > Hebahan: hantar notifikasi telefon kepada semua pelanggan yang hidupkan notifikasi */
@@ -6639,7 +7345,7 @@ function renderAdminReward(){
   else if(custs === null) redeemBody = '<div class="sys-warn">⚠️ Senarai pelanggan tidak dapat dimuat. Pastikan Apps Script sudah dikemas kini ke <b>Code_v3_for_v3.10.0.gs</b>.</div>';
   else if(picked){
     const have = Number(picked.points) || 0;
-    const options = (rewards || []).filter(r => rewardStatus(r) === 'available').map(r => {
+    const options = (rewards || []).filter(r => rewardStatus(r) === 'available' && rewardPublished(r)).map(r => {
       const ok = have >= r.points;
       return `<div class="rw-redeem-row">
         ${rewardImageHtml(r, 'rw-thumb')}
@@ -6647,6 +7353,11 @@ function renderAdminReward(){
         <button type="button" class="rw-redeem-btn" data-rw-redeem="${escapeHtml(r.id)}" ${ok && !state.rwBusy ? '' : 'disabled'}>Tebus</button>
       </div>`;
     }).join('');
+    const bday = picked.bdayGift ? `<div class="rw-redeem-row bday">
+        <div class="rw-bday-icon" aria-hidden="true">🎂</div>
+        <div class="rw-redeem-info"><b>Air Percuma Hari Jadi</b><small>Percuma · sah hingga ${escapeHtml(formatDayMonth(picked.bdayGift.until))}</small></div>
+        <button type="button" class="rw-redeem-btn" id="rwBdayRedeem" ${state.rwBusy ? 'disabled' : ''}>Tebus</button>
+      </div>` : '';
     redeemBody = `<div class="rw-picked">
         <div class="rw-picked-main"><b>${escapeHtml(picked.name || 'Tanpa nama')}</b><small>${escapeHtml(picked.phone)}${picked.referralCode ? ` · Kod ${formatReferralCode(picked.referralCode)}` : ''}</small></div>
         <div class="rw-picked-pts"><b>${have.toLocaleString('ms-MY')}</b><small>points</small></div>
@@ -6657,13 +7368,13 @@ function renderAdminReward(){
         <input id="rwUseRm" class="rw-input" type="number" min="0" step="0.5" inputmode="decimal" placeholder="RM" value="${escapeHtml(state.rwUseRm || '')}" ${(picked.rm || 0) > 0 ? '' : 'disabled'}>
         <button type="button" class="rw-redeem-btn" id="rwUseRmBtn" ${(picked.rm || 0) > 0 && !state.rwBusy ? '' : 'disabled'}>Tolak</button>
       </div>
-      <div class="rw-redeem-list">${options || '<div class="empty-msg">Belum ada hadiah. Tambah hadiah di bawah dahulu.</div>'}</div>
+      <div class="rw-redeem-list">${bday}${options || '<div class="empty-msg">Belum ada hadiah. Tambah hadiah di bawah dahulu.</div>'}</div>
       <button type="button" class="push-btn ghost" id="rwClear">Pilih pelanggan lain</button>`;
   } else {
     redeemBody = `<input id="rwSearch" type="search" class="rw-input" placeholder="Cari nama, no. telefon atau kod referral" value="${escapeHtml(state.rwSearch || '')}" autocomplete="off">
       ${q ? `<div class="rw-matches">${matches.map(c => `<button type="button" class="rw-match" data-rw-pick="${escapeHtml(custKey(c.phone))}">
           <span><b>${escapeHtml(c.name || 'Tanpa nama')}</b><small>${escapeHtml(c.phone)}${c.referralCode ? ` · Kod ${formatReferralCode(c.referralCode)}` : ''}</small></span>
-          <em>${(Number(c.points) || 0).toLocaleString('ms-MY')} pts${c.rm ? ` · ${formatRM(c.rm)}` : ''}</em></button>`).join('') || '<div class="empty-msg">Tiada pelanggan sepadan.</div>'}</div>` : ''}`;
+          <em>${c.bdayGift ? '🎂 · ' : ''}${(Number(c.points) || 0).toLocaleString('ms-MY')} pts${c.rm ? ` · ${formatRM(c.rm)}` : ''}</em></button>`).join('') || '<div class="empty-msg">Tiada pelanggan sepadan.</div>'}</div>` : ''}`;
   }
 
   const editing = state.rwEditId ? (rewards || []).find(r => r.id === state.rwEditId) : null;
@@ -6671,11 +7382,13 @@ function renderAdminReward(){
   const list = rewards === null
     ? `<div class="empty-msg">${state.rewardsError ? 'Senarai hadiah tidak dapat dimuat.' : 'Memuat senarai hadiah...'}</div>`
     : rewards.length ? `<div class="rw-admin-grid">${rewards.map(r => `
-        <div class="rw-admin-card status-${rewardStatus(r)}">
+        <div class="rw-admin-card status-${rewardStatus(r)} ${rewardPublished(r) ? 'is-pub' : 'is-draft'}">
+          <span class="rw-pub-badge ${rewardPublished(r) ? 'on' : 'off'}">${rewardPublished(r) ? '● Published' : '○ Draf'}</span>
           ${rewardImageHtml(r, 'rw-admin-img')}
           <div class="rw-admin-title">${escapeHtml(r.title)}</div>
           <div class="rw-admin-pts">${r.points.toLocaleString('ms-MY')} points <span class="reward-status ${rewardStatus(r)}">${REWARD_STATUS[rewardStatus(r)]}</span></div>
           <select class="rw-status-select" data-rw-status="${escapeHtml(r.id)}" aria-label="Status hadiah" >${Object.entries(REWARD_STATUS).map(([k, l]) => `<option value="${k}" ${rewardStatus(r) === k ? 'selected' : ''}>${l}</option>`).join('')}</select>
+          <button type="button" class="rw-pub-btn ${rewardPublished(r) ? '' : 'primary'}" data-rw-publish="${escapeHtml(r.id)}" data-pub="${rewardPublished(r) ? '0' : '1'}" ${state.rwPubBusy === r.id ? 'disabled' : ''}>${state.rwPubBusy === r.id ? 'Menyimpan...' : rewardPublished(r) ? 'Not Publish (jadi Draf)' : '🌐 Publish'}</button>
           <div class="promotion-admin-actions">
             <button type="button" class="promotion-admin-action" data-rw-edit="${escapeHtml(r.id)}">Edit</button>
             <button type="button" class="promotion-admin-action delete" data-rw-delete="${escapeHtml(r.id)}">Padam</button>
@@ -6687,7 +7400,7 @@ function renderAdminReward(){
     <section class="promotion-admin-panel">
       <div class="promotion-admin-heading">
         <h3>🎁 Tebus Points &amp; Duit Pelanggan</h3>
-        <p>Pelanggan tunjuk skrin hadiah di kaunter. Cari pelanggan, pilih hadiah, tekan Tebus, atau tolak baki duit referral. Ditolak serta-merta.</p>
+        <p>Pelanggan tunjuk skrin hadiah di kaunter. Cari pelanggan, pilih hadiah, tekan Tebus, atau tolak baki duit referral. Ditolak serta-merta. 🎂 = ada air percuma hari jadi.</p>
       </div>
       ${redeemBody}
     </section>
@@ -6718,9 +7431,16 @@ function renderAdminReward(){
       </div>
     </section>
     <section class="promotion-admin-panel">
-      <div class="promotion-admin-heading"><h3>Senarai Hadiah</h3></div>
+      <div class="promotion-admin-heading"><h3>Senarai Hadiah</h3>
+        <p><b>● Published</b> = pelanggan nampak di page Reward. <b>○ Draf</b> = pelanggan tidak nampak, hanya untuk tengok rupa di Pratonton bawah. Hadiah baru disimpan sebagai Draf.</p></div>
       ${list}
     </section>
+    ${rewards && rewards.length ? `<section class="promotion-admin-panel">
+      <div class="promotion-admin-heading"><h3>👁 Pratonton Page Reward</h3>
+        <p>Macam ini pelanggan nampak senarai hadiah. Hadiah bertanda <b>Draf</b> tidak dipaparkan kepada pelanggan sehingga anda tekan Publish. Tekan hadiah untuk lihat paparan besar.</p></div>
+      <div class="rw-preview-phone">${renderRewardCatalog(true)}</div>
+      ${renderRewardDetailModal()}
+    </section>` : ''}
     <section class="promotion-admin-panel">
       <div class="promotion-admin-heading">
         <h3>Tetapan Points</h3>
@@ -6731,6 +7451,7 @@ function renderAdminReward(){
         <span>points / cawan</span>
         <button type="button" class="push-btn primary" id="rwPerCupSave" ${state.rwPerCupBusy ? 'disabled' : ''}>${state.rwPerCupBusy ? 'Menyimpan...' : 'Simpan'}</button>
       </div>
+      ${renderProgramSwitch('points')}
     </section>
     <section class="promotion-admin-panel">
       <div class="promotion-admin-heading">
@@ -6745,7 +7466,41 @@ function renderAdminReward(){
         <span>pembelian pertama</span>
         <button type="button" class="push-btn primary" id="rwRefSave" ${state.rwRefBusy ? 'disabled' : ''}>${state.rwRefBusy ? 'Menyimpan...' : 'Simpan'}</button>
       </div>
+      ${renderProgramSwitch('referral')}
     </section>`;
+}
+
+/* v3.16.0: suis Aktif / Tidak Aktif untuk program points & duit referral.
+   Aktif = order Selesai beri points / duit. Tidak Aktif = berhenti beri; baki lama kekal. */
+function renderProgramSwitch(kind){
+  const isPts = kind === 'points';
+  const on = isPts ? state.pointsOn !== false : state.refOn !== false;
+  const known = (isPts ? state.pointsOn : state.refOn) != null;
+  const busy = state.progSwitchBusy === kind;
+  const what = isPts ? 'points' : 'duit referral';
+  return `<div class="prog-switch ${on ? 'on' : 'off'}">
+      <div class="prog-switch-text">
+        <span class="prog-pill ${on ? 'on' : 'off'}">${!known ? '…' : on ? '● Aktif' : '○ Tidak Aktif'}</span>
+        <small>${on ? `Sedang digunakan: pelanggan dapat ${what} bila order Selesai.` : `Belum digunakan: order Selesai tidak beri ${what}. Baki pelanggan kekal.`}</small>
+      </div>
+      <button type="button" class="push-btn ${on ? 'ghost' : 'primary'}" data-prog-switch="${kind}" data-prog-on="${on ? '0' : '1'}" ${busy || !known ? 'disabled' : ''}>${busy ? 'Menyimpan...' : on ? '⏸ Hentikan' : '▶ Publish (Mula Guna)'}</button>
+    </div>`;
+}
+async function setProgramOn(kind, on){
+  const what = kind === 'points' ? 'Points' : 'Duit Referral';
+  const sure = await confirmDialog(on
+    ? { title:`Publish ${what}?`, message:`Mulai sekarang, setiap order yang jadi Selesai akan beri ${kind === 'points' ? 'points' : 'duit referral'} kepada pelanggan, ikut tetapan di atas.`, confirmText:'Ya, publish', cancelText:'Tidak' }
+    : { title:`Hentikan ${what}?`, message:`Order Selesai selepas ini tidak akan beri ${kind === 'points' ? 'points' : 'duit referral'}. Baki pelanggan sekarang kekal dan masih boleh ditebus.`, confirmText:'Ya, hentikan', cancelText:'Tidak', danger:true });
+  if(!sure) return;
+  state.progSwitchBusy = kind; render();
+  const r = await gasPost('setMeta', { key: kind === 'points' ? 'points-enabled' : 'referral-enabled', value: on ? '1' : '0' }, 30000);
+  state.progSwitchBusy = null;
+  if(r && r.ok){
+    if(kind === 'points') state.pointsOn = on; else state.refOn = on;
+    showToast(`${what}: ${on ? 'Aktif, sedang digunakan' : 'Tidak Aktif'}.`, 'success');
+    logActivity('prog:' + kind + ':' + Date.now(), 'admin', `${what} ${on ? 'diaktifkan' : 'dihentikan'}`);
+  } else showToast(rewardError(r, 'Tidak berjaya disimpan. Semak sambungan.'), 'error');
+  render();
 }
 
 function resetRewardForm(){
@@ -6755,7 +7510,7 @@ function resetRewardForm(){
 function rewardError(r, fallback){
   const map = { SESSION_INVALID:'Sesi Admin tamat. Log masuk semula.', TITLE_EMPTY:'Isi nama hadiah.', INVALID_POINTS:'Points mesti nombor 1 hingga 100000.',
     JENIS_FAIL_TIDAK_DISOKONG:'Gambar mesti WebP.', SAIZ_GAMBAR_MELEBIHI_5MB:'Gambar melebihi 5 MB.', REWARD_NOT_FOUND:'Hadiah tidak dijumpai. Muat semula page.',
-    NOT_ENOUGH_POINTS:'Points pelanggan tidak cukup.', REWARD_NOT_AVAILABLE:'Hadiah ini bukan Tersedia, tidak boleh ditebus.', NO_CUSTOMER:'Pelanggan tidak dijumpai.', 'unknown action':'Apps Script belum dikemas kini ke v3.10.0.' };
+    NOT_ENOUGH_POINTS:'Points pelanggan tidak cukup.', REWARD_DRAFT:'Hadiah ini masih Draf. Publish dahulu.', REWARD_NOT_AVAILABLE:'Hadiah ini bukan Tersedia, tidak boleh ditebus.', NO_CUSTOMER:'Pelanggan tidak dijumpai.', 'unknown action':'Apps Script belum dikemas kini ke v3.10.0.' };
   return (r && map[r.error]) || fallback;
 }
 function upsertLocalReward(reward){
@@ -6770,13 +7525,14 @@ async function saveRewardForm(){
   if(!(points >= 1 && points <= 100000)){ showToast('Points mesti nombor 1 hingga 100000.', 'error'); return; }
   const file = state.rwFile;
   const body = { id: state.rwEditId || '', title, points, status: state.rwStatusSel || 'available' };
+  if(!state.rwEditId) body.published = false; // v3.16.0: hadiah baru = Draf dahulu
   state.rwSaving = true; state.rwStatus = file ? 'Memuat naik gambar...' : 'Menyimpan...'; render();
   try{
     if(file){ body.base64 = await readPromotionFile(file); body.mimeType = file.type; }
     const r = await gasPost('saveReward', body, 90000);
     if(!r || !r.ok || !r.reward) throw new Error(rewardError(r, 'Hadiah tidak berjaya disimpan. Semak sambungan.'));
     upsertLocalReward(r.reward);
-    showToast(state.rwEditId ? 'Hadiah dikemas kini.' : 'Hadiah ditambah.', 'success');
+    showToast(state.rwEditId ? 'Hadiah dikemas kini.' : 'Hadiah ditambah sebagai Draf. Semak di Pratonton, kemudian tekan Publish.', 'success');
     resetRewardForm();
     state.rwStatus = '';
   }catch(e){
@@ -6794,6 +7550,22 @@ async function setRewardStatus(id, status){
   if(!r || !r.ok || !r.reward){ showToast(rewardError(r, 'Status tidak berjaya ditukar.'), 'error'); render(); return; }
   upsertLocalReward(r.reward);
   showToast(`${item.title}: ${REWARD_STATUS[status]}`, 'success');
+  render();
+}
+// v3.16.0: Publish (pelanggan nampak) / Not Publish (Draf, admin sahaja)
+async function setRewardPublished(id, published){
+  const item = (state.rewards || []).find(r => r.id === id);
+  if(!item || state.rwPubBusy) return;
+  if(!published){
+    const sure = await confirmDialog({ title:'Jadikan Draf?', message:`"${item.title}" tidak lagi dipaparkan kepada pelanggan dan tidak boleh ditebus sehingga di-publish semula.`, confirmText:'Ya, jadikan Draf', cancelText:'Tidak' });
+    if(!sure) return;
+  }
+  state.rwPubBusy = id; render();
+  const r = await gasPost('saveReward', { id, title:item.title, points:item.points, status:rewardStatus(item), published }, 30000);
+  state.rwPubBusy = null;
+  if(!r || !r.ok || !r.reward){ showToast(rewardError(r, 'Tidak berjaya disimpan.'), 'error'); render(); return; }
+  upsertLocalReward(r.reward);
+  showToast(published ? `🌐 ${item.title} di-publish. Pelanggan kini nampak hadiah ini.` : `${item.title} kini Draf.`, 'success');
   render();
 }
 async function deleteRewardItem(id){
@@ -6822,6 +7594,24 @@ async function redeemRewardFor(phoneKey, rewardId){
     if(!r || !r.ok) throw new Error(rewardError(r, 'Tebus tidak berjaya. Semak sambungan.'));
     showToast(`✅ ${item.title} ditebus untuk ${c.name || c.phone}. Baki ${r.points} points.`, 'success');
     logActivity('reward:' + phoneKey + ':' + Date.now(), 'redeem', `${c.name || c.phone} tebus ${item.title} (−${item.points} points)`);
+  }catch(e){ showToast(e.message, 'error'); }
+  finally{ state.rwBusy = false; render(); }
+}
+async function redeemBirthdayFor(phoneKey){
+  const c = (state.allCustomers || []).find(x => custKey(x.phone) === phoneKey);
+  if(!c || !c.bdayGift || state.rwBusy) return;
+  const sure = await confirmDialog({ title:'Tebus air percuma hari jadi?', message:`${c.name || c.phone}: 1 air percuma (sekali setahun). Points tidak ditolak.`, confirmText:'Ya, tebus', cancelText:'Tidak' });
+  if(!sure) return;
+  state.rwBusy = true; render();
+  try{
+    const r = await gasPost('redeemBirthday', { phone:c.phone }, 30000);
+    if(!r || !r.ok){
+      if(r && r.error === 'NO_BIRTHDAY_GIFT') c.bdayGift = null;
+      throw new Error(r && r.error === 'NO_BIRTHDAY_GIFT' ? 'Hadiah hari jadi sudah ditebus atau sudah tamat tempoh.' : rewardError(r, 'Tebus tidak berjaya. Semak sambungan.'));
+    }
+    c.bdayGift = null;
+    showToast(`🎂 Air percuma hari jadi ditebus untuk ${c.name || c.phone}.`, 'success');
+    logActivity('bday:' + phoneKey + ':' + Date.now(), 'redeem', `${c.name || c.phone} tebus air percuma hari jadi`);
   }catch(e){ showToast(e.message, 'error'); }
   finally{ state.rwBusy = false; render(); }
 }
@@ -6894,7 +7684,7 @@ function renderAdminPesanan(){
       totalPrice += i.qty * i.price;
       return `
         <tr>
-          <td>${i.name}</td>
+          <td>${escapeHtml(i.name)}</td>
           <td>x${i.qty}</td>
           <td>${time}</td>
           <td>${fmt(i.qty * i.price)}</td>
@@ -6907,7 +7697,7 @@ function renderAdminPesanan(){
     let loyaltyBadge = '';
     const freeCount = cust ? freeDrinksAvailable(cust) : 0;
     if(freeCount > 0){
-      loyaltyBadge = `<button class="redeem-btn" data-phone="${phone}" data-count="${freeCount}">🎁 Layak dapat x${freeCount} kopi percuma &middot; tekan untuk redeem</button>`;
+      loyaltyBadge = `<button class="redeem-btn" data-phone="${escapeHtml(phone)}" data-count="${freeCount}">🎁 Layak dapat x${freeCount} kopi percuma &middot; tekan untuk redeem</button>`;
     }
 
     const rejected = isOrderRejected(o);
@@ -6939,8 +7729,8 @@ function renderAdminPesanan(){
       <div class="customer-group${hasNewOrder ? ' new-order' : ''}${statusKey ? ' status-' + statusKey : ''}">
         <div class="cg-header">
           <div class="cg-info">
-            <div class="cg-name">${o.customerName || '-'}</div>
-            <div class="cg-phone">${o.customerPhone || '-'}</div>
+            <div class="cg-name">${escapeHtml(o.customerName || '-')}</div>
+            <div class="cg-phone">${escapeHtml(o.customerPhone || '-')}</div>
             <div class="cg-datetime">${dateTimeStr}</div>
             ${rejectReasonHtml}
           </div>
@@ -7028,7 +7818,7 @@ function renderAdminSimpanan(){
           const rejectReason = getRejectReason(o);
           const rows = o.items.map(i => `
             <tr>
-              <td>${i.name}</td>
+              <td>${escapeHtml(i.name)}</td>
               <td>x${i.qty}</td>
               <td>${fmt(i.qty * i.price)}</td>
             </tr>
@@ -7036,7 +7826,7 @@ function renderAdminSimpanan(){
           return `
             <div class="cg-order-block">
               <div class="oi-meta">No: ${String(o.queueNo).padStart(3,'0')} &middot; ${time} &middot; ${rejected ? '<strong style="color:#C62828">DITOLAK</strong>' : '<strong style="color:#2E7D32">SELESAI</strong>'}</div>
-              ${rejected ? `<div class="cg-reject-reason">Sebab reject: ${rejectReason || 'Lain-lain'}</div>` : ''}
+              ${rejected ? `<div class="cg-reject-reason">Sebab reject: ${escapeHtml(rejectReason || 'Lain-lain')}</div>` : ''}
               <table class="cg-table">
                 <thead>
                   <tr><th>Jenis minuman</th><th>Kuantiti</th><th>Harga</th></tr>
@@ -7055,13 +7845,13 @@ function renderAdminSimpanan(){
         <div class="customer-group done-group${expanded?' expanded':''}" data-key="${expandKey}">
           <div class="cg-header">
             <div class="cg-info">
-              <div class="cg-name">${g.name}</div>
-              <div class="cg-phone">${g.phone}</div>
+              <div class="cg-name">${escapeHtml(g.name)}</div>
+              <div class="cg-phone">${escapeHtml(g.phone)}</div>
               <div class="cg-datetime">${lastDateTime}</div>
             </div>
             <div class="cg-right">
               <div class="cg-queue">No: ${String(latestQueueNo).padStart(3,'0')}</div>
-              <button class="btn-simpanan-pdf" data-customer-key="${key}">PDF</button>
+              <button class="btn-simpanan-pdf" data-customer-key="${escapeHtml(key)}">PDF</button>
             </div>
           </div>
           <div class="cg-footer">
@@ -7075,7 +7865,55 @@ function renderAdminSimpanan(){
   }
 
   html += renderCustomerReport();
+  html += renderKewanganBulanan();
   return html;
+}
+
+/* v3.12.0: Ringkasan Kewangan Bulanan — bulan semasa dikira terus daripada
+   Orders; bulan lepas daripada sheet KewanganBulanan (disimpan bila bulan bertukar). */
+async function loadKewangan(){
+  state.kewanganLoading = true;
+  const r = await gasGet('kewangan', {}, 30000);
+  state.kewanganLoading = false;
+  state.kewangan = r && r.current ? r : null;
+  if(state.view === 'admin' && state.adminTab === 'simpanan') render();
+}
+function kewMonthLabel(ym){
+  const d = new Date(ym + '-01T00:00:00');
+  return isNaN(d) ? ym : d.toLocaleDateString('ms-MY', { month:'short', year:'numeric' });
+}
+function renderKewanganBulanan(){
+  const k = state.kewangan;
+  let body;
+  if(k === undefined || state.kewanganLoading) body = '<div class="empty-msg">Memuat ringkasan kewangan...</div>';
+  else if(k === null) body = '<div class="sys-warn">⚠️ Ringkasan tidak dapat dimuat. Pastikan Apps Script sudah dikemas kini ke <b>Code_v3_for_v3.12.0.gs</b>.</div>';
+  else {
+    const months = [k.current].concat(k.history || []);
+    const sum = key => months.reduce((n, m) => n + (Number(m[key]) || 0), 0);
+    const row = (m, label, cls) => `<tr class="${cls || ''}">
+        <th scope="row">${label}</th>
+        <td class="kew-money">${fmt(Number(m.jualanRM) || 0)}</td>
+        <td>${m.pesananSelesai}${m.pesananDitolak ? `<small>${m.pesananDitolak} ditolak</small>` : ''}</td>
+        <td>${m.cawan}</td>
+        <td>${m.pelanggan}${m.pelangganBaru ? `<small>+${m.pelangganBaru} baru</small>` : ''}</td>
+        <td>${m.airPercuma}${m.airHariJadi ? `<small>🎂 ${m.airHariJadi}</small>` : ''}</td>
+        <td>+${m.pointsDiberi}<small>−${m.pointsDitebus} ditebus</small></td>
+        <td>${formatRM(m.duitReferralRM)}<small>${formatRM(m.duitDigunakanRM)} diguna</small></td>
+      </tr>`;
+    const total = { jualanRM: sum('jualanRM'), pesananSelesai: sum('pesananSelesai'), pesananDitolak: sum('pesananDitolak'), cawan: sum('cawan'),
+      pelanggan: '—', pelangganBaru: sum('pelangganBaru'), airPercuma: sum('airPercuma'), airHariJadi: sum('airHariJadi'),
+      pointsDiberi: sum('pointsDiberi'), pointsDitebus: sum('pointsDitebus'), duitReferralRM: sum('duitReferralRM'), duitDigunakanRM: sum('duitDigunakanRM') };
+    body = `<div class="kew-wrap"><table class="kew-table">
+        <thead><tr><th scope="col">Bulan</th><th scope="col">Jualan</th><th scope="col">Pesanan</th><th scope="col">Cawan</th><th scope="col">Pelanggan</th><th scope="col">Air percuma</th><th scope="col">Points</th><th scope="col">Duit referral</th></tr></thead>
+        <tbody>
+          ${row(k.current, kewMonthLabel(k.current.bulan) + '<small>bulan ini</small>', 'current')}
+          ${(k.history || []).map(m => row(m, kewMonthLabel(m.bulan))).join('')}
+          ${(k.history || []).length ? row(total, 'Jumlah', 'total') : ''}
+        </tbody>
+      </table></div>
+      <p class="report-note">Jualan = pesanan Selesai sahaja. Bulan lepas disimpan dalam sheet <b>KewanganBulanan</b>; butiran setiap pelanggan dalam sheet <b>LaporanBulanan</b>.</p>`;
+  }
+  return `<div class="section-title">💰 Ringkasan Kewangan Bulanan</div>${body}`;
 }
 
 /* ---------- admin: dashboard tab ---------- */
@@ -7182,7 +8020,7 @@ function renderAdminDashboard(){
     } else {
       html += breakdownRows.map(([name, d]) => `
         <div class="dash-detail-row">
-          <span>${name}</span>
+          <span>${escapeHtml(name)}</span>
           <span>${exp === 'pesanan' ? d.qty + ' cawan' : fmt(d.sales) + ' (' + d.qty + ' cawan)'}</span>
         </div>
       `).join('');
@@ -7196,13 +8034,13 @@ function renderAdminDashboard(){
       html += loyaltyList.map(c => `
         <div class="loyalty-row">
           <div class="loyalty-info">
-            <div class="loyalty-name">${c.name || '-'}</div>
-            <div class="loyalty-phone">${c.phone}</div>
+            <div class="loyalty-name">${escapeHtml(c.name || '-')}</div>
+            <div class="loyalty-phone">${escapeHtml(c.phone)}</div>
             <div class="loyalty-free">🎁 ${c.free} air free &middot; ${c.qty} cawan${c.redeemed ? ` &middot; ${c.redeemed} dah ditebus` : ''}</div>
           </div>
           <div class="loyalty-actions">
-            <button class="redeem-btn" data-phone="${c.phone}" data-count="1">Redeem 1</button>
-            ${c.free > 1 ? `<button class="redeem-btn redeem-all" data-phone="${c.phone}" data-count="${c.free}">Redeem Semua (${c.free})</button>` : ''}
+            <button class="redeem-btn" data-phone="${escapeHtml(c.phone)}" data-count="1">Redeem 1</button>
+            ${c.free > 1 ? `<button class="redeem-btn redeem-all" data-phone="${escapeHtml(c.phone)}" data-count="${c.free}">Redeem Semua (${c.free})</button>` : ''}
           </div>
         </div>
       `).join('');
@@ -7215,8 +8053,8 @@ function renderAdminDashboard(){
     } else {
       html += customerList.map(c => `
         <div class="dash-detail-row">
-          <span>${c.name || '-'}</span>
-          <span>${c.phone}</span>
+          <span>${escapeHtml(c.name || '-')}</span>
+          <span>${escapeHtml(c.phone)}</span>
         </div>
       `).join('');
     }
@@ -7242,13 +8080,7 @@ function renderAdminDashboard(){
   const timeOf = ts => new Date(ts).toLocaleTimeString('ms-MY', {hour:'numeric', minute:'2-digit'});
 
   html += `
-        <section class="dash2-panel">
-          <div class="dash2-panel-head">
-            <h3>Jualan vs Cawan</h3>
-            <div class="dash2-legend"><span class="lg-sales">Jualan (RM)</span><span class="lg-cups">Cawan</span></div>
-          </div>
-          ${renderDashLineChart(days, now.getDate())}
-        </section>
+        ${renderSalesChartPanel()}
         <section class="dash2-panel">
           <div class="dash2-panel-head"><h3>Pesanan Terkini</h3><button type="button" class="dash2-link" data-goto-tab="pesanan">Lihat semua →</button></div>
           ${recent.length ? `<div class="dash2-table-wrap"><table class="dash2-table">
@@ -7290,18 +8122,182 @@ const DASH_ICONS = {
   users: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6 6 0 0 1 3.5 6"/></svg>'
 };
 
-/* Smooth two-line chart for the month: sales (RM, left axis) and cups (right
-   axis), with today's column highlighted. Plain SVG, no chart library. */
-function renderDashLineChart(allDays, today){
-  // Early in the month a 31-day axis squeezes the data into a corner, so the
-  // axis runs to today (at least a week) and lines stop at today.
-  const days = allDays.slice(0, Math.min(allDays.length, Math.max(today, 7)));
-  const upto = Math.min(days.length, today);
-  const W = 640, H = 230, L = 44, R = 36, T = 14, B = 26;
+/* ---------- v3.15.0: graf Jualan vs Cawan ikut Hari / Bulan / Tahun ----------
+   Data daripada server (action salesChart: Orders + OrdersArkib). Sementara
+   menunggu (atau server lama), dikira daripada order bulan ini dalam app. */
+const SC_MONTHS = ['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
+const SC_MONTHS_FULL = ['Januari','Februari','Mac','April','Mei','Jun','Julai','Ogos','September','Oktober','November','Disember'];
+const salesChartCache = {};   // 'mode|key' -> { data, at }
+const salesChartLoading = {};
+let salesChartView = null;    // titik graf yang sedang dipapar (untuk bacaan bila disentuh)
+function scToday(){ return shopNow().date; }
+function scDefaultKey(mode){ const t = scToday(); return mode === 'day' ? t : mode === 'year' ? t.slice(0, 4) : t.slice(0, 7); }
+function scCurrentKey(mode){ return scDefaultKey(mode); }
+function scShiftKey(mode, key, dir){
+  if(mode === 'year') return String(Number(key) + dir);
+  if(mode === 'month'){
+    const d = new Date(Date.UTC(Number(key.slice(0, 4)), Number(key.slice(5, 7)) - 1 + dir, 1));
+    return d.toISOString().slice(0, 7);
+  }
+  const d = new Date(key + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + dir);
+  return d.toISOString().slice(0, 10);
+}
+// Kira daripada state.allOrders (order bulan semasa sahaja) — sandaran
+function scLocalData(mode, key){
+  const y = Number(key.slice(0, 4)), m = Number(key.slice(5, 7)) || 1;
+  const n = mode === 'day' ? 24 : mode === 'month' ? new Date(Date.UTC(y, m, 0)).getUTCDate() : 12;
+  const points = Array.from({ length: n }, () => ({ jualan:0, cawan:0, pesanan:0 }));
+  (state.allOrders || []).forEach(o => {
+    if(isOrderRejected(o) || !o.createdAt) return;
+    const d = new Date(Number(o.createdAt) + 8 * 3600000), ds = d.toISOString();
+    if(mode === 'day' ? ds.slice(0, 10) !== key : mode === 'month' ? ds.slice(0, 7) !== key : ds.slice(0, 4) !== key) return;
+    const p = points[mode === 'day' ? d.getUTCHours() : mode === 'month' ? d.getUTCDate() - 1 : d.getUTCMonth()];
+    p.jualan += Number(o.total) || 0;
+    p.cawan += (o.items || []).reduce((s, i) => s + (Number(i.qty) || 0), 0);
+    p.pesanan++;
+  });
+  const total = points.reduce((t, p) => ({ jualan:t.jualan + p.jualan, cawan:t.cawan + p.cawan, pesanan:t.pesanan + p.pesanan }), { jualan:0, cawan:0, pesanan:0 });
+  return { mode, key, points, total, local:true };
+}
+function scEnsureData(mode, key){
+  const id = mode + '|' + key;
+  const cached = salesChartCache[id];
+  const isCurrent = key === scCurrentKey(mode);
+  if(cached && (!isCurrent || Date.now() - cached.at < 60000)) return cached.data;
+  if(!salesChartLoading[id]){
+    salesChartLoading[id] = true;
+    gasGet('salesChart', { mode, key }, 25000).then(data => {
+      salesChartLoading[id] = false;
+      if(data && data.ok && Array.isArray(data.points)) salesChartCache[id] = { data, at:Date.now() };
+      else salesChartCache[id] = { data:Object.assign(scLocalData(mode, key), { failed:true }), at:Date.now() };
+      if(state.view === 'admin' && state.adminTab === 'dashboard' && (state.chartMode || 'month') === mode && (state.chartKey || scDefaultKey(mode)) === key) render();
+    });
+  }
+  return cached ? cached.data : null;
+}
+function renderSalesChartPanel(){
+  const mode = state.chartMode || 'month';
+  const key = state.chartKey || scDefaultKey(mode);
+  const current = scCurrentKey(mode);
+  const server = scEnsureData(mode, key);
+  const data = server || scLocalData(mode, key);
+  const loading = !server;
+  const today = scToday();
+  // Paksi-x & label setiap titik
+  let idxs = data.points.map((_, i) => i);
+  let upto = data.points.length - 1;
+  if(key === current){
+    upto = mode === 'day' ? Number(shopNow().time ? String(shopNow().time).slice(0, 2) : new Date().getHours())
+      : mode === 'month' ? Number(today.slice(8, 10)) - 1 : Number(today.slice(5, 7)) - 1;
+  }
+  if(mode === 'day'){
+    const has = data.points.map((p, i) => p.pesanan || p.jualan ? i : -1).filter(i => i >= 0);
+    const start = Math.min(8, has.length ? has[0] : 8);
+    const end = Math.max(20, has.length ? has[has.length - 1] : 20);
+    idxs = idxs.filter(i => i >= start && i <= end);
+  }
+  const yr = Number(key.slice(0, 4)), mo = Number(key.slice(5, 7));
+  const items = idxs.map(i => {
+    const p = data.points[i];
+    let label, title;
+    if(mode === 'day'){ label = String(i); title = String(i).padStart(2, '0') + ':00 – ' + String(i + 1).padStart(2, '0') + ':00'; }
+    else if(mode === 'month'){ label = String(i + 1); title = (i + 1) + ' ' + SC_MONTHS[mo - 1] + ' ' + yr; }
+    else { label = SC_MONTHS[i]; title = SC_MONTHS_FULL[i] + ' ' + yr; }
+    return { i, label, title, jualan:Number(p.jualan) || 0, cawan:Number(p.cawan) || 0, pesanan:Number(p.pesanan) || 0, future: i > upto };
+  });
+  const t = data.total || {};
+  const picker = mode === 'day'
+    ? `<input type="date" class="sc-input" data-sc-input value="${key}" max="${today}">`
+    : mode === 'month'
+      ? `<input type="month" class="sc-input" data-sc-input value="${key}" max="${today.slice(0, 7)}">`
+      : `<select class="sc-input" data-sc-input>${Array.from({ length: Number(today.slice(0, 4)) - 2023 }, (_, k) => 2024 + k).reverse().map(y => `<option value="${y}" ${String(y) === key ? 'selected' : ''}>${y}</option>`).join('')}</select>`;
+  const periodLabel = mode === 'day'
+    ? new Date(key + 'T00:00:00').toLocaleDateString('ms-MY', { weekday:'long', day:'numeric', month:'long', year:'numeric' })
+    : mode === 'month' ? SC_MONTHS_FULL[mo - 1] + ' ' + yr : 'Tahun ' + yr;
+  return `<section class="dash2-panel sc-panel">
+    <div class="dash2-panel-head">
+      <h3>Jualan vs Cawan</h3>
+      <div class="dash2-legend"><span class="lg-sales">Jualan (RM)</span><span class="lg-cups">Cawan</span></div>
+    </div>
+    <div class="sc-controls">
+      <div class="sc-seg" role="tablist">
+        ${[['day','Hari'],['month','Bulan'],['year','Tahun']].map(([m, l]) => `<button type="button" class="${m === mode ? 'active' : ''}" data-sc-mode="${m}">${l}</button>`).join('')}
+      </div>
+      <div class="sc-pick">
+        <button type="button" data-sc-shift="-1" aria-label="Sebelum">&#8249;</button>
+        ${picker}
+        <button type="button" data-sc-shift="1" aria-label="Seterusnya" ${key >= current ? 'disabled' : ''}>&#8250;</button>
+      </div>
+    </div>
+    <div class="sc-totals">
+      <div><small>Jumlah Jualan</small><b>${fmt(Number(t.jualan) || 0)}</b></div>
+      <div><small>Jumlah Cawan</small><b>${Number(t.cawan) || 0}</b></div>
+      <div><small>Pesanan</small><b>${Number(t.pesanan) || 0}</b></div>
+    </div>
+    <div class="sc-period">${escapeHtml(periodLabel)}${loading ? ' · <span class="sc-loading">memuatkan data…</span>' : (data.failed ? ' · <span class="sc-loading">data bulan ini sahaja (server belum dikemas kini)</span>' : '')}</div>
+    <div class="sc-wrap" id="scWrap">
+      ${renderDashLineChart(items, key === current ? items.findIndex(it => it.i === upto) : -1)}
+      <div class="sc-guide" hidden></div>
+      <div class="sc-tip" hidden></div>
+    </div>
+    <div class="sc-hint">Sentuh atau letak tetikus pada graf untuk lihat bacaan.</div>
+  </section>`;
+}
+function scSetPeriod(mode, key){
+  state.chartMode = mode;
+  state.chartKey = key;
+  render();
+}
+function bindSalesChart(){
+  document.querySelectorAll('[data-sc-mode]').forEach(btn => { btn.onclick = () => scSetPeriod(btn.dataset.scMode, scDefaultKey(btn.dataset.scMode)); });
+  document.querySelectorAll('[data-sc-shift]').forEach(btn => { btn.onclick = () => {
+    const mode = state.chartMode || 'month';
+    const next = scShiftKey(mode, state.chartKey || scDefaultKey(mode), Number(btn.dataset.scShift));
+    if(next > scCurrentKey(mode)) return;
+    scSetPeriod(mode, next);
+  }; });
+  document.querySelectorAll('[data-sc-input]').forEach(inp => { inp.onchange = () => {
+    const mode = state.chartMode || 'month';
+    if(!inp.value) return;
+    scSetPeriod(mode, inp.value > scCurrentKey(mode) ? scCurrentKey(mode) : inp.value);
+  }; });
+  const wrap = document.getElementById('scWrap');
+  const svg = wrap && wrap.querySelector('svg');
+  if(!svg || !salesChartView) return;
+  const tip = wrap.querySelector('.sc-tip'), guide = wrap.querySelector('.sc-guide');
+  const show = ev => {
+    const v = salesChartView;
+    const rect = svg.getBoundingClientRect();
+    const px = (ev.clientX - rect.left) / rect.width * v.W;
+    let best = 0;
+    v.xs.forEach((x, i) => { if(Math.abs(x - px) < Math.abs(v.xs[best] - px)) best = i; });
+    const it = v.items[best];
+    const left = v.xs[best] / v.W * rect.width;
+    guide.style.left = left + 'px';
+    guide.hidden = false;
+    tip.innerHTML = `<strong>${escapeHtml(it.title)}</strong><span><i class="d-s"></i>Jualan: <b>${fmt(it.jualan)}</b></span><span><i class="d-c"></i>Cawan: <b>${it.cawan}</b></span><span class="sc-tip-sub">${it.pesanan} pesanan</span>`;
+    tip.hidden = false;
+    const tw = tip.offsetWidth;
+    tip.style.left = Math.max(0, Math.min(rect.width - tw, left - tw / 2)) + 'px';
+  };
+  svg.addEventListener('pointermove', show);
+  svg.addEventListener('pointerdown', show);
+  svg.addEventListener('pointerleave', ev => { if(ev.pointerType === 'mouse'){ tip.hidden = true; guide.hidden = true; } });
+}
+
+/* Graf dua garisan: jualan (RM, paksi kiri) & cawan (paksi kanan). items =
+   [{label,title,jualan,cawan,pesanan,future}]; titik 'future' (selepas hari ini)
+   tidak dilukis. hi = titik semasa (diserlahkan), -1 jika tiada. */
+function renderDashLineChart(items, hi){
+  const days = items;
+  const upto = items.filter(d => !d.future).length;
+  // v3.15.0: kanvas lebih lebar supaya tulisan & tinggi graf tidak terlalu besar pada skrin lebar
+  const W = 980, H = 260, L = 52, R = 36, T = 14, B = 26;
   const iw = W - L - R, ih = H - T - B;
   const maxS = Math.max(10, ...days.map(d => d.jualan));
   const maxC = Math.max(5, ...days.map(d => d.cawan));
-  const x = i => L + (days.length > 1 ? i / (days.length - 1) : 0) * iw;
+  const x = i => L + (days.length > 1 ? i / (days.length - 1) : 0.5) * iw;
+  salesChartView = { W, xs: days.map((_, i) => x(i)), items: days };
   const ys = v => T + ih - v / maxS * ih;
   const yc = v => T + ih - v / maxC * ih;
   // Flat-tangent curves: smooth, and never overshoot above a peak or below zero.
@@ -7319,14 +8315,14 @@ function renderDashLineChart(allDays, today){
       <text x="${L - 8}" y="${y + 4}" text-anchor="end" class="lc-axis">${Math.round(maxS * f)}</text>
       <text x="${W - R + 8}" y="${y + 4}" class="lc-axis">${Math.round(maxC * f)}</text>`;
   }).join('');
-  const step = days.length <= 10 ? 1 : 5;
-  const labels = days.filter(d => d.day === 1 || d.day % step === 0 || d.day === days.length)
-    .map(d => `<text x="${x(d.day - 1)}" y="${H - 6}" text-anchor="middle" class="lc-axis">${d.day}</text>`).join('');
-  const ti = upto - 1;
+  const step = days.length <= 16 ? 1 : 5;
+  const labels = days.filter((d, i) => i === 0 || i === days.length - 1 || (step === 1 ? true : (i + 1) % step === 0))
+    .map(d => { const i = days.indexOf(d); return `<text x="${x(i)}" y="${H - 6}" text-anchor="middle" class="lc-axis">${escapeHtml(d.label)}</text>`; }).join('');
+  const ti = hi;
   const band = ti >= 0 ? `<rect x="${x(ti) - 9}" y="${T}" width="18" height="${ih}" rx="9" class="lc-today"/>` : '';
   const dots = ti >= 0 ? `<circle cx="${x(ti)}" cy="${ys(days[ti].jualan)}" r="5" class="lc-dot-s"/><circle cx="${x(ti)}" cy="${yc(days[ti].cawan)}" r="5" class="lc-dot-c"/>` : '';
-  const hits = days.map((d, i) => `<rect x="${x(i) - iw / days.length / 2}" y="${T}" width="${iw / days.length}" height="${ih}" fill="transparent"><title>Hari ${d.day}: ${fmt(d.jualan)} · ${d.cawan} cawan</title></rect>`).join('');
-  return `<svg class="dash2-line" viewBox="0 0 ${W} ${H}" role="img" aria-label="Graf jualan dan cawan harian bulan ini">
+  const hits = '';
+  return `<svg class="dash2-line" viewBox="0 0 ${W} ${H}" role="img" aria-label="Graf jualan dan cawan">
     <defs><linearGradient id="lcTodayGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6B4226" stop-opacity=".05"/><stop offset="1" stop-color="#6B4226" stop-opacity=".55"/></linearGradient></defs>
     ${grid}${band}
     <path d="${cups}" class="lc-cups"/>
@@ -7597,7 +8593,7 @@ async function exportMonthlyPdf(e){
   const original = btn ? btn.textContent : '';
   try{
     if(btn){ btn.disabled = true; btn.textContent = 'Menjana PDF...'; }
-    await loadExternalScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+    await loadExternalScript('vendor/jspdf-2.5.1.umd.min.js');
 
     const days = getMonthlyDailyStats();
     const monthLabel = state.currentMonthKey || getMonthKey(new Date());
@@ -7711,7 +8707,7 @@ function drawReceiptPage_(pdf, order){
    (used by the "PDF" button on each Simpanan customer box), one order
    per receipt-style page. */
 async function exportCustomerReceiptsPdf(orders){
-  await loadExternalScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+  await loadExternalScript('vendor/jspdf-2.5.1.umd.min.js');
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF('p', 'mm', [100, 180]);
 
@@ -7876,11 +8872,19 @@ function renderAdminMenu(){
   const cats = CATEGORIES;
   // v3.7.2: tajuk & penerangan kini dalam banner merah (renderAdminHero)
   let html = '<div class="pmenu-wrap">';
+  // v3.15.0: admin cipta kategori & menu sendiri
+  html += '<div class="pmenu-toolbar"><p>Tekan <b>+ Tambah Menu</b> di hujung setiap kategori untuk menu baru.</p>'
+    + '<button type="button" class="pmenu-add-cat" data-pmenu-add-cat>&#10133; Tambah Kategori</button></div>';
 
   cats.forEach(function(cat) {
     const items = MENU.filter(function(m){ return m.category === cat.id; });
+    const cid = escapeHtml(cat.id);
     html += '<div class="pmenu-section-box">';
-    html += '<div class="pmenu-section-header">' + cat.label + '</div>';
+    html += '<div class="pmenu-section-header"><span>' + escapeHtml(cat.label) + ' <small>(' + items.length + ' menu)</small></span>'
+      + '<span class="pmenu-cat-actions">'
+      + '<button type="button" data-pmenu-rename-cat="' + cid + '">&#9999;&#65039; Tukar Nama</button>'
+      + '<button type="button" class="danger" data-pmenu-delete-cat="' + cid + '">&#128465;&#65039; Padam</button>'
+      + '</span></div>';
     html += '<div class="pmenu-items-row">';
     items.forEach(function(item) {
       const img = getItemImage(item);
@@ -7888,7 +8892,7 @@ function renderAdminMenu(){
       const iid = item.id;
       html += '<div class="pmenu-item-col">';
       html += '<label class="pmenu-img-upload" for="pm_upload_' + iid + '" style="cursor:pointer;display:block;">';
-      html += '<img src="' + img + '" alt="' + item.name + '" id="pm_thumb_' + iid + '">';
+      html += '<img src="' + img + '" alt="' + escapeHtml(item.name) + '" id="pm_thumb_' + iid + '">';
       html += '<span class="upload-hint">&#128247; Tukar Gambar</span>';
       html += '</label>';
       html += '<input type="file" accept="image/*" class="pmenu-file-input" id="pm_upload_' + iid + '" data-item-id="' + iid + '" onchange="handlePmenuUpload(this)" style="display:none;">';
@@ -7899,13 +8903,170 @@ function renderAdminMenu(){
       const published = isItemPublished(item);
       html += '<button class="pmenu-publish-btn ' + (published ? '' : 'unpublished') + '" data-publish-id="' + iid + '">' + (published ? '&#128994; PUBLISH' : '&#128308; TIDAK PUBLISH') + '</button>';
       html += '<button class="pmenu-save-btn" data-save-id="' + iid + '">&#128190; Simpan</button>';
+      html += '<button type="button" class="pmenu-delete-item" data-pmenu-delete-item="' + iid + '">&#128465;&#65039; Padam menu</button>';
       html += '</div>';
     });
+    html += '<div class="pmenu-item-col pmenu-add-col"><button type="button" class="pmenu-add-item" data-pmenu-add-item="' + cid + '">'
+      + '<span>+</span>Tambah Menu</button></div>';
     html += '</div></div>';
   });
 
   html += '</div>';
   return html;
+}
+
+/* ---------- v3.15.0: borang kategori / menu baru ----------
+   Dialog sendiri (bukan prompt()) kerana prompt/confirm pelayar tidak boleh
+   dipercayai pada tablet admin. fields: [{key,label,type,value,placeholder}]
+   type: text | number | textarea | check. Pulangkan nilai, atau null jika Batal. */
+function menuFormDialog({ title, fields, okText, validate }){
+  return new Promise(resolve => {
+    const overlay = document.createElement('div');
+    overlay.className = 'confirm-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    const fieldHtml = fields.map(f => {
+      const id = 'mf_' + f.key;
+      if(f.type === 'check') return `<label class="menu-form-check"><input type="checkbox" id="${id}" ${f.value ? 'checked' : ''}> <span>${escapeHtml(f.label)}</span></label>`;
+      const control = f.type === 'textarea'
+        ? `<textarea id="${id}" rows="3" maxlength="200" placeholder="${escapeHtml(f.placeholder || '')}">${escapeHtml(f.value || '')}</textarea>`
+        : `<input id="${id}" type="${f.type === 'number' ? 'number' : 'text'}" ${f.type === 'number' ? 'step="0.50" min="0" inputmode="decimal"' : 'maxlength="' + (f.max || 60) + '"'} value="${escapeHtml(f.value == null ? '' : f.value)}" placeholder="${escapeHtml(f.placeholder || '')}">`;
+      return `<label class="menu-form-field"><span>${escapeHtml(f.label)}</span>${control}</label>`;
+    }).join('');
+    overlay.innerHTML = `
+      <div class="confirm-box menu-form-box">
+        <h3 class="confirm-title">${escapeHtml(title)}</h3>
+        <div class="menu-form-fields">${fieldHtml}</div>
+        <p class="menu-form-error" hidden></p>
+        <div class="confirm-actions">
+          <button type="button" class="confirm-cancel">Batal</button>
+          <button type="button" class="confirm-ok">${escapeHtml(okText || 'Simpan')}</button>
+        </div>
+      </div>`;
+    const errEl = overlay.querySelector('.menu-form-error');
+    const values = () => {
+      const out = {};
+      fields.forEach(f => {
+        const el = overlay.querySelector('#mf_' + f.key);
+        out[f.key] = f.type === 'check' ? el.checked : el.value.trim();
+      });
+      return out;
+    };
+    const close = answer => {
+      document.removeEventListener('keydown', onKey);
+      overlay.classList.add('closing');
+      setTimeout(() => overlay.remove(), 180);
+      resolve(answer);
+    };
+    const submit = () => {
+      const v = values();
+      const err = validate ? validate(v) : '';
+      if(err){ errEl.textContent = err; errEl.hidden = false; return; }
+      close(v);
+    };
+    const onKey = e => {
+      if(e.key === 'Escape') close(null);
+      if(e.key === 'Enter' && e.target && e.target.tagName === 'INPUT'){ e.preventDefault(); submit(); }
+    };
+    overlay.querySelector('.confirm-cancel').onclick = () => close(null);
+    overlay.querySelector('.confirm-ok').onclick = submit;
+    overlay.onclick = e => { if(e.target === overlay) close(null); };
+    document.addEventListener('keydown', onKey);
+    document.body.appendChild(overlay);
+    const first = overlay.querySelector('input:not([type=checkbox]), textarea');
+    if(first) first.focus();
+  });
+}
+
+const MENU_ADMIN_ERRORS = {
+  NAMA_KOSONG:'Nama tidak boleh kosong', HARGA_TIDAK_SAH:'Harga tidak sah',
+  KATEGORI_TIADA:'Kategori tidak dijumpai — muat semula app', KATEGORI_ADA_MENU:'Padam semua menu dalam kategori ini dahulu',
+  MENU_TIADA:'Menu tidak dijumpai — muat semula app', TERLALU_BANYAK:'Had maksimum dicapai',
+  SESSION_INVALID:'Sesi admin tamat — sila log masuk semula'
+};
+function menuAdminFail(result){
+  const code = result && (result.error || '');
+  if(result && result.error === 'unknown action') return showToast('⚠️ Apps Script belum dikemas kini ke v' + REQUIRED_SERVER_VERSION, 'error');
+  showToast('⚠️ ' + (MENU_ADMIN_ERRORS[code] || (code ? String(code).slice(0, 60) : 'Gagal — semak sambungan internet')), 'error');
+}
+function menuCategoryLabel(id){ const c = CATEGORIES.find(x => x.id === id); return c ? c.label : ''; }
+
+async function pmenuAddCategory(){
+  const v = await menuFormDialog({
+    title:'Tambah Kategori', okText:'Tambah',
+    fields:[{ key:'label', label:'Nama kategori', placeholder:'cth. Roti & Kek', max:40 }],
+    validate: v => v.label ? '' : 'Sila isi nama kategori'
+  });
+  if(!v) return;
+  showToast('⏳ Menyimpan kategori...', '');
+  const r = await gasPost('saveMenuCategory', { label:v.label });
+  if(!r || !r.ok) return menuAdminFail(r);
+  applyMenuStructure({ categories:r.categories });
+  showToast('✅ Kategori "' + v.label + '" ditambah. Sekarang tekan + Tambah Menu.', 'success');
+  render();
+  loadMenuMeta();
+}
+async function pmenuRenameCategory(id){
+  const v = await menuFormDialog({
+    title:'Tukar Nama Kategori', okText:'Simpan',
+    fields:[{ key:'label', label:'Nama kategori', value:menuCategoryLabel(id), max:40 }],
+    validate: v => v.label ? '' : 'Sila isi nama kategori'
+  });
+  if(!v) return;
+  const r = await gasPost('saveMenuCategory', { id:id, label:v.label });
+  if(!r || !r.ok) return menuAdminFail(r);
+  applyMenuStructure({ categories:r.categories });
+  showToast('✅ Nama kategori disimpan', 'success');
+  render();
+  loadMenuMeta();
+}
+async function pmenuDeleteCategory(id){
+  const count = MENU.filter(m => m.category === id).length;
+  if(count > 0){
+    showToast('⚠️ Kategori ini masih ada ' + count + ' menu. Padam menu-menu itu dahulu.', 'error');
+    return;
+  }
+  const ok = await confirmDialog({ title:'Padam kategori?', message:'"' + menuCategoryLabel(id) + '" akan dibuang daripada menu pelanggan.', confirmText:'Padam', cancelText:'Batal', danger:true });
+  if(!ok) return;
+  const r = await gasPost('deleteMenuCategory', { id:id });
+  if(!r || !r.ok) return menuAdminFail(r);
+  applyMenuStructure({ categories:r.categories });
+  showToast('✅ Kategori dipadam', 'success');
+  render();
+  loadMenuMeta();
+}
+async function pmenuAddItem(categoryId){
+  const v = await menuFormDialog({
+    title:'Tambah Menu · ' + menuCategoryLabel(categoryId), okText:'Tambah',
+    fields:[
+      { key:'name', label:'Nama menu', placeholder:'cth. Coklat Kelapa' },
+      { key:'price', label:'Harga (RM)', type:'number', placeholder:'cth. 8' },
+      { key:'temp', label:'Ada pilihan Hot / Ice', type:'check', value:true },
+      { key:'desc', label:'Penerangan pendek (pilihan)', type:'textarea', placeholder:'cth. Coklat pekat dengan santan segar.' }
+    ],
+    validate: v => !v.name ? 'Sila isi nama menu' : (v.price === '' || isNaN(parseFloat(v.price)) || parseFloat(v.price) < 0) ? 'Sila isi harga yang betul' : ''
+  });
+  if(!v) return;
+  showToast('⏳ Menambah menu...', '');
+  const r = await gasPost('addMenuItem', { category:categoryId, name:v.name, price:parseFloat(v.price), temp:v.temp, desc:v.desc });
+  if(!r || !r.ok || !r.item) return menuAdminFail(r);
+  addCustomMenuItem(r.item);
+  if(r.item.desc) menuDescs[r.item.id] = r.item.desc;
+  showToast('✅ "' + r.item.name + '" ditambah. Tekan Tukar Gambar untuk letak gambar.', 'success');
+  render();
+  loadMenuMeta();
+}
+async function pmenuDeleteItem(id){
+  const item = MENU.find(m => m.id === id);
+  if(!item) return;
+  const ok = await confirmDialog({ title:'Padam menu?', message:'"' + getItemName(item) + '" akan dibuang daripada menu.\nJika cuma habis stok sementara, guna butang PUBLISH sahaja.', confirmText:'Padam', cancelText:'Batal', danger:true });
+  if(!ok) return;
+  const r = await gasPost('deleteMenuItem', { id:id });
+  if(!r || !r.ok) return menuAdminFail(r);
+  removeMenuItem(id);
+  showToast('✅ Menu dipadam', 'success');
+  render();
+  loadMenuMeta();
 }
 
 async function savePmenuItem(itemId){
@@ -8047,16 +9208,16 @@ function renderAdminPengurusan(){
           <h3>Edit Admin</h3>
           <div class="form-group">
             <label>Nama</label>
-            <input type="text" id="editName" value="${a.name}" autocomplete="off">
+            <input type="text" id="editName" value="${escapeHtml(a.name)}" autocomplete="off">
           </div>
           <div class="form-group">
             <label>ID Admin</label>
-            <input type="text" id="editUsername" value="${a.username}" autocomplete="off">
+            <input type="text" id="editUsername" value="${escapeHtml(a.username)}" autocomplete="off">
           </div>
           <div class="form-group">
             <label>Kata Laluan</label>
-            <input type="text" id="editPassword" value="${a.password}" autocomplete="off">
-            <div class="field-hint">Min 3 aksara, ada 1 huruf &amp; 1 simbol (!@#$% dll)</div>
+            <input type="password" id="editPassword" value="" placeholder="Biarkan kosong untuk kekalkan" autocomplete="new-password">
+            <div class="field-hint">Isi hanya jika mahu tukar · min 8 aksara, ada huruf &amp; nombor</div>
           </div>
           <div class="form-error">${errMsg}</div>
           <div style="display:flex; gap:8px;">
@@ -8069,8 +9230,8 @@ function renderAdminPengurusan(){
     return `
       <div class="admin-list-row">
         <div class="a-info">
-          <div class="a-name">${a.name}</div>
-          <div class="a-username">ID: ${a.username}</div>
+          <div class="a-name">${escapeHtml(a.name)}</div>
+          <div class="a-username">ID: ${escapeHtml(a.username)}</div>
         </div>
         <div class="a-actions">
           <button class="a-edit" data-id="${a.id}">Edit</button>
@@ -8103,8 +9264,8 @@ function renderAdminPengurusan(){
       </div>
       <div class="form-group">
         <label>Kata Laluan</label>
-        <input type="text" id="newAdminPassword" placeholder="Kata laluan" autocomplete="off">
-        <div class="field-hint">Min 3 aksara, ada 1 huruf &amp; 1 simbol (!@#$% dll)</div>
+        <input type="password" id="newAdminPassword" placeholder="Kata laluan" autocomplete="new-password">
+        <div class="field-hint">Min 8 aksara, ada huruf &amp; nombor</div>
       </div>
       <div class="form-error">${editId ? '' : errMsg}</div>
       <button class="reg-submit" id="addAdmin">+ Daftar Admin</button>
@@ -8192,12 +9353,12 @@ function renderCustomerReport(){
       return `
       <div class="report-row">
         <div class="r-name">
-          ${c.name || '-'}
-          <span class="phone">${c.phone}</span>
+          ${escapeHtml(c.name || '-')}
+          <span class="phone">${escapeHtml(c.phone)}</span>
         </div>
         <div class="r-count">${c.count}x pesanan</div>
         <div class="r-qty">${c.qty} cawan</div>
-        ${free > 0 ? `<button class="loyalty-badge loyalty-goto-dash" data-phone="${c.phone}">🎁 ${free} Kopi Percuma</button>` : ''}
+        ${free > 0 ? `<button class="loyalty-badge loyalty-goto-dash" data-phone="${escapeHtml(c.phone)}">🎁 ${free} Kopi Percuma</button>` : ''}
       </div>
     `;
     }).join('');
@@ -8347,6 +9508,8 @@ function bindViewEvents(){
       state.loginBusy = false;
       if(!r || r.error === 'unknown action'){
         state.loginError = !r ? 'Tidak dapat menyemak. Semak internet dan cuba lagi.' : 'Sistem sedang dikemas kini. Cuba sebentar lagi.';
+      } else if(r.error === 'BUSY' || r.error === 'SERVER_ERROR'){
+        state.loginError = 'Sistem sedang sibuk. Cuba lagi dalam seminit.';
       } else if(!r.exists){
         state.loginError = 'Nombor ini belum berdaftar. Tekan "Daftar di sini" untuk daftar.';
         state.regPhone = phone;
@@ -8416,13 +9579,13 @@ function bindViewEvents(){
       state.regBusy = false;
       if(r && r.error === 'ALREADY_REGISTERED'){
         state.loginPhone = phone;
-        state.loginError = `Nombor ini sudah berdaftar${r.name ? ' atas nama ' + r.name : ''}. Tekan Masuk.`;
+        state.loginError = `Nombor ini sudah berdaftar${r.name ? ' atas nama ' + escapeHtml(r.name) : ''}. Tekan Masuk.`;
         state.view = 'register';
         render();
         return;
       }
       if(!r || !r.ok){
-        const map = { NAME_EMPTY:'Sila isi nama.', INVALID_PHONE:'No. telefon tidak sah.', 'unknown action':'Sistem sedang dikemas kini. Cuba sebentar lagi.' };
+        const map = { NAME_EMPTY:'Sila isi nama.', INVALID_PHONE:'No. telefon tidak sah.', BUSY:'Sistem sedang sibuk. Cuba lagi dalam seminit.', 'unknown action':'Sistem sedang dikemas kini. Cuba sebentar lagi.' };
         return fail((r && map[r.error]) || 'Tidak dapat daftar. Semak internet dan cuba lagi.');
       }
       Object.assign(state, { regName:'', regPhone:'', regGender:'', regBirthday:'', regRefCode:'', regError:'' });
@@ -8545,7 +9708,8 @@ function bindViewEvents(){
         if(!result.ok || !result.admin || !result.token){
           await hideAdminLoginLoader(false);
           // Only a LOGIN_FAILED answer means wrong details; anything else is a server fault.
-          state.adminLoginError = result.error && result.error !== 'LOGIN_FAILED'
+          state.adminLoginError = result.error === 'LOGIN_LOCKED' ? 'Terlalu banyak cubaan salah. Cuba lagi selepas 15 minit.'
+            : result.error && result.error !== 'LOGIN_FAILED'
             ? 'Server ada masalah. Sila cuba semula sebentar lagi.' : 'ID atau kata laluan salah.';
           render();
           return;
@@ -8654,14 +9818,16 @@ function bindViewEvents(){
         // jump the list back to the top.
         if(Math.abs(dx) < 80 || Math.abs(dx) < Math.abs(dy) * 2) return;
         if(Math.abs(menuList.scrollTop - touchStartScroll) > 8) return;
-        const idx = CATEGORIES.findIndex(c => c.id === (state.menuCategory || CATEGORIES[0].id));
+        const cats = customerCategories();
+        if(!cats.length) return;
+        const idx = Math.max(0, cats.findIndex(c => c.id === state.menuCategory));
         let nextIdx;
         if(dx < 0){
-          nextIdx = (idx + 1) % CATEGORIES.length;
+          nextIdx = (idx + 1) % cats.length;
         } else {
-          nextIdx = (idx - 1 + CATEGORIES.length) % CATEGORIES.length;
+          nextIdx = (idx - 1 + cats.length) % cats.length;
         }
-        state.menuCategory = CATEGORIES[nextIdx].id;
+        state.menuCategory = cats[nextIdx].id;
         render();
         scrollActiveTabIntoView();
       }, { passive: true });
@@ -8725,6 +9891,14 @@ function bindViewEvents(){
         toggleMenuPublished(btn.dataset.publishId);
       };
     });
+    // v3.15.0: graf Jualan vs Cawan (Hari / Bulan / Tahun + bacaan)
+    bindSalesChart();
+    // v3.15.0: kategori & menu ciptaan admin
+    document.querySelectorAll('[data-pmenu-add-cat]').forEach(btn => { btn.onclick = () => pmenuAddCategory(); });
+    document.querySelectorAll('[data-pmenu-rename-cat]').forEach(btn => { btn.onclick = () => pmenuRenameCategory(btn.dataset.pmenuRenameCat); });
+    document.querySelectorAll('[data-pmenu-delete-cat]').forEach(btn => { btn.onclick = () => pmenuDeleteCategory(btn.dataset.pmenuDeleteCat); });
+    document.querySelectorAll('[data-pmenu-add-item]').forEach(btn => { btn.onclick = () => pmenuAddItem(btn.dataset.pmenuAddItem); });
+    document.querySelectorAll('[data-pmenu-delete-item]').forEach(btn => { btn.onclick = () => pmenuDeleteItem(btn.dataset.pmenuDeleteItem); });
 
     const burger = document.getElementById('adminBurger');
     if(burger) burger.onclick = () => { state.adminNavOpen = !state.adminNavOpen; render(); };
@@ -8773,6 +9947,21 @@ function bindViewEvents(){
     document.querySelectorAll('[data-push-image]').forEach(btn => {
       btn.onclick = () => { state.pushPromoImage = btn.dataset.pushImage; render(); };
     });
+    // Admin > Hebahan: notifikasi automatik (v3.11.0)
+    if(state.apDraft){
+      [['apRemindTitle','remindTitle'], ['apRemindBody','remindBody'], ['apBdayTitle','birthdayTitle'], ['apBdayBody','birthdayBody'], ['apEvery','remindEvery']].forEach(([id, key]) => {
+        const el = document.getElementById(id);
+        if(el) el.oninput = () => { state.apDraft[key] = el.value; };
+      });
+      [['apRemind','remind'], ['apBday','birthday']].forEach(([id, key]) => {
+        const el = document.getElementById(id);
+        if(el) el.onchange = () => { state.apDraft[key] = el.checked; };
+      });
+    }
+    const apSave = document.getElementById('apSave');
+    if(apSave) apSave.onclick = saveAutoPush;
+    const rwBdayRedeem = document.getElementById('rwBdayRedeem');
+    if(rwBdayRedeem) rwBdayRedeem.onclick = () => redeemBirthdayFor(state.rwCustomer);
     // Admin > Reward (v3.10.0)
     const rwSearch = document.getElementById('rwSearch');
     if(rwSearch) rwSearch.oninput = () => { state.rwSearch = rwSearch.value; render(); };
@@ -8821,6 +10010,7 @@ function bindViewEvents(){
     });
     document.querySelectorAll('[data-rw-status]').forEach(sel => { sel.onchange = () => setRewardStatus(sel.dataset.rwStatus, sel.value); });
     document.querySelectorAll('[data-rw-delete]').forEach(btn => { btn.onclick = () => deleteRewardItem(btn.dataset.rwDelete); });
+    document.querySelectorAll('[data-rw-publish]').forEach(btn => { btn.onclick = () => setRewardPublished(btn.dataset.rwPublish, btn.dataset.pub === '1'); });
     const rwPerCup = document.getElementById('rwPerCup');
     if(rwPerCup) rwPerCup.oninput = () => { state.rwPerCup = rwPerCup.value; };
     const rwUseRm = document.getElementById('rwUseRm');
@@ -8835,6 +10025,28 @@ function bindViewEvents(){
     if(rwRefSave) rwRefSave.onclick = saveReferralSettings;
     const rwPerCupSave = document.getElementById('rwPerCupSave');
     if(rwPerCupSave) rwPerCupSave.onclick = savePointsPerCup;
+    document.querySelectorAll('[data-support-open]').forEach(btn => { btn.onclick = openSupportPopup; });
+    // v3.16.0: suis Aktif / Tidak Aktif program points & duit referral
+    document.querySelectorAll('[data-prog-switch]').forEach(btn => {
+      btn.onclick = () => setProgramOn(btn.dataset.progSwitch, btn.dataset.progOn === '1');
+    });
+    // v3.16.0: Senarai Pelanggan > Tebus Points / Tebus Air
+    document.querySelectorAll('[data-ct-points]').forEach(btn => {
+      btn.onclick = () => {
+        Object.assign(state, { adminTab:'reward', rwCustomer:btn.dataset.ctPoints, rwSearch:'', rwUseRm:'' });
+        render();
+        window.scrollTo({ top:0, behavior:'smooth' });
+      };
+    });
+    document.querySelectorAll('[data-ct-free]').forEach(btn => {
+      btn.onclick = () => { state.ctFreeOpen = state.ctFreeOpen === btn.dataset.ctFree ? null : btn.dataset.ctFree; render(); };
+    });
+    document.querySelectorAll('[data-ct-free-redeem]').forEach(btn => {
+      btn.onclick = () => redeemFreeFromTable(btn.dataset.ctFreeRedeem, Number(btn.dataset.count) || 1);
+    });
+    document.querySelectorAll('[data-ct-free-close]').forEach(btn => {
+      btn.onclick = () => { state.ctFreeOpen = null; render(); };
+    });
     // Admin > Pelanggan
     const custRefresh = document.getElementById('custRefresh');
     if(custRefresh) custRefresh.onclick = () => { state.allCustomers = undefined; loadAllCustomers(); render(); };
@@ -9260,7 +10472,7 @@ function bindViewEvents(){
             return;
           }
           if(!isValidAdminPassword(password)){
-            state.adminMgmtError = 'Kata laluan mesti sekurang-kurangnya 3 aksara, ada 1 huruf dan 1 simbol (!@#$% dll).';
+            state.adminMgmtError = ADMIN_MGMT_ERRORS.WEAK_PASSWORD;
             render();
             return;
           }
@@ -9270,10 +10482,10 @@ function bindViewEvents(){
             render();
             return;
           }
-          admins.push({ id:'a_'+Date.now(), name, username, password });
-          await addAdminApi(name, username, password);
+          const added = await addAdminApi(name, username, password);
+          state.adminMgmtError = adminMgmtError(added);
+          if(state.adminMgmtError){ render(); return; }
           state.adminAccounts = await loadAdmins();
-          state.adminMgmtError = '';
           render();
         };
       }
@@ -9298,7 +10510,8 @@ function bindViewEvents(){
           if(!sure) return;
           btn.disabled = true;
           btn.textContent = '...';
-          await deleteAdminApi(id);
+          const removed = await deleteAdminApi(id);
+          if(adminMgmtError(removed)){ btn.disabled = false; btn.textContent = 'Padam'; showToast(adminMgmtError(removed), 'error'); return; }
           state.adminAccounts = await loadAdmins();
           showToast(`Admin "${admin.name || '-'}" telah dipadam.`, 'success');
           logActivity('deladmin:' + id, 'admin', `Admin "${admin.name || '-'}" dipadam oleh ${(state.loggedInAdmin && state.loggedInAdmin.name) || 'admin'}`);
@@ -9313,13 +10526,13 @@ function bindViewEvents(){
           const name = (document.getElementById('editName').value || '').trim();
           const username = (document.getElementById('editUsername').value || '').trim();
           const password = (document.getElementById('editPassword').value || '').trim();
-          if(!name || !username || !password){
-            state.adminMgmtError = 'Sila isi semua maklumat.';
+          if(!name || !username){
+            state.adminMgmtError = 'Sila isi nama dan ID admin.';
             render();
             return;
           }
-          if(!isValidAdminPassword(password)){
-            state.adminMgmtError = 'Kata laluan mesti sekurang-kurangnya 3 aksara, ada 1 huruf dan 1 simbol (!@#$% dll).';
+          if(password && !isValidAdminPassword(password)){
+            state.adminMgmtError = ADMIN_MGMT_ERRORS.WEAK_PASSWORD;
             render();
             return;
           }
@@ -9329,12 +10542,11 @@ function bindViewEvents(){
             render();
             return;
           }
-          const idx = admins.findIndex(a => a.id === id);
-          if(idx >= 0) admins[idx] = { id, name, username, password };
-          await updateAdminApi(id, name, username, password);
+          const saved = await updateAdminApi(id, name, username, password);
+          state.adminMgmtError = adminMgmtError(saved);
+          if(state.adminMgmtError){ render(); return; }
           state.adminAccounts = await loadAdmins();
           state.adminEditId = null;
-          state.adminMgmtError = '';
           render();
         };
       }
@@ -9371,7 +10583,8 @@ async function submitOrder(){
     .map(m => {
       const temp = m.temp === 'both' ? (state.itemTemp[m.id] || 'hot') : null;
       const name = temp ? m.name + ' (' + (temp === 'hot' ? 'Hot' : 'Ice') + ')' : m.name;
-      return { name, qty: state.cart[m.id], price: m.price };
+      // v3.13.0: id & temp dihantar; server tentukan nama & harga sebenar
+      return { id: m.id, temp: temp || '', name, qty: state.cart[m.id], price: getItemPrice(m) };
     });
   if(items.length === 0) return;
 
@@ -9409,7 +10622,13 @@ async function submitOrder(){
   }
   if(!added.queueNo && added.error !== 'SHOP_CLOSED'){
     state.submitting = false;
-    showToast(added.error === 'INVALID_ORDER' ? 'Pesanan tidak sah. Sila semak troli anda.' : 'Pesanan gagal dihantar. Semak internet anda dan cuba lagi.', 'error');
+    const why = {
+      INVALID_ORDER: 'Pesanan tidak sah. Sila semak troli anda.',
+      ITEM_UNAVAILABLE: (added.item || 'Satu minuman') + ' tiada buat masa ini. Buang dari troli dan cuba lagi.',
+      TOO_MANY_ORDERS: 'Anda sudah ada beberapa pesanan aktif. Tunggu pesanan siap dahulu, kemudian order lagi.',
+      BUSY: 'Kedai sedang sibuk. Cuba lagi dalam seminit.'
+    };
+    showToast(why[added.error] || 'Pesanan gagal dihantar. Semak internet anda dan cuba lagi.', 'error');
     render();
     return;
   }
@@ -9423,6 +10642,11 @@ async function submitOrder(){
     return;
   }
   order.queueNo = added.queueNo || 0;
+  // v3.13.0: jumlah & harga yang server kira (sama dengan resit admin)
+  if(Number(added.total) >= 0 && Array.isArray(added.items)){
+    order.total = Number(added.total);
+    order.items = added.items.map(i => ({ name: i.name, qty: i.qty, price: i.price }));
+  }
   // v3.3.1 backend credits loyalty itself when the admin completes the order.
   // Only older backends still expect the browser to record the purchase.
   if(added.loyalty === 'pending') order.loyalty = 'pending';
@@ -9954,8 +11178,64 @@ async function checkMidnightReset(){
   }
 }
 
+/* ---------- v3.15.0: restart automatik bila versi baru dimuat naik ke Netlify ----------
+   Setiap zip ada version.json dengan BUILD_ID yang sama seperti di bawah. App
+   menyemak fail itu setiap 2 minit dan setiap kali app dibuka semula; jika
+   berbeza, app dimuat semula ke versi baru. Tiada log keluar (log keluar
+   memadam langganan notifikasi). Troli, page & giliran disimpan sebelum
+   restart. Jika pengguna sedang menaip / popup terbuka, tunggu saat selamat.
+   SETIAP ZIP BARU: tukar BUILD_ID di sini DAN dalam version.json. */
+const BUILD_ID = '3.16.0-20261118g';
+let newBuildId = null, updateBannerShown = false;
+function updateSafeNow(){
+  const a = document.activeElement;
+  if(a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName) && a.type !== 'button') return false;
+  if(document.querySelector('.confirm-overlay')) return false;   // popup / borang terbuka
+  if(state.submitting || state.orderSubmitting) return false;
+  return true;
+}
+function applyNewBuild(force){
+  if(!newBuildId) return;
+  // elak ulang-muat tanpa henti jika pelayan masih beri fail lama
+  let last = null;
+  try{ last = JSON.parse(sessionStorage.getItem('kfedeSolReloadFor') || 'null'); }catch(e){}
+  const looping = last && last.build === newBuildId && Date.now() - last.at < 5 * 60000;
+  if(!force && (looping || !updateSafeNow())){ showUpdateBanner(); return; }
+  try{ sessionStorage.setItem('kfedeSolReloadFor', JSON.stringify({ build:newBuildId, at:Date.now() })); }catch(e){}
+  try{ persistAppSession(); }catch(e){}
+  showToast('✨ Versi baru K\'fe De Sol — memuat semula...', 'success');
+  setTimeout(() => location.reload(), 1200);
+}
+function showUpdateBanner(){
+  if(updateBannerShown) return;
+  updateBannerShown = true;
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'update-banner';
+  b.innerHTML = '✨ Versi baru tersedia · <b>Kemas kini</b>';
+  b.onclick = () => applyNewBuild(true);
+  document.body.appendChild(b);
+}
+async function checkNewBuild(){
+  if(document.hidden || !navigator.onLine) return;
+  try{
+    const r = await fetch('version.json?_=' + Date.now(), { cache:'no-store' });
+    if(!r.ok) return;
+    const j = await r.json();
+    if(j && j.build && j.build !== BUILD_ID){ newBuildId = String(j.build); applyNewBuild(false); }
+  }catch(e){}
+}
+setTimeout(checkNewBuild, 15000);
+setInterval(checkNewBuild, 120000);
+// cuba lagi bila keadaan jadi selamat (pengguna habis menaip / tutup popup)
+setInterval(() => { if(newBuildId && updateSafeNow()) applyNewBuild(false); }, 20000);
+document.addEventListener('visibilitychange', () => { if(!document.hidden) checkNewBuild(); });
+window.addEventListener('online', checkNewBuild);
+
 // Tajuk tab/tetingkap sentiasa ikut APP_VERSION (tidak perlu tukar <title> tangan)
 document.title = "K'fe De Sol · v" + APP_VERSION;
+// v3.15.0: kategori & menu ciptaan admin daripada salinan terakhir, sebelum lukisan pertama
+try{ applyMenuStructure(JSON.parse(localStorage.getItem(MENU_STRUCTURE_KEY) || 'null')); }catch(e){}
 // Load menu meta (descriptions + image URLs) from Sheets on startup
 loadMenuMeta();
 restoreSchedule();      // last known schedule, until the server answers

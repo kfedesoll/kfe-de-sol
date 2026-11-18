@@ -1,0 +1,23 @@
+# v3.13.0: header keselamatan Netlify untuk semua page.
+# Jika tukar Apps Script URL atau servis push untuk kedai lain, kemas kini connect-src.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob:; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://kfe-de-sol-push.kfedesoll.workers.dev; frame-src https:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+  Strict-Transport-Security: max-age=31536000
+
+# Service worker sentiasa terkini
+/sw.js
+  Cache-Control: no-cache
+
+# v3.15.0: app semak fail ini untuk restart automatik bila versi baru dimuat naik
+/version.json
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/index.html
+  Cache-Control: no-cache
+
+/
+  Cache-Control: no-cache

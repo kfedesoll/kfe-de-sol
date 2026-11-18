@@ -1,4 +1,29 @@
-K'fe De Sol Web GUI
+﻿K'fe De Sol Web GUI
+Version: v3.16.0
+Build: 2026-11-18
+Backend: Code_v3_for_v3.16.0.gs (WAJIB; version action returns v3.16.0-secure; meta points-enabled & referral-enabled ('0' = tidak aktif, asal aktif); rewards & myLoyalty pulangkan pointsOn, refOn)
+Features: v3.16.0: Admin > Reward: suis Publish / Hentikan untuk Tetapan Points dan Tetapan Duit Referral. Admin > Pelanggan > Senarai Pelanggan: kolum Points, Reward (RM), Air Percuma; butang Tebus Points (ke Reward dengan pelanggan dipilih) dan Tebus Air (1 air / semua). Page pelanggan tunjuk "belum dibuka" bila program tidak aktif. Termasuk semua v3.15.1 (v3.14.0 Coklat & Milk, v3.15.0 kategori/menu admin).
+Previous: v3.15.1
+Version: v3.13.0
+Build: 2026-10-29
+Backend: Code_v3_for_v3.13.0.gs (WAJIB; version action returns v3.13.0-secure; harga order dikira server (MENU_DEFAULTS_ + MenuMeta); kata laluan admin hash h1$ (naik taraf sendiri semasa log masuk); tiada akaun lalai (buatAdminPertama); LOGIN_LOCKED; had request CacheService; archiveCustomers perlu admin; ralat SERVER_ERROR tanpa stack; sheet AuditLog)
+Features: v3.13.0: keselamatan untuk dijual kepada kedai lain. App hantar id & temp item dan guna jumlah daripada server; mesej ITEM_UNAVAILABLE / TOO_MANY_ORDERS / BUSY / LOGIN_LOCKED. Urus admin: kata laluan tidak dipapar (kosong = kekal), minimum 8 aksara huruf + nombor, ralat server dipapar. Fail _headers (CSP, nosniff, X-Frame-Options, Referrer-Policy, Permissions-Policy, HSTS). jsPDF disimpan dalam vendor/ (tidak lagi dari CDN). Termasuk semua v3.12.0.
+Previous: v3.12.0
+Version: v3.12.0
+Build: 2026-10-29
+Backend: Code_v3_for_v3.12.0.gs (WAJIB; version action returns v3.12.0-secure; cleanText_ untuk nama/item/telefon/id/status order; sheet LaporanBulanan & KewanganBulanan (laporan lama dalam Meta 'reports' dipindah sekali, sel lama tidak ditulis lagi); action admin kewangan (GET))
+Features: v3.12.0: keselamatan - nama, telefon & item ditapis di semua paparan admin dan dibersihkan di server. Laporan bulanan dalam sheet sendiri: LaporanBulanan (seorang pelanggan sebulan, termasuk jualan RM) & KewanganBulanan (ringkasan kedai sebulan). Laporan dan Resit: jadual Ringkasan Kewangan Bulanan. Termasuk semua v3.11.0.
+Previous: v3.11.0
+Version: v3.11.0
+Build: 2026-10-29
+Backend: Code_v3_for_v3.11.0.gs (WAJIB; version action returns v3.11.0-secure; SemuaPelanggan kolum 15-16 bdayPushed, bdayRedeemed; meta auto-push; action autoPush (GET), saveAutoPush, redeemBirthday; trigger harian harianNotif dipasang dengan pasangNotifHarian())
+Features: v3.11.0: notifikasi automatik setiap hari sekitar 10 pagi. Ucapan hari jadi + 1 air percuma (sah 7 hari, sekali setahun; banner di page Reward; admin tebus di Reward > Tebus). Ingatan 'Apa khabar' setiap 3 hari, setiap hari kumpulan pelanggan berlainan, hanya hari kedai buka, langkau yang baru beli. Admin > Promosi dan Hebahan > Notifikasi Automatik: hidup/mati, teks ({nama}, {hingga}), kekerapan, senarai hari ini. Termasuk semua v3.10.6.
+Previous: v3.10.6
+Version: v3.10.6
+Build: 2026-10-29
+Backend: Code_v3_for_v3.10.2.gs (tiada perubahan; version action returns v3.10.2-secure)
+Features: v3.10.6 (frontend sahaja): telefon yang sudah Allow tidak lagi nampak kotak notifikasi muncul sekejap selepas Masuk; langganan didaftar semula senyap. Termasuk semua v3.10.5.
+Previous: v3.10.5
 Version: v3.10.5
 Build: 2026-10-27
 Backend: Code_v3_for_v3.10.2.gs (tiada perubahan; version action returns v3.10.2-secure)
